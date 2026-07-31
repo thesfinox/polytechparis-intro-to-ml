@@ -74,6 +74,8 @@
   tabsize=4,
   keepspaces=true,
   upquote=true,
+  aboveskip=0pt,
+  belowskip=0pt,
   escapeinside={(*@}{@*)}}
 
 \lstdefinestyle{ceacarbonlight}{%
@@ -96,6 +98,8 @@
   tabsize=4,
   keepspaces=true,
   upquote=true,
+  aboveskip=0pt,
+  belowskip=0pt,
   escapeinside={(*@}{@*)}}
 
 % Plain style: no background, for chunked sequential reveal.
@@ -142,6 +146,8 @@
   tabsize=4,
   keepspaces=true,
   upquote=true,
+  aboveskip=0pt,
+  belowskip=0pt,
   escapeinside={(*@}{@*)}}
 
 \lstdefinestyle{ceanotebookout}{%
@@ -153,7 +159,9 @@
   breakatwhitespace=true,
   tabsize=4,
   keepspaces=true,
-  upquote=true}
+  upquote=true,
+  aboveskip=0pt,
+  belowskip=0pt}
 
 % Default plain lstlisting inherits the dark style.
 \lstset{style=ceacarbon}
@@ -166,9 +174,11 @@
   \fill[carbonGreen]  ([xshift=30pt,yshift=-9pt]frame.north west) circle (2.5pt);}
 
 % --- Jupyter prompt overlay ---
-\newcommand{\@nbprompt}[2]{% #1 = In/Out label, #2 = colour name
+% #1 = In/Out label, #2 = colour name. xshift=4pt keeps the label clear of
+% the left border (the node is anchored at the frame's outer corner).
+\newcommand{\@nbprompt}[2]{%
   \node[anchor=north west, font=\footnotesize\ttfamily\color{#2},
-        inner xsep=0pt, inner ysep=6pt] at (frame.north west) {#1 [\nbcellnum]:};}
+        inner xsep=0pt, inner ysep=6pt] at ([xshift=4pt]frame.north west) {#1 [\nbcellnum]:};}
 
 % --- tcolorbox card environments ---
 % Usage: \begin{codewithcard}[options]{filename} ... \end{codewithcard}
@@ -186,15 +196,15 @@
   listing options={style=ceacarbon, #1},
   left=10pt,
   right=8pt,
-  top=8pt,
-  bottom=8pt,
+  top=3pt,
+  bottom=3pt,
   shadow={2pt}{-2pt}{0pt}{black!40},
   title={\ttfamily\footnotesize \detokenize{#2}},
   fonttitle=\ttfamily\footnotesize,
   lefttitle=34pt,
   titlerule=0pt,
-  toptitle=4pt,
-  bottomtitle=4pt,
+  toptitle=2pt,
+  bottomtitle=2pt,
   overlay={\@ceacarbondots}}
 
 \newtcblisting{codewithcardlight}[2][]{%
@@ -209,15 +219,15 @@
   listing options={style=ceacarbonlight, #1},
   left=10pt,
   right=8pt,
-  top=8pt,
-  bottom=8pt,
+  top=3pt,
+  bottom=3pt,
   shadow={2pt}{-2pt}{0pt}{black!25},
   title={\ttfamily\footnotesize \detokenize{#2}},
   fonttitle=\ttfamily\footnotesize,
   lefttitle=34pt,
   titlerule=0pt,
-  toptitle=4pt,
-  bottomtitle=4pt,
+  toptitle=2pt,
+  bottomtitle=2pt,
   overlay={\@ceacarbondots}}
 
 % --- Notebook cell environments ---
@@ -231,8 +241,8 @@
   listing options={style=ceanotebookin},
   left=36pt,
   right=8pt,
-  top=6pt,
-  bottom=6pt,
+  top=2pt,
+  bottom=2pt,
   before upper={\only<1>{\refstepcounter{nbcell}}},
   overlay={\@nbprompt{In}{nbinColor}}}
 
@@ -246,10 +256,10 @@
   listing options={style=ceanotebookout},
   left=36pt,
   right=8pt,
-  top=6pt,
-  bottom=6pt,
+  top=2pt,
+  bottom=2pt,
   before skip=0pt,
-  after skip=4pt,
+  after skip=2pt,
   overlay={\@nbprompt{Out}{nboutColor}}}
 
 % --- Sequential reveal patterns (documented for users) ---
