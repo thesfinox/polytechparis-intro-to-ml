@@ -48,15 +48,15 @@ print(df.describe())
 \begin{frame}[fragile]
 	\frametitle{Feature 2: dark code card}
 	\begin{codewithcard}{mars_eda.py}
-		import pandas as pd
-		import matplotlib.pyplot as plt
+import pandas as pd
+import matplotlib.pyplot as plt
 
-		# Load the MARS dataset
-		df = pd.read_csv("mars.csv")
-		print(df.head())
+# Load the MARS dataset
+df = pd.read_csv("mars.csv")
+print(df.head())
 
-		# Basic statistics
-		print(df.describe())
+# Basic statistics
+print(df.describe())
 	\end{codewithcard}
 \end{frame}
 
@@ -64,15 +64,15 @@ print(df.describe())
 \begin{frame}[fragile]
 	\frametitle{Feature 3: light code card}
 	\begin{codewithcardlight}{mars_eda_light.py}
-		import pandas as pd
-		import matplotlib.pyplot as plt
+import pandas as pd
+import matplotlib.pyplot as plt
 
-		# Load the MARS dataset
-		df = pd.read_csv("mars.csv")
-		print(df.head())
+# Load the MARS dataset
+df = pd.read_csv("mars.csv")
+print(df.head())
 
-		# Basic statistics
-		print(df.describe())
+# Basic statistics
+print(df.describe())
 	\end{codewithcardlight}
 \end{frame}
 
@@ -80,10 +80,10 @@ print(df.describe())
 \begin{frame}[fragile]
 	\frametitle{Feature 4: language override}
 	\begin{codewithcard}[language=bash]{terminal}
-		# Create a new uv project for the ML course
-		uv init --python ">=3.10,<3.13" mars-ml
-		cd mars-ml
-		uv add pandas numpy scikit-learn
+# Create a new uv project for the ML course
+uv init --python ">=3.10,<3.13" mars-ml
+cd mars-ml
+uv add pandas numpy scikit-learn
 	\end{codewithcard}
 \end{frame}
 
@@ -94,11 +94,11 @@ print(df.describe())
 	This frame has 2 slides.
 	\begin{onlyenv}<2->
 		\begin{codewithcard}{train_step_1.py}
-			import numpy as np
-			from sklearn.linear_model import LinearRegression
+import numpy as np
+from sklearn.linear_model import LinearRegression
 
-			X = np.random.rand(100, 3)
-			y = X[:, 0] + 2 * X[:, 1] - 0.5 * X[:, 2]
+X = np.random.rand(100, 3)
+y = X[:, 0] + 2 * X[:, 1] - 0.5 * X[:, 2]
 		\end{codewithcard}
 	\end{onlyenv}
 \end{frame}
@@ -112,30 +112,30 @@ print(df.describe())
 	This frame should produce 3 slides.
 	\begin{onlyenv}<1>
 		\begin{codewithcard}{train_step_2.py}
-			import numpy as np
-			from sklearn.linear_model import LinearRegression
+import numpy as np
+from sklearn.linear_model import LinearRegression
 		\end{codewithcard}
 	\end{onlyenv}
 	\begin{onlyenv}<2>
 		\begin{codewithcard}{train_step_2.py}
-			import numpy as np
-			from sklearn.linear_model import LinearRegression
+import numpy as np
+from sklearn.linear_model import LinearRegression
 
-			X = np.random.rand(100, 3)
-			y = X[:, 0] + 2 * X[:, 1] - 0.5 * X[:, 2]
+X = np.random.rand(100, 3)
+y = X[:, 0] + 2 * X[:, 1] - 0.5 * X[:, 2]
 		\end{codewithcard}
 	\end{onlyenv}
 	\begin{onlyenv}<3>
 		\begin{codewithcard}{train_step_2.py}
-			import numpy as np
-			from sklearn.linear_model import LinearRegression
+import numpy as np
+from sklearn.linear_model import LinearRegression
 
-			X = np.random.rand(100, 3)
-			y = X[:, 0] + 2 * X[:, 1] - 0.5 * X[:, 2]
+X = np.random.rand(100, 3)
+y = X[:, 0] + 2 * X[:, 1] - 0.5 * X[:, 2]
 
-			model = LinearRegression()
-			model.fit(X, y)
-			print(f"R^2 = {model.score(X, y):.3f}")
+model = LinearRegression()
+model.fit(X, y)
+print(f"R^2 = {model.score(X, y):.3f}")
 		\end{codewithcard}
 	\end{onlyenv}
 \end{frame}
