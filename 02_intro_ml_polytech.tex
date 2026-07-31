@@ -1,0 +1,53 @@
+% !TeX root = 02_intro_ml_polytech.tex
+% !TeX program = pdflatex
+% !TeX encoding = UTF-8
+\documentclass[t,10pt,aspectratio=169,rounded]{beamer}
+\usetheme{CEA23}
+
+\usepackage[utf8x]{inputenc}
+\usepackage[english]{babel}
+\usepackage{csquotes}
+
+% Code listings: Carbon-style "code snapshot" cards (see code_listings_demo.tex)
+\usepackage{beamer-code-listings}
+
+\AtBeginSection[]{\sepframe[\insertsectionnumber]{}{}}
+
+\begin{document}
+
+\title{Introduction to Machine Learning}
+\subtitle{Module 2 — ML Practices, Optimisation, and Linear Models}
+\date[02/12/2026]{2 December 2026}
+\author{Riccardo \textsc{Finotello}}
+
+\titlepagelogo{\includegraphics[height=24mm]{graphics/ORIGINAL/ISAS.png}}
+% TODO: activate once img/titlepage.png exists in slides/img/
+% \titlepagepicture{img/titlepage.png}
+\setvalue{\diffusion}{}
+
+\seminar[PolytechParis]{Machine Learning - PolytechParis}
+
+\CEAmerci{Thank you}
+\CEAcenter{CEA SACLAY}
+\addr{91\,191 Gif-sur-Yvette Cedex\\France}
+\CEAemail{\href{mailto:riccardo.finotello@cea.fr}{\texttt{riccardo.finotello@cea.fr}}}
+
+% --- TITLE SLIDE ---
+\begin{frame}[plain]
+	\titlepage
+\end{frame}
+
+% ------------------------------------------------------------------
+% Content slides: drop your module slide fragments into 02_slides/
+% and include them below, e.g.
+%   \input{02_slides/section_01}
+%   \input{02_slides/section_02}
+% Each fragment contains \section{...} and \begin{frame}...\end{frame}
+% only (no preamble, no \begin{document}).
+% ------------------------------------------------------------------
+
+% --- CONCLUDING SLIDE ---
+\begin{frame}[plain]
+	\usebeamertemplate*{last page}
+\end{frame}
+\end{document}
