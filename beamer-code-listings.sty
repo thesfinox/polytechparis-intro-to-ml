@@ -1,0 +1,351 @@
+% !TeX program = pdflatex
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamer-code-listings}[2026/07/31 v1.0 Carbon-style code listings for CEA23 Beamer slides]
+
+% --- Dependencies ---
+\RequirePackage{listings}
+\RequirePackage{xcolor}
+\RequirePackage{tcolorbox}
+\tcbuselibrary{listings,skins,breakable}
+
+% --- Monospace font (best effort for pdfLaTeX) ---
+\IfFileExists{inconsolata.sty}{\RequirePackage[scaled=0.85]{inconsolata}}{%
+  \IfFileExists{beramono.sty}{\RequirePackage[scaled=0.85]{beramono}}{}}
+
+% --- Carbon "One Dark" palette (dark card) ---
+\definecolor{codeBg}{HTML}{282C34}      % card background
+\definecolor{codeBgTitle}{HTML}{21252B} % title bar background
+\definecolor{codeFg}{HTML}{ABB2BF}      % default text
+\definecolor{codeComment}{HTML}{5C6370}
+\definecolor{codeKeyword}{HTML}{C678DD}
+\definecolor{codeString}{HTML}{98C379}
+\definecolor{codeNumber}{HTML}{D19A66}
+\definecolor{codeType}{HTML}{E5C07B}
+\definecolor{codeFunc}{HTML}{61AFEF}
+\definecolor{codeLineNr}{HTML}{495162}
+\definecolor{codeFrame}{HTML}{3E4451}
+\definecolor{carbonRed}{HTML}{FF5F56}   % window dot
+\definecolor{carbonYellow}{HTML}{FFBD2E}% window dot
+\definecolor{carbonGreen}{HTML}{27C93F} % window dot
+
+% --- Light palette variant ---
+\definecolor{codeBgLight}{HTML}{FBFBFB}
+\definecolor{codeFgLight}{HTML}{383A42}
+\definecolor{codeCommentLight}{HTML}{A0A1A7}
+\definecolor{codeKeywordLight}{HTML}{A626A4}
+\definecolor{codeStringLight}{HTML}{50A14F}
+\definecolor{codeNumberLight}{HTML}{986801}
+\definecolor{codeTypeLight}{HTML}{C18401}
+\definecolor{codeFuncLight}{HTML}{4078F2}
+\definecolor{codeLineNrLight}{HTML}{C0C0C0}
+\definecolor{codeFrameLight}{HTML}{DDDDDD}
+\definecolor{codeBgTitleLight}{HTML}{F0F0F0}
+
+% --- Jupyter notebook cell palette ---
+\definecolor{nbinColor}{HTML}{303F9F}   % Jupyter In prompt (indigo)
+\definecolor{nboutColor}{HTML}{D84315}  % Jupyter Out prompt (deep orange)
+\definecolor{nbinBg}{HTML}{F7F7F7}      % Jupyter input cell background
+\definecolor{nbinFrame}{HTML}{CFCFCF}   % Jupyter cell border
+\definecolor{nboutBg}{HTML}{FFFFFF}     % output background
+\definecolor{nboutFrame}{HTML}{CFCFCF}  % output border
+
+% --- Notebook cell counter ---
+\newcounter{nbcell}
+\newcommand{\nbcellnum}{\ifnum\value{nbcell}<10\phantom{0}\fi\arabic{nbcell}}
+
+% --- Listings styles ---
+\lstdefinestyle{ceacarbon}{%
+  language=Python,
+  backgroundcolor=\color{codeBg},
+  basicstyle=\ttfamily\small\color{codeFg},
+  keywordstyle=\color{codeKeyword}\bfseries,
+  commentstyle=\color{codeComment}\itshape,
+  stringstyle=\color{codeString},
+  numberstyle=\ttfamily\footnotesize\color{codeLineNr},
+  identifierstyle=\color{codeFg},
+  emphstyle=\color{codeFunc},
+  numbers=left,
+  numbersep=10pt,
+  xleftmargin=12pt,
+  framexleftmargin=12pt,
+  showstringspaces=false,
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4,
+  keepspaces=true,
+  upquote=true,
+  escapeinside={(*@}{@*)}}
+
+\lstdefinestyle{ceacarbonlight}{%
+  language=Python,
+  backgroundcolor=\color{codeBgLight},
+  basicstyle=\ttfamily\small\color{codeFgLight},
+  keywordstyle=\color{codeKeywordLight}\bfseries,
+  commentstyle=\color{codeCommentLight}\itshape,
+  stringstyle=\color{codeStringLight},
+  numberstyle=\ttfamily\footnotesize\color{codeLineNrLight},
+  identifierstyle=\color{codeFgLight},
+  emphstyle=\color{codeFuncLight},
+  numbers=left,
+  numbersep=10pt,
+  xleftmargin=12pt,
+  framexleftmargin=12pt,
+  showstringspaces=false,
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4,
+  keepspaces=true,
+  upquote=true,
+  escapeinside={(*@}{@*)}}
+
+% Plain style: no background, for chunked sequential reveal.
+% Consecutive blocks using this style visually merge into one continuous card.
+% backgroundcolor= is cleared explicitly because \lstset{style=ceacarbon}
+% below otherwise leaks the dark card background into this style.
+\lstdefinestyle{ceacarbonplain}{%
+  language=Python,
+  backgroundcolor=,
+  % No card background: text must contrast with the (white) frame
+  % background, so use the light-palette colours.
+  basicstyle=\ttfamily\small\color{codeFgLight},
+  keywordstyle=\color{codeKeywordLight}\bfseries,
+  commentstyle=\color{codeCommentLight}\itshape,
+  stringstyle=\color{codeStringLight},
+  numberstyle=\ttfamily\footnotesize\color{codeLineNrLight},
+  identifierstyle=\color{codeFgLight},
+  emphstyle=\color{codeFuncLight},
+  numbers=left,
+  numbersep=10pt,
+  xleftmargin=12pt,
+  framexleftmargin=12pt,
+  showstringspaces=false,
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4,
+  keepspaces=true,
+  upquote=true,
+  escapeinside={(*@}{@*)}}
+
+\lstdefinestyle{ceanotebookin}{%
+  language=Python,
+  backgroundcolor=\color{nbinBg},
+  basicstyle=\ttfamily\small\color{codeFgLight},
+  keywordstyle=\color{codeKeywordLight}\bfseries,
+  commentstyle=\color{codeCommentLight}\itshape,
+  stringstyle=\color{codeStringLight},
+  identifierstyle=\color{codeFgLight},
+  emphstyle=\color{codeFuncLight},
+  numbers=none,
+  showstringspaces=false,
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4,
+  keepspaces=true,
+  upquote=true,
+  escapeinside={(*@}{@*)}}
+
+\lstdefinestyle{ceanotebookout}{%
+  backgroundcolor=\color{nboutBg},
+  basicstyle=\ttfamily\small\color{codeFgLight},
+  numbers=none,
+  showstringspaces=false,
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4,
+  keepspaces=true,
+  upquote=true}
+
+% Default plain lstlisting inherits the dark style.
+\lstset{style=ceacarbon}
+
+% --- Carbon window-dots overlay ---
+% Three coloured circles in the title bar, top-left.
+\newcommand{\@ceacarbondots}{%
+  \fill[carbonRed]   ([xshift=10pt,yshift=-9pt]frame.north west) circle (2.5pt);
+  \fill[carbonYellow] ([xshift=20pt,yshift=-9pt]frame.north west) circle (2.5pt);
+  \fill[carbonGreen]  ([xshift=30pt,yshift=-9pt]frame.north west) circle (2.5pt);}
+
+% --- Jupyter prompt overlay ---
+\newcommand{\@nbprompt}[2]{% #1 = In/Out label, #2 = colour name
+  \node[anchor=north west, font=\footnotesize\ttfamily\color{#2},
+        inner xsep=0pt, inner ysep=6pt] at (frame.north west) {#1 [\nbcellnum]:};}
+
+% --- tcolorbox card environments ---
+% Usage: \begin{codewithcard}[options]{filename} ... \end{codewithcard}
+% #1 = extra per-listing options (e.g. language=bash)
+% #2 = filename/caption shown in the title bar
+\newtcblisting{codewithcard}[2][]{%
+  enhanced,
+  arc=4pt,
+  boxrule=0.5pt,
+  colframe=codeFrame,
+  colback=codeBg,
+  colbacktitle=codeBgTitle,
+  coltitle=codeFg,
+  listing only,
+  listing options={style=ceacarbon, #1},
+  left=10pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
+  shadow={2pt}{-2pt}{0pt}{black!40},
+  title={\ttfamily\footnotesize \detokenize{#2}},
+  fonttitle=\ttfamily\footnotesize,
+  lefttitle=34pt,
+  titlerule=0pt,
+  toptitle=4pt,
+  bottomtitle=4pt,
+  overlay={\@ceacarbondots}}
+
+\newtcblisting{codewithcardlight}[2][]{%
+  enhanced,
+  arc=4pt,
+  boxrule=0.5pt,
+  colframe=codeFrameLight,
+  colback=codeBgLight,
+  colbacktitle=codeBgTitleLight,
+  coltitle=codeFgLight,
+  listing only,
+  listing options={style=ceacarbonlight, #1},
+  left=10pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
+  shadow={2pt}{-2pt}{0pt}{black!25},
+  title={\ttfamily\footnotesize \detokenize{#2}},
+  fonttitle=\ttfamily\footnotesize,
+  lefttitle=34pt,
+  titlerule=0pt,
+  toptitle=4pt,
+  bottomtitle=4pt,
+  overlay={\@ceacarbondots}}
+
+% --- Notebook cell environments ---
+\newtcblisting{notebookin}{%
+  enhanced,
+  sharp corners,
+  boxrule=1pt,
+  colframe=nbinFrame,
+  colback=nbinBg,
+  listing only,
+  listing options={style=ceanotebookin},
+  left=36pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  before upper={\only<1>{\refstepcounter{nbcell}}},
+  overlay={\@nbprompt{In}{nbinColor}}}
+
+\newtcblisting{notebookout}{%
+  enhanced,
+  sharp corners,
+  boxrule=0.5pt,
+  colframe=nboutFrame,
+  colback=nboutBg,
+  listing only,
+  listing options={style=ceanotebookout},
+  left=36pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  before skip=0pt,
+  after skip=4pt,
+  overlay={\@nbprompt{Out}{nboutColor}}}
+
+% --- Sequential reveal patterns (documented for users) ---
+%
+% Pattern A: whole block appears on a later slide.
+%   Wrap the card/listing in an overlay environment:
+%     \begin{frame}[fragile]
+%       \begin{onlyenv}<2->
+%         \begin{codewithcard}{file.py}
+%           ...
+%         \end{codewithcard}
+%       \end{onlyenv}
+%     \end{frame}
+%   (\uncoverenv or \visibleenv work too.)
+%
+% Pattern B: line-by-line reveal inside a single card.
+%   \pause inside a tcolorbox listing splits the frame, but in this CEA23/
+%   beamer setup it makes the frame title disappear on early overlays.
+%   The robust alternative is to place several top-aligned codewithcard
+%   environments inside onlyenv blocks; each slide shows the same card with
+%   progressively more lines:
+%     \begin{frame}[fragile]{...}
+%       \begin{onlyenv}<1>
+%         \begin{codewithcard}{file.py}
+%           import numpy as np
+%         \end{codewithcard}
+%       \end{onlyenv}
+%       \begin{onlyenv}<2>
+%         \begin{codewithcard}{file.py}
+%           import numpy as np
+%           X = np.random.rand(100, 3)
+%         \end{codewithcard}
+%       \end{onlyenv}
+%     \end{frame}
+%   If you do not need the frame title on intermediate slides, the
+%   (*@\pause@*) escape inside a single card also produces the extra pages.
+%
+% Pattern C: chunked reveal across several plain listings.
+%   Use ceacarbonplain (no background) so consecutive listings merge visually,
+%   and separate the chunks with \pause:
+%     \begin{frame}[fragile]
+%       \begin{lstlisting}[style=ceacarbonplain]
+%         chunk 1
+%       \end{lstlisting}
+%       \pause
+%       \begin{lstlisting}[style=ceacarbonplain]
+%         chunk 2
+%       \end{lstlisting}
+%     \end{frame}
+%
+% IMPORTANT: all frames containing listings must be declared [fragile].
+%
+% --- Notebook cells ---
+%
+% Usage:
+%   \begin{notebookin}
+%     import numpy as np
+%   \end{notebookin}
+%
+%   \begin{notebookout}
+%     array([1, 2, 3])
+%   \end{notebookout}
+%
+% Pair input immediately followed by output to share the same cell number:
+%   \begin{notebookin}
+%     print(1 + 1)
+%   \end{notebookin}
+%   \begin{notebookout}
+%     2
+%   \end{notebookout}
+%
+% Pattern D: reveal output after input.
+%   Place the input cell inside onlyenv<1-> and the output cell inside
+%   onlyenv<2->.  The counter is guarded with \only<1> so the same logical
+%   cell number is used on every overlay; both overlays show In [n]: and
+%   the second overlay adds Out [n]:.
+%     \begin{frame}[fragile]
+%       \begin{onlyenv}<1->
+%         \begin{notebookin}
+%           print("hello")
+%         \end{notebookin}
+%       \end{onlyenv}
+%       \begin{onlyenv}<2->
+%         \begin{notebookout}
+%           hello
+%         \end{notebookout}
+%       \end{onlyenv}
+%     \end{frame}
+%
+% IMPORTANT:
+%   - notebookin steps the cell counter once per logical cell, even when
+%     Beamer re-renders the frame body for each overlay.
+%   - The counter guard (\only<1>) assumes the input cell is rendered on
+%     overlay 1.  If you wrap notebookin in onlyenv<2-> or later, the counter
+%     is not stepped automatically; step it manually with
+%     \refstepcounter{nbcell} before the cell, or keep the input on <1->.
+%   - notebookout never steps the counter; it reads the current value.
+%   - Every frame containing these environments must be declared [fragile].
+\endinput
