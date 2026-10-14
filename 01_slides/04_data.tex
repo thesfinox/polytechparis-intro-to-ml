@@ -1,0 +1,541 @@
+\begin{frame}{\includesvg[height=12pt]{01_slides/img/tool.svg}~A First Look at the Data}{Download the data\dots}
+    Download the data in the \texttt{data} directory:
+    \begin{center}
+        \href{https://drive.google.com/drive/folders/1jgY7HknDzpB-sSn2zHAWcyknVQWESx_X?usp=sharing}{Data (Google Drive)}
+    \end{center}
+
+    \vfill \pause
+
+    What's in the data?
+    \vspace{1em}
+
+    \begin{columns}[c]
+        \begin{column}{0.45\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \node[label=right:data/] (data) at (0, 0) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
+                \node[below=0.25em of data, label=right:src/] (src) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
+                \node[below=0.25em of src, label=right:notebooks/] (nb) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
+                \node[label=right:pyproject.toml, below=0.25em of nb] (toml) {\includesvg[height=12pt]{01_slides/img/toml.svg}};
+                \node[label=right:README.md, below=0.25em of toml] (readme) {\includesvg[height=12pt]{01_slides/img/readme.svg}};
+            \end{tikzpicture}
+        \end{column}
+        \hfil
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                \item \texttt{*.hdr} and \texttt{*.img}: 3 couples of files (images) in \textbf{ENVI} format
+                \item \texttt{*.mat}: 3 associated files containing pixel-wise annotations
+                \item \texttt{data\_description.xlsx}: contains the \emph{labels} of the pixels
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{\includesvg[height=12pt]{01_slides/img/tool.svg}~A First Look at the Data}{Opening the data\dots}
+    \begin{enumerate}
+        \item \alert<2>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Create and open a new notebook called \texttt{data\_tidying.ipynb}}
+        \item \alert<3>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Import the following libraries:}
+              \begin{itemize}
+                  \item \texttt{numpy} and \texttt{matplotlib.pyplot} to manipulate and visualise the data
+                  \item from \texttt{scipy.io} import \texttt{loadmat} to open Matlab files
+                  \item from \texttt{spectral.io} import \texttt{envi} to open ENVI headers
+              \end{itemize}
+        \item \alert<4>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Open one of the \texttt{*.hdr} files using \texttt{envi.open}}
+        \item \alert<5>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Isolate metadata and store the following values into separate variables:}
+              \begin{itemize}
+                  \item the list of wavelengths and the list of \enquote{bad wavelengths} (\texttt{bbl} from \enquote{Bad Bands List})
+                  \item values that must be ignored
+                  \item the type of interleave of the object
+              \end{itemize}
+        \item \alert<6>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Convert the list of (bad) wavelengths to a Numpy array of (boolean) decimal values}
+        \item \alert<7>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Open the image using \texttt{open\_memmap}}
+    \end{enumerate}
+
+    \begin{onlyenv}<2>
+        \begin{tikzpicture}[overlay]
+            \node[label=right:data/] (data) at (current page.center) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
+            \node[below=0.25em of data, label=right:src/] (src) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
+            \node[below=0.25em of src, label=right:notebooks/] (nb) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
+            \node[below right=0.25em of nb, label=right:first\_tutorial.ipynb] (nbtut) {\includesvg[height=12pt]{01_slides/img/python.svg}};
+            \node[below=0.25em of nbtut, label=right:data\_tidying.ipynb] (nbdat) {\includesvg[height=12pt]{01_slides/img/python.svg}};
+
+            \begin{scope}[on background layer]
+                \node[set, fit=(data)(src)(nb)(nbtut)(nbdat), minimum width=18em, minimum height=10em, xshift=7em, yshift=-4em] at (current page.center) {};
+            \end{scope}
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<3>
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-3em] at (current page.center) {
+                \begin{notebookin}
+from scipy.io import loadmat  # open annotations
+from spectral.io import envi  # open images
+
+import numpy as np
+import matplotlib.pyplot as plt
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<4>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, xshift=-2em, yshift=-3em] at (current page.center) {
+                \begin{notebookin}
+data = envi.open("../data/HC_frt0000580c_07_if164j_ter3.hdr")
+print(data)
+                \end{notebookin}
+                \begin{notebookout}
+Data Source:   './../data/HC_frt0000580c_07_if164j_ter3.img'
+# Rows:            420
+# Samples:         640
+# Bands:           545
+Interleave:        BSQ
+Quantization:  32 bits
+Data format:   float32
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<5>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, xshift=-2em, yshift=-3em] at (current page.center) {
+                \begin{notebookin}
+metadata = data.metadata
+wavelengths = metadata["wavelength"]
+bad_wavelengths = metadata["bbl"]
+ignore_value = float(metadata["data ignore value"])
+interleave = metadata["interleave"]
+print("Description:", metadata["description"])
+print("List of keys:", list(metadata.keys()))
+                \end{notebookin}
+                \begin{notebookout}
+Description: ENVI File, Created [Sun Jun 14 08:14:44 2015]
+List of keys: ['description', 'samples', 'lines', 'bands', 'header offset', 'file type', 'data type', 'interleave', 'sensor type', 'byte order', 'default bands', 'sun azimuth', 'sun elevation', 'cloud cover', 'wavelength units', 'data ignore value', 'default stretch', 'wavelength', 'fwhm', 'bbl']
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<6>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, xshift=-2em, yshift=-3em] at (current page.center) {
+                \begin{notebookin}
+# Parse wavelengths to decimal numbers
+wavelengths = np.array(wavelengths).astype("float")
+# Parse bad_wavelengths to a boolean array
+bad_wavelengths = np.array(bad_wavelengths).astype("bool")
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<7>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, xshift=-2em, yshift=-3em] at (current page.center) {
+                \begin{notebookin}
+# Open the image
+img = data.open_memmap(interleave=interleave, writable=False)
+print("Original shape:", img.shape)
+                \end{notebookin}
+                \begin{notebookout}
+Original shape: (545, 420, 640)
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+\end{frame}
+
+\begin{frame}[fragile]{\includesvg[height=12pt]{01_slides/img/tool.svg}~A First Look at the Data}{Tidying the data\dots}
+    \begin{enumerate}
+        \item \alert<2>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Keep only the correct wavelengths (i.e.\ where \texttt{BBL} is \texttt{True})}
+        \item \alert<3-4>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Remove values to ignore from the spectral cube}
+        \item \alert<5-6>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Display the image in \enquote{fake colours} (choose three bands to represent 3 colour channels of a \enquote{normal} RGB image)}
+        \item \alert<7>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Choose 5 pixels on the image and display the intensity of the wavelengths (the spectra)}
+        \item \alert<8-9>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Restrict the data to only the \textbf{SWIR} (\emph{Short-Wave InfraRed}) range (1400 nm - 2500 nm)}
+    \end{enumerate}
+
+    \begin{onlyenv}<2>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, xshift=-2em, yshift=-10em] at (current page.center) {
+                \begin{notebookin}
+img = img[bad_wavelengths]
+print("Shape (after bad wavelength removal):", img.shape)
+wavelengths = wavelengths[bad_wavelengths]
+print("wavelengths.shape =", wavelengths.shape)
+print("wavelengths.min:", float(wavelengths.min()), "nm")
+print("wavelengths.max:", float(wavelengths.max()), "nm")
+                \end{notebookin}
+                \begin{notebookout}
+Shape (after bad wavelength removal): (489, 420, 640)
+wavelengths.shape = (489,)
+wavelengths.min: 436.13 nm
+wavelengths.max: 3896.76 nm
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<3>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, xshift=-2em, yshift=-10em] at (current page.center) {
+                \begin{notebookin}
+mask = img != ignore_value
+print("Mask.shape =", mask.shape)
+mask_spatial = mask.sum(axis=0)
+print("Shape (spatial mask):", mask_spatial.shape)
+good_rows = mask_spatial.sum(axis=1) > 0
+print("Rows to keep:", good_rows.sum())
+good_cols = mask_spatial.sum(axis=0) > 0
+print("Columns to keep:", good_cols.sum())
+img = img[:, good_rows, :][:, :, good_cols]
+print("img.shape =", img.shape)
+                \end{notebookin}
+                \begin{notebookout}
+Mask.shape = (489, 420, 640)
+Shape (spatial mask): (420, 640)
+Rows to keep: 418
+Columns to keep: 600
+img.shape = (489, 418, 600)
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<4>
+        \centering
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-10em] at (current page.center) {\includegraphics[width=0.45\textwidth]{01_slides/img/spatial_mask.png}};
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<5>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, xshift=-2em, yshift=-12em] at (current page.center) {
+                \begin{notebookin}
+# Choose the base wavelengths
+red = np.abs(wavelengths - 2500.0).argmin()
+green = np.abs(wavelengths - 1500.0).argmin()
+blue = np.abs(wavelengths - 800.0).argmin()
+
+# Select the bands and normalise in [0, 1]
+img_viz = img[[blue, green, red]]
+img_viz = (img_viz - img_viz.min()) / (img_viz.max() - img_viz.min())
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<6>
+        \centering
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-10em] at (current page.center) {\includegraphics[width=0.45\textwidth]{01_slides/img/rgb_image.png}};
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<7>
+        \centering
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-10em] at (current page.center) {\includegraphics[height=0.45\textheight]{01_slides/img/unnormalised_spectra.png}~\includegraphics[height=0.45\textheight]{01_slides/img/pixel_localisation.png}};
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<8>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, xshift=-2em, yshift=-3em] at (current page.center) {
+                \begin{notebookin}
+swir_hi = np.abs(wavelengths - 2500.0).argmin()
+swir_lo = np.abs(wavelengths - 1400.0).argmin()
+img_swir = img[swir_lo:swir_hi]
+wavelengths_swir = wavelengths[swir_lo:swir_hi]
+print("SWIR image.shape =", img_swir.shape)
+                \end{notebookin}
+                \begin{notebookout}
+SWIR image.shape = (167, 418, 600)
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<9>
+        \centering
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-8em] at (current page.center) {\includegraphics[width=0.55\textwidth]{01_slides/img/unnormalised_spectra_swir.png}};
+        \end{tikzpicture}
+    \end{onlyenv}
+\end{frame}
+
+\begin{frame}[fragile]{A First Look at the Data}{Normalising the data\dots}
+    Let us now \textbf{think} about what we just obtained:
+    \begin{enumerate}
+        \item data contain \emph{spectral} information: typical \textbf{material} signature
+        \item contamination from multiple sources: spectra are not directly comparable
+        \item must find a way to remove the background \enquote{noise}
+    \end{enumerate}
+
+    \vfill \pause
+
+    \begin{columns}[T]
+        \begin{column}{0.65\textwidth}
+            \textbf{Idea:} Define two objects:
+            \begin{enumerate}
+                \item $S(\lambda)$: the spectrum as function of wavelength $\lambda$
+                \item $C(\lambda)$: the \enquote{spectrum} which envelopes from above $S(\lambda)$ (the \emph{convex hull})
+            \end{enumerate}
+
+            \begin{equation*}
+                I(\lambda) = 1 - S(\lambda) / C(\lambda)
+            \end{equation*}
+            becomes the spectrum which has \textbf{no background} (when $S = C \Rightarrow I = 0$)
+        \end{column}
+        \hfil
+        \begin{column}{0.35\textwidth}
+            \centering
+            \includegraphics[width=0.9\textwidth]{01_slides/img/convex_hull.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{A First Look at the Data}{Normalising the data\dots}
+    How to achieve just that?
+
+    \vfill \pause
+
+    \begin{columns}[c]
+        \begin{column}{0.65\textwidth}
+            \begin{enumerate}[<+->]
+                \item Read you spectrum point-by-point from \textbf{left to right}
+                \item Connect the first \textbf{two} points, then iterate on the remaining points
+                \item If to reach the following ($i+1$-th point), you turn \textbf{clockwise} (right), then you keep the current point ($i$-th)
+                \item If you have to turn \textbf{anti-clockwise} (left), then you remove the current point from the convex hull
+            \end{enumerate}
+        \end{column}
+        \hfil
+        \begin{column}{0.35\textwidth}
+            \centering
+            \input{01_slides/img/convexhull.tex}
+        \end{column}
+    \end{columns}
+
+    \vfill \pause
+
+    {\tiny
+        Remember that a point $P = (x, y)$ is \enquote{under} the line between two points $P_1 = (x_1, y_1)$ and $P_2 = (x_2, y_2)$ if:
+        \begin{equation*}
+            y \le y_1 + (x - x_1) (y_2 - y_1) / (x_2 - x_1)
+            \Leftrightarrow
+            (y - y_1)(x_2 - x_1) - (x - x_1)(y_2 - y_1) = \mathcal{C}^{(P_1, P_2)}(P) \le 0.
+        \end{equation*}
+        Thus, going from $P_i$ to $P_{i+1}$, you need to \enquote{turn anti-clockwise} if you verify
+        \begin{equation*}
+            \mathcal{C}^{(P_{i-1}, P_{i+1})}(P_i) < 0
+        \end{equation*}
+    }
+\end{frame}
+
+\begin{frame}[fragile]{\includesvg[height=12pt]{01_slides/img/tool.svg}~A First Look at the Data}{Normalising the data\dots}
+    \begin{enumerate}
+        \item \alert<2>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Create a new file \texttt{normalisation.py} inside the \texttt{src} directory}
+        \item \alert<3>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Inside \texttt{normalisation.py}, develop a function \texttt{convex\_hull} to compute the convex hull of a spectrum:}
+              \begin{itemize}
+                  \item Use the vector of \texttt{wavelengths} and the spectrum as inputs
+                  \item Return the indices of the points that form the convex hull
+              \end{itemize}
+        \item \alert<4>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Back to the notebook \texttt{data\_tidying.ipynb}, import the new function}
+        \item \alert<5-6>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Compute the convex hull of each spectrum in the SWIR image}
+        \item \alert<7>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Save the image in the \texttt{data} directory using \texttt{np.save}}
+    \end{enumerate}
+
+    \begin{onlyenv}<2>
+        \begin{tikzpicture}[overlay]
+            \node[label=right:data/] (data) at (current page.center) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
+            \node[below=0.25em of data, label=right:notebooks/] (nb) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
+            \node[below=0.25em of nb, label=right:src/] (src) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
+            \node[below right=0.25em of src, label=right:mlintro/] (mlintro) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
+            \node[below right=0.25em of mlintro, label=right:\_\_init\_\_.py/] (init) {\includesvg[height=12pt]{01_slides/img/python.svg}};
+            \node[below=0.25em of init, label=right:naive\_classifier.py/] (naive) {\includesvg[height=12pt]{01_slides/img/python.svg}};
+            \node[below=0.25em of naive, label=right:normalisation.py/] (norm) {\includesvg[height=12pt]{01_slides/img/python.svg}};
+
+            \begin{scope}[on background layer]
+                \node[set, fit=(data)(src)(mlintro)(init)(naive)(norm)(nb), minimum width=18em, minimum height=10em, xshift=7em, yshift=-6em] at (current page.center) {};
+            \end{scope}
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<3>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, xshift=-2em, yshift=-5em] at (current page.center) {
+                \begin{notebookin}
+from mlintro.normalisation import convex_hull
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<4>
+        \begin{tikzpicture}[overlay]
+            \node[xshift=-2em, yshift=-8em] at (current page.center) {
+                \begin{codewithcard}{normalisation.py}
+import numpy as np
+def convex_hull(x, y):
+    stack = []
+    for i in range(x.size):
+        while len(stack) >= 2:
+            i1, i2 = stack[-2], stack[-1]
+            cross = (y[i2]-y[i1])*(x[i]-x[i1]) - (x[i2]-x[i1])*(y[i]-y[i1])
+            if cross < 0.0:
+                stack.pop()
+            else:
+                break
+        stack.append(i)
+    return np.asarray(stack, dtype="int")
+                \end{codewithcard}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<5>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, xshift=-2em, yshift=-8em] at (current page.center) {
+                \begin{notebookin}
+C, H, W = img_swir.shape
+img_swir_flat = img_swir.reshape(C, -1).T
+print("Flat shape =", img_swir_flat.shape)
+for i, s in enumerate(img_swir_flat):
+    idx = convex_hull(wavelengths_swir, s)
+    hull = np.interp(wavelengths_swir, wavelengths_swir[idx], s[idx])
+    img_swir_flat[i] = 1.0 - np.where(hull > 0, s / hull, 0.0)
+img_swir_norm = img_swir_flat.T.reshape(C, H, W)
+print("Normalised image.shape =", img_swir_norm.shape)
+                \end{notebookin}
+                \begin{notebookout}
+Flat shape = (250800, 167)
+Normalised image.shape = (167, 418, 600)
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<6>
+        \centering
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-8em] at (current page.center) {
+                \includegraphics[width=0.55\textwidth]{01_slides/img/normalised_spectra_swir.png}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<7>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, xshift=-2em, yshift=-8em] at (current page.center) {
+                \begin{notebookin}
+np.save("../data/HC_norm.npy", img_swir_norm)
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+\end{frame}
+
+\begin{frame}[fragile]{\includesvg[height=12pt]{01_slides/img/tool.svg}~A First Look at the Data}{Opening the annotations\dots}
+    \begin{enumerate}
+        \item \alert<2>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Use the \texttt{loadmat} function to load the \textbf{ground truth} annotations (relative to the image you chose!)}
+        \item \alert<3>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Select the object containing the labels}
+        \item \alert<4>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Pad the annotations to fit the image (add zeros to the right and the bottom where necessary)}
+        \item \alert<5>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Display the annotations in different colours}
+        \item \alert<6>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Select spectra based on the different labels and plot the average spectra of each mineral}
+        \item \alert<7>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~As in the previous case, use \texttt{np.save} to save the labels to file}
+    \end{enumerate}
+
+    \begin{onlyenv}<2>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, xshift=-2em, yshift=-5em] at (current page.center) {
+                \begin{notebookin}
+annot = loadmat("../data/HC_ground_truth.mat")
+print(list(annot.keys()))
+                \end{notebookin}
+                \begin{notebookout}
+['__header__', '__version__', '__globals__', 'holden_gt']
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<3>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, xshift=-2em, yshift=-8em] at (current page.center) {
+                \begin{notebookin}
+labels = annot["holden_gt"]
+print("Labels.shape =", labels.shape)
+                \end{notebookin}
+                \begin{notebookout}
+Labels.shape = (418, 595)
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<4>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, xshift=-2em, yshift=-7em] at (current page.center) {
+                \begin{notebookin}
+if labels.shape != img_swir_norm.shape[1:]:
+    pad_rows = img_swir_norm.shape[1] - labels.shape[0]
+    pad_cols = img_swir_norm.shape[2] - labels.shape[1]
+    if (pad_rows >= 0) and (pad_cols >= 0):
+        labels = np.pad(
+            labels,
+            ((0, pad_rows), (0, pad_cols)),
+            mode="constant",
+            constant_values=0,
+            )
+print("Labels.shape (new) =", labels.shape)
+                \end{notebookin}
+                \begin{notebookout}
+Labels.shape (new) = (418, 600)
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<5>
+        \centering
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-7em] at (current page.center) {
+                \includegraphics[width=0.55\textwidth]{01_slides/img/labels.png}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<6>
+        \centering
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-7em] at (current page.center) {
+                \includegraphics[width=0.55\textwidth]{01_slides/img/average_spectra.png}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<7>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, xshift=-2em, yshift=-5em] at (current page.center) {
+                \begin{notebookin}
+np.save("../data/HC_labels.npy", labels)
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+\end{frame}
+
+\begin{frame}{A First Look at the Data}{Preparing for next time\dots}
+    We can now proceed with the study of different ML algorithms, thanks to all the work we have done so far!
+    \vfill \pause
+    \begin{center}
+        \huge
+        Remember where you saved the data! Next time we shall start from there!
+        \\[2em]
+        Are there questions?
+    \end{center}
+    \vfill
+\end{frame}

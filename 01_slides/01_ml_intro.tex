@@ -1,0 +1,172 @@
+% !TeX root = 01_intro_ml_polytech.tex
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_GB
+
+\begin{frame}{What is Machine Learning?}{Let us shed some light\dots}
+
+    \begin{columns}[c]
+        \begin{column}{0.50\textwidth}
+            Let us build some intuition: \emph{what is AI?}
+            \vspace{1em}
+
+            \only<2->{
+                \textbf{Artificial Intelligence:}
+                \begin{itemize}
+                    \item emulation of \enquote{human behaviour}
+                    \item decision making
+                \end{itemize}
+                \vspace{1em}
+            }
+
+            \only<3->{
+                \textbf{Machine Learning:}
+                \begin{itemize}
+                    \item statistical modelling
+                    \item generalisation
+                \end{itemize}
+                \vspace{1em}
+            }
+
+            \only<4->{
+                \textbf{Deep Learning:}
+                \begin{itemize}
+                    \item complex problems
+                    \item neural networks
+                \end{itemize}
+            }
+        \end{column}
+        \hfil
+        \begin{column}{0.5\textwidth}
+            \centering
+            \input{01_slides/img/ml_schema.tex}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{What is Machine Learning?}{Some motivations\dots}
+    \begin{center}
+        \large
+        \textbf{Q:}~Why choose an introductory ML course in 2026?
+
+        \vspace{2em}
+
+        {\tiny Answers \enquote{I had to fill my time schedule somehow} mildly discouraged\dots}
+    \end{center}
+
+    \vfill\pause
+
+    \begin{columns}[c]
+        \begin{column}{0.6\textwidth}
+            \begin{itemize}
+                \item ML $\simeq$ statistics $\simeq$ applied mathematics
+                \item ML enables interpretation of the world
+                \item ML = interpretation of complex systems
+                \item ML in \textbf{material science} = modern frontier
+            \end{itemize}
+        \end{column}
+        \hfil
+        \begin{column}{0.3\textwidth}
+            \centering
+            \includegraphics[width=0.8\textwidth]{01_slides/img/hsi_cube.jpg}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{What is Machine Learning?}{Some examples\dots}
+    \begin{columns}[c]
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[width=0.55\textwidth]{01_slides/img/diffusion.jpg}
+        \end{column}
+        \hfil
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includesvg[height=32px]{01_slides/img/anthropic.svg}
+            \hfil
+            \includesvg[height=32px]{01_slides/img/google.svg}
+            \hfil
+            \includesvg[height=32px]{01_slides/img/openai.svg}
+            \\[1em]
+            \includesvg[height=32px]{01_slides/img/deepseek.svg}
+            \hfil
+            \includesvg[height=32px]{01_slides/img/mistral.svg}
+            \hfil
+            \includesvg[height=32px]{01_slides/img/kimi-ai.svg}
+        \end{column}
+    \end{columns}
+
+    \vspace{2em}
+
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{tabular}{@{}lp{14em}@{}}
+                \textbf{Model:}  & {\small Google's \href{https://gemini.google.com/images}{Nano Banana 2}}                                                                                               \\[1em]
+                \textbf{Prompt:} & {\small \enquote{Generate a realistic image of an astronaut wearing a NASA suit riding a magnificent unicorn on the surface of Mars with realistic martian lightning}}
+            \end{tabular}
+        \end{column}
+        \hfil
+        \begin{column}{0.5\textwidth}
+            \begin{tabular}{@{}lp{14em}@{}}
+                \textbf{Question:} & {\small Can you tell me a very funny, short joke?}                                                                                          \\[1em]
+                \textbf{Answer:}   & {\small \enquote{Why do programmers prefer dark mode? Because light attracts bugs.}} {\tiny \textcolor{CEAgrey}{(model: Gemini 3.6 Flash)}}
+            \end{tabular}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{What is Machine Learning?}{Some examples\dots}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[height=6.5em]{01_slides/img/face_input.jpg}
+            \hfil
+            \includegraphics[height=6.5em]{01_slides/img/mesh_output.png}
+            \\
+            {\tiny \textcolor{CEAgrey}{Source: \href{https://developers.google.com/ml-kit}{Google's MLKit}}}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[height=6.6em]{01_slides/img/nvidia.png}
+            \\
+            {\tiny \textcolor{CEAgrey}{Source: \href{https://developer.nvidia.com/blog/using-multi-scale-attention-for-semantic-segmentation/}{NVidia Developers}}}
+        \end{column}
+    \end{columns}
+
+    \vfill
+
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[height=6.5em]{01_slides/img/yolo.png}
+            \\
+            {\tiny \textcolor{CEAgrey}{Source: \href{https://www.ultralytics.com/}{Ultralytics' YOLO model}}}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[height=6.8em]{01_slides/img/alphago.jpg}
+            \\
+            {\tiny \textcolor{CEAgrey}{Source: \href{https://www.bbc.com/news/technology-35785875}{BBC News}}}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{What is Machine Learning?}{Some examples (in science)\dots}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \centering
+            \input{01_slides/img/chf.tex}
+            \\
+            {\tiny \textcolor{CEAgrey}{Source: \href{https://arxiv.org/abs/2602.21701}{Cazzola et al.\ (2026)}}}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[height=6.8em]{01_slides/img/validation.png}
+            \\
+            {\tiny \textcolor{CEAgrey}{Source: \href{https://arxiv.org/abs/2210.03762}{Finotello et al.\ (2022)}}}
+            \\[1em]
+            \includegraphics[height=6.8em]{01_slides/img/imaging.jpg}
+            \\
+            {\tiny \textcolor{CEAgrey}{Source: \href{https://www.sciencedirect.com/science/article/pii/S0584854718304889}{Jolivet et al.\ (2019)}}}
+        \end{column}
+    \end{columns}
+\end{frame}

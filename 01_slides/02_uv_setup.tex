@@ -1,0 +1,146 @@
+% !TeX root = 01_intro_ml_polytech.tex
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_GB
+
+\begin{frame}{Python Projects Primer}{\includesvg[height=12pt]{01_slides/img/tool.svg}~Settings things up locally\dots}
+    \begin{center}
+        \large
+        \textbf{Q:}~How many of you prefer working on Windows in these sessions? How many on Linux?
+    \end{center}
+
+    \pause \vfill
+
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{center}
+                \large \textbf{LINUX}
+
+                Open up a \emph{terminal} window:
+                \begin{center}
+                    \includesvg[height=24pt]{01_slides/img/gnome_terminal.svg}
+                \end{center}
+            \end{center}
+        \end{column}
+        \hfil
+        \begin{column}{0.5\textwidth}
+            \begin{center}
+                \large \textbf{WINDOWS}
+
+                Search and click on \emph{GIT (Bash)}:
+                \begin{center}
+                    \includegraphics[height=24pt]{01_slides/img/git_windows.png}
+                \end{center}
+            \end{center}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Python Projects Primer}{\includesvg[height=12pt]{01_slides/img/tool.svg}~Practicing some commands\dots}
+    \begin{codewithcard}[language=sh]{Terminal}
+# This command prints the current "working directory"
+pwd
+# This command "lists" the files in the directory
+ls
+# This command "creates" a new directory
+mkdir MyNewDirectory
+# This command "changes the directory" = moves to a new location
+cd MyNewDirectory
+# This command creates an empty file
+touch AnEmptyFile.txt
+# This command shows the content of files
+cat AnEmptyFile.txt
+# This command removes a file
+rm AnEmptyFile.txt
+    \end{codewithcard}
+\end{frame}
+
+\begin{frame}{Python Projects Primer}{Introducing the practical tools\dots}
+    We choose the \href{https://www.python.org/}{\textbf{Python}~\includesvg[height=12pt]{01_slides/img/python.svg}} programming language:
+    \begin{itemize}
+        \item For its \textbf{simplicity} and \textbf{portability};
+        \item For its huge \textbf{ecosystem};
+        \item Because it is the \textbf{most widely used language} for AI
+    \end{itemize}
+
+    \vfill \pause
+
+    What is a Python \textbf{project} made of and what shall we use?
+    \begin{itemize}
+        \item \textbf{libraries:}
+              \begin{itemize}
+                  \item \emph{third parties:} code written by others, available to be \textbf{imported} in our code
+                  \item \emph{local:} tools used by the main code in our implementation
+              \end{itemize}
+        \item \textbf{scripts:} pipelines/sequences of operations to perform
+        \item \textbf{notebooks:} like scripts, but divided into standalone cells
+        \item \textbf{documentation:} logbooks, instructions, experiment notes, etc.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Python Projects Primer}{\includesvg[height=12pt]{01_slides/img/tool.svg}~Installing a package manager\dots}
+    \vfill
+
+    We shall install \href{https://docs.astral.sh/uv/}{\texttt{uv}} to manage all this for us:
+    \begin{codewithcard}[language=sh]{Terminal}
+# Copy and execute the following line in the previous location
+curl -LsSf https://astral.sh/uv/install.sh | sh
+    \end{codewithcard}
+
+    \pause
+    You must \textbf{close and restart} your terminal, then \textbf{go back} to the previous location:
+    \begin{codewithcard}[language=sh]{Terminal}
+# Try executing uv once to check that it has been installed
+uv
+    \end{codewithcard}
+
+    \vfill
+\end{frame}
+
+\begin{frame}[fragile]{Python Projects Primer}{\includesvg[height=12pt]{01_slides/img/tool.svg}~Creating a first project\dots}
+    \vfill
+
+    You can now create your \textbf{first project}:
+    \begin{codewithcard}[language=sh]{Terminal}
+# Set name and email once to initialise the versioning system
+# This is only necessary ONCE, if you have not already
+git config --global user.name "Name Surname"
+git config --global user.email name.surname@whatever.com
+
+# Create your first project
+uv init --name="my-project-name" \
+--description="This is where you describe the purpose of the project" \
+--build-backend="hatch" \
+--python 3.13
+    \end{codewithcard}
+
+    \vfill
+
+    Using \textbf{any file browser} that you know
+\end{frame}
+
+\begin{frame}{Python Projects Primer}{A quick look at a project\dots}
+    \centering
+    \input{01_slides/img/project.tex}
+\end{frame}
+
+
+\begin{frame}[fragile]{Python Projects Primer}{\includesvg[height=12pt]{01_slides/img/tool.svg}~Setting things up\dots}
+    \textbf{Move your first steps} -- Prepare your working space:
+    \begin{enumerate}
+        \item Open the file \texttt{pyproject.toml} and remove the \texttt{[project.scripts]} section
+        \item Open the file \texttt{\_\_init\_\_.py} inside the \texttt{src} directory and remove the code
+        \item Create a new directory \texttt{notebooks} on the same level as the \texttt{src} directory
+        \item Create a new directory \texttt{data} on the same level as the \texttt{src} directory
+        \item Open the file \texttt{README.md} file and keep it open somewhere: use it as a log
+    \end{enumerate}
+
+    \pause \vfill
+    \textbf{Install the dependencies} -- Ready your project:
+    \begin{codewithcard}[language=sh]{Terminal}
+# Install third party libraries
+# This is only required once per project
+uv add numpy scipy scikit-learn matplotlib spectral jupyter
+# Run the notebook interface
+uv run jupyter lab
+    \end{codewithcard}
+\end{frame}

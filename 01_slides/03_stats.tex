@@ -1,0 +1,501 @@
+% !TeX root = 01_intro_ml_polytech.tex
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_GB
+
+\begin{frame}{The Jupyter Interface}{\includesvg[height=12pt]{01_slides/img/tool.svg}~The starting point\dots}
+    \centering
+    \includegraphics[width=\textwidth]{01_slides/img/jupyter.png}
+
+    \vfill
+    \begin{enumerate}
+        \item Double click the \texttt{notebooks} directory
+        \item Click on the \texttt{Python 3 (ipykernel)} notebook
+    \end{enumerate}
+
+    \begin{tikzpicture}[overlay]
+        \node<2->[set red, align=center, text width=15em, xshift=5em] at (current page.west) {\textbf{CTRL + s} to save your work! {\footnotesize (Call the notebook \texttt{first\_tutorial.ipynb})}};
+    \end{tikzpicture}
+\end{frame}
+
+\begin{frame}[fragile]{The Jupyter Interface}{Cells and execution\dots}
+    The notebook is organised in \enquote{cells}:
+    \begin{notebookin}
+# Here goes your Python code
+    \end{notebookin}
+
+    \vfill
+
+    You need to use \texttt{SHIFT + Enter} to execute the content of a cell:
+    \begin{notebookin}
+print("Hello, world!")
+    \end{notebookin}
+    \begin{notebookout}
+Hello, world!
+    \end{notebookout}
+    \begin{notebookin}
+3 + 2
+    \end{notebookin}
+    \begin{notebookout}
+5
+\end{notebookout}
+\end{frame}
+
+\begin{frame}[fragile]{The Jupyter Interface}{Cells and execution\dots}
+    The top bar allows you to choose between \emph{Code} or \emph{Markdown}:
+    \begin{center}
+        \includegraphics[height=12pt]{01_slides/img/jupyter_bar.png}
+        \hfil
+        \includegraphics[height=12pt]{01_slides/img/jupyter_bar_md.png}
+    \end{center}
+
+    \vfill
+
+    In Markdown mode, this cell
+    \begin{notebookinmd}
+# This is a title
+
+This is text.
+
+## This is a subtitle.
+
+This is **bold** and this is *italic*.
+    \end{notebookinmd}
+    will display as text: useful for notes!
+\end{frame}
+
+\begin{frame}[fragile]{The Jupyter Interface}{Cells and execution\dots}
+    You can use the commands on the right of the cell
+    \begin{center}
+        \includegraphics[height=12pt]{01_slides/img/jupyter_cell_cmd.png}
+    \end{center}
+    to
+    \begin{itemize}
+        \item \textbf{Duplicate} the current cell
+        \item \textbf{Move} the current cell up or down
+        \item \textbf{Add} a cell above or below the current cell
+        \item \textbf{Delete} the current cell
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Some Basic Statistics}{\includesvg[height=12pt]{01_slides/img/tool.svg}~Back to the notebooks\dots}
+    Start by activating some useful Jupyter extensions:
+    \begin{notebookin}
+%load_ext autoreload
+%autoreload 2
+    \end{notebookin}
+
+    \vfill
+    Then, load the libraries
+    \begin{notebookin}
+import numpy as np
+    \end{notebookin}
+
+    \vfill
+    We shall now take a look at some standard operations to perform on objects (\textbf{tensors}) in Python.
+\end{frame}
+
+\begin{frame}[fragile]{Some Basic Statistics}{\includesvg[height=12pt]{01_slides/img/tool.svg}~Some basic Python\dots}
+    You can now perform some basic operations:
+    \begin{notebookin}
+# Generate 1000 samples in a standard normal distribution
+X = np.random.randn(1000)
+print("X.shape =", X.shape)
+    \end{notebookin}
+    \begin{notebookout}
+X.shape = (1000,)
+    \end{notebookout}
+
+    \vfill \pause
+    You can also manipulate \textbf{tensors} and \textbf{scalars}:
+    \begin{notebookin}
+# Generate 1000 samples in a normal distribution
+# centred in 1.0 and with standard deviation 1/2
+Y = 1.0 + 0.5 * np.random.randn(1000)
+print("Y.shape =", Y.shape)
+    \end{notebookin}
+    \begin{notebookout}
+Y.shape = (1000,)
+    \end{notebookout}
+\end{frame}
+
+\begin{frame}[fragile]{Some Basic Statistics}{\includesvg[height=12pt]{01_slides/img/tool.svg}~Some basic Python\dots}
+    You can reshape easily your tensors:
+    \begin{notebookin}
+X = X.reshape(-1, 1); Y = Y.reshape(-1, 1)
+print("X.shape =", X.shape)
+print("Y.shape =", Y.shape)
+    \end{notebookin}
+    \begin{notebookout}
+X.shape = (1000, 1)
+Y.shape = (1000, 1)
+    \end{notebookout}
+
+    \vfill \pause
+    And perform basic operations (e.g. \textbf{matric multiplication}):
+    \begin{notebookin}
+Z = (X.T @ Y) / 1000
+print("Z.shape =", Z.shape)
+print("Z =", Z.ravel())
+    \end{notebookin}
+    \begin{notebookout}
+Z.shape = (1, 1)
+Z = [0.0098006]
+    \end{notebookout}
+\end{frame}
+
+\begin{frame}[fragile]{Some Basic Statistics}{\includesvg[height=12pt]{01_slides/img/tool.svg}~Some basic Python\dots}
+    In general, you can manipulate \textbf{tensors} of any shape:
+    \begin{notebookin}
+# 1000 typical, 3-channel (RGB) images with square factor
+X = np.random.randn(1000, 3, 64, 64)
+print("X.shape =", X.shape)
+    \end{notebookin}
+    \begin{notebookout}
+X.shape = (1000, 3, 64, 64)
+    \end{notebookout}
+
+    \vfill \pause
+    And compute \textbf{statistics} on them:
+    \begin{notebookin}
+# The "axis" defines where to compute the operation
+X_mean = X.mean(axis=1)  # in "torch", it will be "dim=1"
+X_std = X.std(axis=1)
+print("E[X].shape =", X_mean.shape)
+print("std(X).shape = ", X_std.shape)
+    \end{notebookin}
+    \begin{notebookout}
+E[X].shape = (1000, 64, 64)
+std(X).shape =  (1000, 64, 64)
+    \end{notebookout}
+\end{frame}
+
+\begin{frame}[fragile]{Some Basic Statistics}{\includesvg[height=12pt]{01_slides/img/tool.svg}~Some basic Python\dots}
+    Tensors can be \textbf{sliced} and modified:
+    \begin{notebookin}
+# For instance:
+#    X[3] takes the 4th element of a tensor
+#    X[:, 2] takes all elements in the first axis, 3rd in the second
+#    X[2:, :] takes from 3rd to the end in the first, all in the second
+X = 3.0 * np.random.randn(128, 128)
+X[32:64, 18:64] = 0
+    \end{notebookin}
+
+    \vfill \pause
+    An certain objects (mostly 2d) can be shown:
+    \begin{notebookin}
+fig, ax = plt.subplots(ncols=1, nrows=1, layout="constrained")
+img = ax.matshow(X, cmap="RdBu_r")
+plt.colorbar(img)
+plt.savefig("matplotlib_img.png")
+    \end{notebookin}
+
+    \begin{tikzpicture}[overlay]
+        \node<3->[set, xshift=3em] at (current page.center) {\includegraphics[width=15em]{01_slides/img/matplotlib_img.png}};
+    \end{tikzpicture}
+\end{frame}
+
+\begin{frame}[fragile]{Some Basic Statistics}{\includesvg[height=12pt]{01_slides/img/tool.svg}~Some basic Python\dots}
+    We can also plot curves:
+    \begin{notebookin}
+# Create some data
+x = np.linspace(0.0, 2*np.pi, num=1000)
+y1 = np.sin(x)
+y2 = np.cos(x)
+
+# Create line plots
+fig, ax = plt.subplots(ncols=1, nrows=1, layout="constrained")
+ax.plot(x, y1, "r-", label="sin(x)")
+ax.plot(x, y2, "b--", label="cos(x)")
+ax.set(xlabel="x", ylabel="y")
+ax.legend()
+plt.savefig("matplotlib_lines.png")
+    \end{notebookin}
+
+    \begin{tikzpicture}[overlay]
+        \node<2->[set, xshift=3em] at (current page.center) {\includegraphics[width=15em]{01_slides/img/matplotlib_lines.png}};
+    \end{tikzpicture}
+\end{frame}
+
+\begin{frame}[fragile]{Some Basic Statistics}{\includesvg[height=12pt]{01_slides/img/tool.svg}~Some basic Python\dots}
+    We can also plot histograms:
+    \begin{notebookin}
+# Create some data
+x = np.random.beta(2.0, 5.0, size=2500)
+
+# Create the histogram
+fig, ax = plt.subplots(ncols=1, nrows=1, layout="constrained")
+ax.hist(x, bins=100)
+ax.set(xlabel="x", ylabel="Beta distribution")
+plt.savefig("matplotlib_beta.png")
+    \end{notebookin}
+
+    \begin{tikzpicture}[overlay]
+        \node<2->[set, xshift=3em, yshift=-5em] at (current page.center) {\includegraphics[width=15em]{01_slides/img/matplotlib_beta.png}};
+    \end{tikzpicture}
+\end{frame}
+
+\begin{frame}[fragile]{Some Basic Statistics}{\includesvg[height=12pt]{01_slides/img/tool.svg}~Hands on, maybe\dots}
+    Let us build a small 1D dataset:
+    \begin{notebookin}
+X_1 = np.random.randn(1500)
+y_1 = np.zeros(1500)
+X_2 = 3.0 + 0.25 * np.random.randn(1000)
+y_2 = np.ones(1000)
+X_3 = -4.1 + 2.0 * np.random.randn(500)
+y_3 = 2 * np.ones(500)
+
+X = np.concat([X_1, X_2, X_3], axis=0)
+y = np.concat([y_1, y_2, y_3], axis=0).astype("int")
+
+# Shuffle the entries
+p = np.random.permutation(X.shape[0])
+X = X[p]; y = y[p]
+    \end{notebookin}
+
+    \textbf{Goal:} Use $X$ as independent variables. Use $y$ as associated labels.
+\end{frame}
+
+\begin{frame}[fragile]{Some Basic Statistics}{\includesvg[height=12pt]{01_slides/img/tool.svg}~Hands on, maybe\dots}
+
+    \begin{enumerate}
+        \item \alert<2>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Verify that both $X$ and $y$ are vectors of length $3000$}
+        \item \alert<3-4>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Plot the three multivariate normal distributions (one per plot + on the same plot)}
+        \item \alert<5>{\includesvg[height=12pt]{01_slides/img/brain.svg}~If $X$ are samples, what do labels identify in this example?}
+    \end{enumerate}
+
+    \vfill
+
+    \begin{onlyenv}<2>
+        \begin{notebookin}
+print("X.shape =", X.shape)
+print("y.shape =", y.shape)
+        \end{notebookin}
+        \begin{notebookout}
+X.shape = (3000,)
+y.shape = (3000,)
+        \end{notebookout}
+    \end{onlyenv}
+
+    \begin{onlyenv}<3>
+        \begin{tikzpicture}[overlay]
+            \node[set, yshift=-12em] at (current page.center) {\includegraphics[width=0.85\textwidth]{01_slides/img/bayes_gauss.png}};
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<4>
+        \begin{notebookin}
+fig, ax = plt.subplots(ncols=4, nrows=1, figsize=(20, 5), layout="constrained")
+ax[0].hist(X_1, bins=50)
+ax[0].set(xlabel="x", ylabel="y", title="Gaussian no. 1")
+...  # same on ax[1] and ax[2]
+ax[3].hist(X_1, bins=50, alpha=0.5, label="X_1")
+...  # same but on same ax[3]
+plt.savefig("bayes_gauss.png")
+        \end{notebookin}
+    \end{onlyenv}
+\end{frame}
+
+\begin{frame}[fragile]{Some Basic Statistics}{Hands on, maybe\dots}
+    Now suppose we lost the original parameters of the three Gaussian.
+    We are left with a \textbf{mixture}
+
+    \begin{center}
+        \includegraphics[width=0.3\textwidth]{01_slides/img/bayes_gauss_mix.png}
+    \end{center}
+
+    and with simple \textbf{labels} that just tell us which sample correspond to which Gaussian.
+
+    \pause
+
+    \begin{center}
+        \includesvg[height=12pt]{01_slides/img/brain.svg}~Can we design an algorithm to determine the parameters and assign labels to new samples?
+    \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Some Basic Statistics}{Hands on, maybe\dots}
+    Recall an important lesson in statistics (\textbf{Bayes' theorem}):
+    \begin{equation*}
+        \underbrace{P(C \mid X)}_{\text{posterior}}
+        \propto
+        \underbrace{P(X \mid C)}_{\text{likelihood}}
+        \underbrace{P(C)}_{\text{prior}}
+    \end{equation*}
+
+    \pause
+    In other words,
+    \begin{enumerate}[<+->]
+        \item Given the probability of finding a certain \textbf{class} (label) $C = c$ {\tiny (favourable cases / total cases)}\dots
+        \item \dots and the \enquote{model} (\textbf{likelihood}) which we use to describe our data (i.e.\ a Gaussian distribution) in a certain class,
+        \item We can \enquote{update} the probability that $X = x$ is in a certain class by multiplying the two objects
+    \end{enumerate}
+
+    \pause
+    The objective is thus:
+    \begin{enumerate}[<+->]
+        \item Determine (\enquote{fit}) correctly the parameters that describe the data (estimate mean and standard deviation for each class)
+        \item \enquote{try} to apply each class to $X = x$ and see which class has the highest probability
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Some Basic Statistics}{\includesvg[height=12pt]{01_slides/img/tool.svg}~Hands on, maybe\dots}
+    \begin{enumerate}
+        \item \alert<2>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Go in directory of your package in the \texttt{src} directory and create a new file named \texttt{naive\_classifier.py}}
+        \item \alert<3>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Import \texttt{numpy} in the file and create the following functions:}
+              \begin{enumerate}
+                  \item \alert<4>{\texttt{gaussian\_distribution} to define a Gaussian probability of a sample $X$ given the mean and standard deviation of the curve}
+                  \item \alert<5>{\texttt{fit} to separate the \enquote{training} samples into their classes and compute the mean and standard deviation of their distributions, and the \emph{prior}}
+                  \item \alert<6>{\texttt{predict} to apply the Gaussian model for each possible class and select the one with the maximum \emph{posterior}}
+                  \item \alert<7>{\texttt{accuracy} to compute how many times the prediction is exactly the same as the original label}
+              \end{enumerate}
+        \item \alert<8>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Go back to the notebook and import the \texttt{fit} and \texttt{predict} functions}
+        \item \alert<9>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Apply the \texttt{fit} function to a subset of the $X$ dataset (e.g.\ the first 2500 elements)}
+        \item \alert<10>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Apply the \texttt{predict} function to the remaining samples and compute the accuracy fo the predictions}
+    \end{enumerate}
+
+    \begin{onlyenv}<2>
+        \begin{tikzpicture}[overlay]
+            \node[label=right:src/] (src) at (current page.center) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
+            \node[below right=0.25em of src, label=right:mlintro/] (mod) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
+            \node[below right=0.25em of mod, label=right:\_\_init\_\_.py] (init) {\includesvg[height=12pt]{01_slides/img/python.svg}};
+            \node[below=0.25em of init, label=right:naive\_classifier.py] (class) {\includesvg[height=12pt]{01_slides/img/python.svg}};
+
+            \begin{scope}[on background layer]
+                \node[set, fit=(src)(mod)(init)(class), minimum width=18em, minimum height=10em, xshift=7em, yshift=-3em] at (current page.center) {};
+            \end{scope}
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<3>
+        \begin{tikzpicture}[overlay]
+            \node[xshift=-2em, yshift=-5em] at (current page.center) {
+                \begin{codewithcard}{naive_classifier.py}
+import numpy as np
+                \end{codewithcard}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<4>
+        \begin{tikzpicture}[overlay]
+            \node[xshift=-2em, yshift=-5em] at (current page.center) {
+                \begin{codewithcard}{naive_classifier.py}
+...
+def gaussian_distribution(x, mean, std):
+    num = np.exp(-0.5 * (x-mean)**2 / std**2)
+    den = np.sqrt(2.0 * np.pi) * std
+    return num / den
+                \end{codewithcard}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<5>
+        \begin{tikzpicture}[overlay]
+            \node[xshift=-2em, yshift=-2em] at (current page.center) {
+                \begin{codewithcard}{naive_classifier.py}
+...
+def fit(X, y):
+    # Order the samples by their label
+    idx = np.argsort(y)
+    X_copy = X[idx]; y_copy = y[idx]
+    # Recover the first positions of labels and split
+    splits = np.unique(y_copy, return_index=True)[1]
+    X_splits = np.split(X_copy, splits[1:])
+    # Compute mean and std
+    mean_list = []; std_list = []; prior_list = []
+    for X_split in X_splits:
+        mean_list.append(float(X_split.mean()))
+        std_list.append(float(X_split.std()))
+        prior_list.append(float(X_split.shape[0] / X.shape[0]))
+    return mean_list, std_list, prior_list
+                \end{codewithcard}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<6>
+        \begin{tikzpicture}[overlay]
+            \node[xshift=-2em, yshift=-2em] at (current page.center) {
+                \begin{codewithcard}{naive_classifier.py}
+...
+def predict(X, mean_list, std_list, prior_list):
+    # Assume X is a list of values
+    labels = []
+    for x in X:
+        # Compute the posterior for each class
+        posterior_list = []
+        for mean, std, prior in zip(mean_list, std_list, prior_list):
+            likelihood = gaussian_distribution(x, mean, std)
+            posterior = likelihood * prior
+            posterior_list.append(posterior)
+        labels.append(np.argmax(posterior_list))
+    return np.array(labels).astype("int")
+                \end{codewithcard}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<7>
+        \begin{tikzpicture}[overlay]
+            \node[xshift=-2em, yshift=3em] at (current page.center) {
+                \begin{codewithcard}{naive_classifier.py}
+...
+def accuracy(y_true, y_pred):
+    return float((y_true == y_pred).mean())
+                \end{codewithcard}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<8>
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=3em] at (current page.center) {
+                \begin{notebookin}
+from mlintro.naive_classifier import fit, predict
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<9>
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=3em] at (current page.center) {
+                \begin{notebookin}
+mean_list, std_list, prior_list = fit(X[:2500], y[:2500])
+            \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<10>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=40em, xshift=-2em, yshift=3em] at (current page.center) {
+                \begin{notebookin}
+preds = predict(X[2500:], mean_list, std_list, prior_list)
+acc = accuracy(y[2500:], preds)
+print(f"Accuracy: {acc:.1%"})
+                \end{notebookin}
+                \begin{notebookout}
+96.6%
+            \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+\end{frame}
+
+\begin{frame}{Some Basic Statistics}{Bravo!}
+    If you got to this point, then \emph{congratulations}! You just coded your first ML algorithm completely from scratch!
+
+    \vspace{1em}
+
+    What you just coded is called:
+    \begin{center}
+        \huge
+        \textbf{Naive Bayes Classifier}
+    \end{center}
+    and performs simple (\emph{naive}) classification, based on basic assumptions on the shape of the data.
+
+    \vspace{1em}
+
+    After breaking the ice, we can now proceed with the case study that will accompany us for the rest of the modules.
+\end{frame}
