@@ -1,0 +1,23 @@
+\begin{tikzpicture}[scale=0.9, every node/.style={scale=0.9}]
+    % Elements first (fit needs their coordinates)
+    \node<2->[elem, label=below:logic programming] (ai1) at (0.25, -2)    {};
+    \node<2->[elem, label=above:semantic nets] (ai2) at (4.5, -6.5)   {};
+    \node<2->[elem, label=above:expert systems] (ai3) at (4, -3.5) {};
+
+    \node<3->[elem, label=below:data analysis] (ml1) at (0.25, -3.5)    {};
+    \node<3->[elem, label=above:learning algorithms] (ml2) at (0.75, -6)   {};
+
+    \node<4->[elem, label=above:neural networks] (dl1) at (0.74, -4.75)   {};
+
+    % Sets on the background layer so they do not hide the elements
+    \begin{scope}[on background layer]
+        \node<2->[set, fit=(ai1)(ai2)(ai3), minimum width=7.8cm] (ai) {};
+        \node<3->[set green, fit=(ml1)(ml2), minimum width=4cm] (ml) {};
+        \node<4->[set red, fit=(dl1), minimum width=3cm, minimum height=1.25cm] (dl) {};
+    \end{scope}
+
+    % Labels
+    \node<2->[set label, CEAblue] at (ai.north west) {Artificial Intelligence};
+    \node<3->[set label, CEAgreen] at (ml.north west) {Machine Learning};
+    \node<4->[set label, CEAred, yshift=-0.6cm] at (dl.east) {Deep Learning};
+\end{tikzpicture}

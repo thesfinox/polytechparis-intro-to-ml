@@ -1,0 +1,23 @@
+\begin{tikzpicture}[scale=0.5, every node/.style={scale=0.5}]
+    % Heat flux
+    \fill[very thick, CEAred] (0.15, 0) rectangle (0.0, 5) node[midway, above, rotate=90] {\Large \textsc{Heat Flux}};
+    \foreach \i in {0.5, 1.5, 2.5, 3.5, 4.5} {
+            \draw[draw=CEAyellow, fill=CEAred!80!white, very thick] (0.2, \i) -- ++(0, -0.15) -- ++(1.5, 0) -- ++(0, -0.1) -- ++(0.5, 0.25) -- ++(-0.5, +0.25) -- ++(0, -0.1) -- ++(-1.5, 0) -- cycle;
+        }
+
+    % Walls and coolant
+    \fill[very thick, black!50] (2.6, 0) rectangle (2.8, 5);
+    \fill[very thick, black!50] (4.6, 0) rectangle (4.8, 5);
+    \fill[CEAblue!25] (2.8, 0) rectangle (4.6, 5) node[midway, above, black, rotate=90] {\Large \textsc{Coolant Liquid}} node[midway, below, black, rotate=90] {\Large $\longrightarrow \quad \longrightarrow \quad \longrightarrow$};
+
+    % Labels
+    \draw[thick, |<->|] (5.0, 0) -- (5.0, 5) node[midway, above right, black] (heated length) {\textsc{Heated Length}};
+    \node[below=0.15em of heated length, black] {\Large $L$};
+
+    \draw[thick, |<->|] (2.8, -0.2) -- (4.6, -0.2) node[midway, below, black, yshift=-0.3em] (tube diameter) {\textsc{Tube Diameter}};
+    \node[below=0.15em of tube diameter, black] {\Large $D$};
+
+    \draw[CEAblue, ultra thick, ->, rounded corners=3mm] (6.0, -1.75) node[right, anchor=south west] {\textsc{Mass Flow Rate}~ {\Large $G$}} node[right, anchor=north west] {\textsc{Inlet Temperature}~ {\Large $T_{\text{in}}$}} -- (4.3, -1.75) -- (4.3, -0.9);
+
+    \draw[CEAblue, ultra thick, ->, rounded corners=3mm] (4.3, 5.2) -- (4.3, 6.05) -- (6.0, 6.05) node[right, anchor=south west] {\textsc{Pressure}~ {\Large $P$}} node[right, anchor=north west] {\textsc{Outlet Vapour Quality}~ {\Large $\mathfrak{X}$}};
+\end{tikzpicture}
