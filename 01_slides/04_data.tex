@@ -180,7 +180,7 @@ wavelengths.max: 3896.76 nm
 
     \begin{onlyenv}<3>
         \begin{tikzpicture}[overlay]
-            \node[set, text width=35em, xshift=-2em, yshift=-10em] at (current page.center) {
+            \node[set, text width=35em, xshift=-2em, yshift=-8em] at (current page.center) {
                 \begin{notebookin}
 mask = img != ignore_value
 print("Mask.shape =", mask.shape)
@@ -366,16 +366,6 @@ SWIR image.shape = (167, 418, 600)
 
     \begin{onlyenv}<3>
         \begin{tikzpicture}[overlay]
-            \node[set, text width=35em, xshift=-2em, yshift=-5em] at (current page.center) {
-                \begin{notebookin}
-from mlintro.normalisation import convex_hull
-                \end{notebookin}
-            };
-        \end{tikzpicture}
-    \end{onlyenv}
-
-    \begin{onlyenv}<4>
-        \begin{tikzpicture}[overlay]
             \node[xshift=-2em, yshift=-8em] at (current page.center) {
                 \begin{codewithcard}{normalisation.py}
 import numpy as np
@@ -392,6 +382,16 @@ def convex_hull(x, y):
         stack.append(i)
     return np.asarray(stack, dtype="int")
                 \end{codewithcard}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<4>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, xshift=-2em, yshift=-5em] at (current page.center) {
+                \begin{notebookin}
+from mlintro.normalisation import convex_hull
+                \end{notebookin}
             };
         \end{tikzpicture}
     \end{onlyenv}
@@ -491,9 +491,12 @@ if labels.shape != img_swir_norm.shape[1:]:
             constant_values=0,
             )
 print("Labels.shape (new) =", labels.shape)
+labels = labels.reshape(-1)
+print("Labels.shape (flatten) =", labels.shape)
                 \end{notebookin}
                 \begin{notebookout}
 Labels.shape (new) = (418, 600)
+Labels.shape (flatten) = (250800,)
                 \end{notebookout}
             };
         \end{tikzpicture}
