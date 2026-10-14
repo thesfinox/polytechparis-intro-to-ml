@@ -7,6 +7,35 @@
 \usepackage[utf8x]{inputenc}
 \usepackage[english]{babel}
 \usepackage{csquotes}
+\usepackage{physics}
+\usepackage{svg}
+
+% Tikz styles
+\usetikzlibrary{shadows, fit, backgrounds, positioning}
+\tikzset{
+  % Base style: rounded rectangle with a soft drop shadow
+  set/.style = {
+    rectangle,
+    rounded corners = 8pt,
+    draw = CEAblue,
+    line width = 0.8pt,
+    fill = CEAblue!5!white,
+    inner sep = 12pt,
+    drop shadow = {shadow xshift = 2pt, shadow yshift = -2pt,
+                   opacity = 0.35, fill = black},
+  },
+  % Colour variants (inherit everything from `set`)
+  set green/.style = {set, fill = CEAgreen!5!white, draw = CEAgreen},
+  set red/.style   = {set, fill = CEAred!5!white,   draw = CEAred},
+  % Label anchored at the upper-left corner, inside the set
+  set label/.style = {
+    anchor = south west,
+    inner sep = 4pt,
+    font = \bfseries\small,
+  },
+  % Element dot
+  elem/.style = {circle, fill = black, inner sep = 1.2pt},
+}
 
 % Code listings: Carbon-style "code snapshot" cards (see code_listings_demo.tex)
 \usepackage{beamer-code-listings}
