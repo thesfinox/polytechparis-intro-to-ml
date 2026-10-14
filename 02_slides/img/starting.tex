@@ -1,0 +1,13 @@
+\begin{tikzpicture}[overlay]
+    \node[label=right:data/, xshift=-2em, yshift=-10em] (data) at (current page.center) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
+    \node[below right=0.25em of data] (dots) {\dots};
+    \node[below=0.25em of dots, label=right:HC\_labels.npy] (lab) {\includesvg[height=12pt]{02_slides/img/numpy.svg}};
+    \node[below=0.25em of lab, label=right:HC\_norm.npy] (norm) {\includesvg[height=12pt]{02_slides/img/numpy.svg}};
+    \node[below left=0.25em of norm, label=right:notebooks] (nb) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
+    \node[below=0.25em of nb, label=right:src] (src) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
+    \node[below=0.25em of src] (dots2) {\dots};
+
+    \begin{scope}[on background layer]
+        \node[set, fit=(data)(dots)(lab)(norm)(nb)(dots), minimum height=14em, minimum width=13em, xshift=4em, yshift=-2em] {};
+    \end{scope}
+\end{tikzpicture}

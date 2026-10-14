@@ -1,0 +1,8 @@
+\begin{tikzpicture}
+    \draw<1>[thick, draw=CEAred, fill=CEAred!5] (0, 0) rectangle (10cm, 1cm) node[midway] {DATA};
+    \draw<2>[thick, draw=CEAred, fill=CEAred!5] (0, 0) rectangle (7cm, 1cm) node[midway] {TRAIN DATA};
+    \draw<2>[thick, draw=CEAblue, fill=CEAblue!5] (7cm, 0) rectangle (10cm, 1cm) node[midway] {TEST DATA};
+    \draw<3->[thick, draw=CEAred, fill=CEAred!5] (0, 0) rectangle (4cm, 1cm) node[midway] {TRAIN DATA};
+    \draw<3->[thick, draw=CEAgreen, fill=CEAgreen!5] (4cm, 0) rectangle (7cm, 1cm) node[midway] {VALIDATION DATA};
+    \draw<3->[thick, draw=CEAblue, fill=CEAblue!5] (7cm, 0) rectangle (10cm, 1cm) node[midway] {TEST DATA};
+\end{tikzpicture}

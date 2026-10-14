@@ -1,0 +1,81 @@
+\begin{frame}{Preparing a ML model}{The overfitting problem\dots}
+    \begin{center}
+        \input{02_slides/img/overfitting.tex}
+    \end{center}
+
+    \vfill
+
+    \begin{onlyenv}<1>
+        \includesvg[height=12pt]{01_slides/img/brain.svg}~What would you consider as a \textbf{good model}? Think in terms of something like the \textbf{Mean Squared Error} (MSE):
+        \begin{equation*}
+            \operatorname{MSE}
+            =
+            \mathbb{E}\left[ \left( y - f(x) \right)^2 \right]
+            =
+            \mathbb{E}\left[ \operatorname{dist}\left( y - f(x) \right)^2 \right]
+        \end{equation*}
+    \end{onlyenv}
+
+    \begin{onlyenv}<4>
+        \begin{center}
+            The model that seemed to work best, in reality \textbf{does not generalise}!
+        \end{center}
+    \end{onlyenv}
+
+    \vfill
+\end{frame}
+
+\begin{frame}{Preparing a ML model}{How to avoid over- and under-fitting\dots}
+    Suppose you have a \textbf{data distribution} $X = \left\{ x_i \right\}_{i = 1}^N$.
+    Are there ways to avoid under- and overfitting?
+
+    \begin{center}
+        \input{02_slides/img/train_test_split.tex}
+    \end{center}
+
+    \begin{itemize}[<+->]
+        \item \textcolor{CEAred}{\textbf{Test Set:}} Split \textbf{randomly} your data to keep some of them for \textbf{testing}
+        \item \textcolor{CEAred}{\textbf{Validation Set:}} Retain some more data to \textbf{validate} your choice of the ML model
+        \item \textcolor{CEAred}{\textbf{Training Set:}} What remains is what you use to train the models (N.B. \alert{It must be representative of what you want to learn!})
+    \end{itemize}
+
+    \vfill \pause
+
+    {\footnotesize
+        \begin{tabular}{@{}llp{28em}@{}}
+            \textbf{Glossary:} &                         &                                                                                                                                     \\
+                               & \emph{testing:}         & It measures the \textbf{generalisation} capability of a ML model. \alert{Do not touch this data until you give your final results!} \\
+                               & \emph{validation:}      & Scores the performance of the models on a distribution similar to that used in training                                             \\
+                               & \emph{model selection:} & Choice of the \textbf{model} and \textbf{hyperparameters} that deliver the best results on validation                               \\
+        \end{tabular}
+    }
+\end{frame}
+
+\begin{frame}{Preparing a ML model}
+    Let $\mathcal{D}$ be the whole data set.
+    The procedure we just saw leaves you with:
+    \begin{equation*}
+        \mathcal{D} = \mathcal{D}_{\text{train}} \sqcup \mathcal{D}_{\text{val}} \sqcup \mathcal{D}_{\text{test}}
+    \end{equation*}
+    where
+    \begin{enumerate}
+        \item $x \in \mathcal{D}_{\text{test}}$ represent the real \textbf{use case} scenario
+        \item $x \in \mathcal{D}_{\text{val}}$ come from the same distribution as $\mathcal{D}_{\text{train}}$ and are used for evaluation
+        \item $x \in \mathcal{D}_{\text{train}}$ are \textbf{shuffled} data representing \textbf{realistic}
+    \end{enumerate}
+    This is known as \textbf{holdout validation}.
+
+    \vfill
+
+    {\footnotesize
+        Once a \textbf{test set} is selected, there are other types of \textbf{validation} procedures worth knowing:
+        \begin{itemize}
+            \item \textbf{cross-validation}: Instead of choosing one validation set, you iteratively retain a certain number of data from the train distribution for validation and train on the others
+            \item \textbf{leave-one-out} (\emph{jackknife}): Train on all but one piece of data and evaluate on the remaining point. Repeat for all samples at your disposal (extreme case of cross-validation).
+        \end{itemize}
+    }
+
+    \vfill
+
+    {\tiny Clearly, the more $\mathcal{D}_{\text{train}}$ \enquote{looks like} $\mathcal{D}_{\text{test}}$ the better!}
+\end{frame}
