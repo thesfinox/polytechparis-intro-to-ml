@@ -10,7 +10,7 @@
 
 % --- Monospace font (best effort for pdfLaTeX) ---
 \IfFileExists{inconsolata.sty}{\RequirePackage[scaled=0.85]{inconsolata}}{%
-  \IfFileExists{beramono.sty}{\RequirePackage[scaled=0.85]{beramono}}{}}
+    \IfFileExists{beramono.sty}{\RequirePackage[scaled=0.85]{beramono}}{}}
 
 % --- Carbon "One Dark" palette (dark card) ---
 \definecolor{codeBg}{HTML}{282C34}      % card background
@@ -55,113 +55,113 @@
 
 % --- Listings styles ---
 \lstdefinestyle{ceacarbon}{%
-  language=Python,
-  backgroundcolor=\color{codeBg},
-  basicstyle=\ttfamily\small\color{codeFg},
-  keywordstyle=\color{codeKeyword}\bfseries,
-  commentstyle=\color{codeComment}\itshape,
-  stringstyle=\color{codeString},
-  numberstyle=\ttfamily\footnotesize\color{codeLineNr},
-  identifierstyle=\color{codeFg},
-  emphstyle=\color{codeFunc},
-  numbers=left,
-  numbersep=10pt,
-  xleftmargin=12pt,
-  framexleftmargin=12pt,
-  showstringspaces=false,
-  breaklines=true,
-  breakatwhitespace=true,
-  tabsize=4,
-  keepspaces=true,
-  upquote=true,
-  aboveskip=0pt,
-  belowskip=0pt,
-  escapeinside={(*@}{@*)}}
+    language=Python,
+    backgroundcolor=\color{codeBg},
+    basicstyle=\ttfamily\small\color{codeFg},
+    keywordstyle=\color{codeKeyword}\bfseries,
+    commentstyle=\color{codeComment}\itshape,
+    stringstyle=\color{codeString},
+    numberstyle=\ttfamily\footnotesize\color{codeLineNr},
+    identifierstyle=\color{codeFg},
+    emphstyle=\color{codeFunc},
+    numbers=left,
+    numbersep=10pt,
+    xleftmargin=12pt,
+    framexleftmargin=12pt,
+    showstringspaces=false,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4,
+    keepspaces=true,
+    upquote=true,
+    aboveskip=0pt,
+    belowskip=0pt,
+    escapeinside={(*@}{@*)}}
 
 \lstdefinestyle{ceacarbonlight}{%
-  language=Python,
-  backgroundcolor=\color{codeBgLight},
-  basicstyle=\ttfamily\small\color{codeFgLight},
-  keywordstyle=\color{codeKeywordLight}\bfseries,
-  commentstyle=\color{codeCommentLight}\itshape,
-  stringstyle=\color{codeStringLight},
-  numberstyle=\ttfamily\footnotesize\color{codeLineNrLight},
-  identifierstyle=\color{codeFgLight},
-  emphstyle=\color{codeFuncLight},
-  numbers=left,
-  numbersep=10pt,
-  xleftmargin=12pt,
-  framexleftmargin=12pt,
-  showstringspaces=false,
-  breaklines=true,
-  breakatwhitespace=true,
-  tabsize=4,
-  keepspaces=true,
-  upquote=true,
-  aboveskip=0pt,
-  belowskip=0pt,
-  escapeinside={(*@}{@*)}}
+    language=Python,
+    backgroundcolor=\color{codeBgLight},
+    basicstyle=\ttfamily\small\color{codeFgLight},
+    keywordstyle=\color{codeKeywordLight}\bfseries,
+    commentstyle=\color{codeCommentLight}\itshape,
+    stringstyle=\color{codeStringLight},
+    numberstyle=\ttfamily\footnotesize\color{codeLineNrLight},
+    identifierstyle=\color{codeFgLight},
+    emphstyle=\color{codeFuncLight},
+    numbers=left,
+    numbersep=10pt,
+    xleftmargin=12pt,
+    framexleftmargin=12pt,
+    showstringspaces=false,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4,
+    keepspaces=true,
+    upquote=true,
+    aboveskip=0pt,
+    belowskip=0pt,
+    escapeinside={(*@}{@*)}}
 
 % Plain style: no background, for chunked sequential reveal.
 % Consecutive blocks using this style visually merge into one continuous card.
 % backgroundcolor= is cleared explicitly because \lstset{style=ceacarbon}
 % below otherwise leaks the dark card background into this style.
 \lstdefinestyle{ceacarbonplain}{%
-  language=Python,
-  backgroundcolor=,
-  % No card background: text must contrast with the (white) frame
-  % background, so use the light-palette colours.
-  basicstyle=\ttfamily\small\color{codeFgLight},
-  keywordstyle=\color{codeKeywordLight}\bfseries,
-  commentstyle=\color{codeCommentLight}\itshape,
-  stringstyle=\color{codeStringLight},
-  numberstyle=\ttfamily\footnotesize\color{codeLineNrLight},
-  identifierstyle=\color{codeFgLight},
-  emphstyle=\color{codeFuncLight},
-  numbers=left,
-  numbersep=10pt,
-  xleftmargin=12pt,
-  framexleftmargin=12pt,
-  showstringspaces=false,
-  breaklines=true,
-  breakatwhitespace=true,
-  tabsize=4,
-  keepspaces=true,
-  upquote=true,
-  escapeinside={(*@}{@*)}}
+    language=Python,
+    backgroundcolor=,
+    % No card background: text must contrast with the (white) frame
+    % background, so use the light-palette colours.
+    basicstyle=\ttfamily\small\color{codeFgLight},
+    keywordstyle=\color{codeKeywordLight}\bfseries,
+    commentstyle=\color{codeCommentLight}\itshape,
+    stringstyle=\color{codeStringLight},
+    numberstyle=\ttfamily\footnotesize\color{codeLineNrLight},
+    identifierstyle=\color{codeFgLight},
+    emphstyle=\color{codeFuncLight},
+    numbers=left,
+    numbersep=10pt,
+    xleftmargin=12pt,
+    framexleftmargin=12pt,
+    showstringspaces=false,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4,
+    keepspaces=true,
+    upquote=true,
+    escapeinside={(*@}{@*)}}
 
 \lstdefinestyle{ceanotebookin}{%
-  language=Python,
-  backgroundcolor=\color{nbinBg},
-  basicstyle=\ttfamily\small\color{codeFgLight},
-  keywordstyle=\color{codeKeywordLight}\bfseries,
-  commentstyle=\color{codeCommentLight}\itshape,
-  stringstyle=\color{codeStringLight},
-  identifierstyle=\color{codeFgLight},
-  emphstyle=\color{codeFuncLight},
-  numbers=none,
-  showstringspaces=false,
-  breaklines=true,
-  breakatwhitespace=true,
-  tabsize=4,
-  keepspaces=true,
-  upquote=true,
-  aboveskip=0pt,
-  belowskip=0pt,
-  escapeinside={(*@}{@*)}}
+    language=Python,
+    backgroundcolor=\color{nbinBg},
+    basicstyle=\ttfamily\small\color{codeFgLight},
+    keywordstyle=\color{codeKeywordLight}\bfseries,
+    commentstyle=\color{codeCommentLight}\itshape,
+    stringstyle=\color{codeStringLight},
+    identifierstyle=\color{codeFgLight},
+    emphstyle=\color{codeFuncLight},
+    numbers=none,
+    showstringspaces=false,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4,
+    keepspaces=true,
+    upquote=true,
+    aboveskip=0pt,
+    belowskip=0pt,
+    escapeinside={(*@}{@*)}}
 
 \lstdefinestyle{ceanotebookout}{%
-  backgroundcolor=\color{nboutBg},
-  basicstyle=\ttfamily\small\color{codeFgLight},
-  numbers=none,
-  showstringspaces=false,
-  breaklines=true,
-  breakatwhitespace=true,
-  tabsize=4,
-  keepspaces=true,
-  upquote=true,
-  aboveskip=0pt,
-  belowskip=0pt}
+    backgroundcolor=\color{nboutBg},
+    basicstyle=\ttfamily\small\color{codeFgLight},
+    numbers=none,
+    showstringspaces=false,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4,
+    keepspaces=true,
+    upquote=true,
+    aboveskip=0pt,
+    belowskip=0pt}
 
 % Default plain lstlisting inherits the dark style.
 \lstset{style=ceacarbon}
@@ -169,102 +169,117 @@
 % --- Carbon window-dots overlay ---
 % Three coloured circles in the title bar, top-left.
 \newcommand{\@ceacarbondots}{%
-  \fill[carbonRed]   ([xshift=10pt,yshift=-9pt]frame.north west) circle (2.5pt);
-  \fill[carbonYellow] ([xshift=20pt,yshift=-9pt]frame.north west) circle (2.5pt);
-  \fill[carbonGreen]  ([xshift=30pt,yshift=-9pt]frame.north west) circle (2.5pt);}
+    \fill[carbonRed]   ([xshift=10pt,yshift=-9pt]frame.north west) circle (2.5pt);
+    \fill[carbonYellow] ([xshift=20pt,yshift=-9pt]frame.north west) circle (2.5pt);
+    \fill[carbonGreen]  ([xshift=30pt,yshift=-9pt]frame.north west) circle (2.5pt);}
 
 % --- Jupyter prompt overlay ---
-% #1 = In/Out label, #2 = colour name. xshift=4pt keeps the label clear of
+% #1 = colour name. xshift=4pt keeps the label clear of
 % the left border (the node is anchored at the frame's outer corner).
-\newcommand{\@nbprompt}[2]{%
-  \node[anchor=north west, font=\footnotesize\ttfamily\color{#2},
-        inner xsep=0pt, inner ysep=6pt] at ([xshift=4pt]frame.north west) {#1 [\nbcellnum]:};}
+\newcommand{\@nbprompt}[1]{%
+    \node[anchor=north west, font=\scriptsize\ttfamily\color{#1},
+        inner xsep=0pt, inner ysep=6pt] at ([xshift=2pt]frame.north west) {[\nbcellnum]:};}
 
 % --- tcolorbox card environments ---
 % Usage: \begin{codewithcard}[options]{filename} ... \end{codewithcard}
 % #1 = extra per-listing options (e.g. language=bash)
 % #2 = filename/caption shown in the title bar
 \newtcblisting{codewithcard}[2][]{%
-  enhanced,
-  arc=4pt,
-  boxrule=0.5pt,
-  colframe=codeFrame,
-  colback=codeBg,
-  colbacktitle=codeBgTitle,
-  coltitle=codeFg,
-  listing only,
-  listing options={style=ceacarbon, numbers=none, numbersep=0pt, xleftmargin=0pt, framexleftmargin=0pt, #1},
-  left=10pt,
-  right=8pt,
-  top=3pt,
-  bottom=3pt,
-  shadow={2pt}{-2pt}{0pt}{black!40},
-  title={\ttfamily\footnotesize \detokenize{#2}},
-  fonttitle=\ttfamily\footnotesize,
-  center title,
-  lefttitle=0pt,
-  righttitle=0pt,
-  titlerule=0pt,
-  toptitle=2pt,
-  bottomtitle=2pt,
-  overlay={\@ceacarbondots}}
+    enhanced,
+    arc=4pt,
+    boxrule=0.5pt,
+    colframe=codeFrame,
+    colback=codeBg,
+    colbacktitle=codeBgTitle,
+    coltitle=codeFg,
+    listing only,
+    listing options={style=ceacarbon, numbers=none, numbersep=0pt, xleftmargin=0pt, framexleftmargin=0pt, #1},
+    left=4pt,
+    right=8pt,
+    top=3pt,
+    bottom=3pt,
+    shadow={2pt}{-2pt}{0pt}{black!40},
+    title={\ttfamily\footnotesize \detokenize{#2}},
+    fonttitle=\ttfamily\footnotesize,
+    center title,
+    lefttitle=0pt,
+    righttitle=0pt,
+    titlerule=0pt,
+    toptitle=2pt,
+    bottomtitle=2pt,
+    overlay={\@ceacarbondots}}
 
 \newtcblisting{codewithcardlight}[2][]{%
-  enhanced,
-  arc=4pt,
-  boxrule=0.5pt,
-  colframe=codeFrameLight,
-  colback=codeBgLight,
-  colbacktitle=codeBgTitleLight,
-  coltitle=codeFgLight,
-  listing only,
-  listing options={style=ceacarbonlight, numbers=none, numbersep=0pt, xleftmargin=0pt, framexleftmargin=0pt, #1},
-  left=10pt,
-  right=8pt,
-  top=3pt,
-  bottom=3pt,
-  shadow={2pt}{-2pt}{0pt}{black!25},
-  title={\ttfamily\footnotesize \detokenize{#2}},
-  fonttitle=\ttfamily\footnotesize,
-  center title,
-  lefttitle=0pt,
-  righttitle=0pt,
-  titlerule=0pt,
-  toptitle=2pt,
-  bottomtitle=2pt,
-  overlay={\@ceacarbondots}}
+    enhanced,
+    arc=4pt,
+    boxrule=0.5pt,
+    colframe=codeFrameLight,
+    colback=codeBgLight,
+    colbacktitle=codeBgTitleLight,
+    coltitle=codeFgLight,
+    listing only,
+    listing options={style=ceacarbonlight, numbers=none, numbersep=0pt, xleftmargin=0pt, framexleftmargin=0pt, #1},
+    left=4pt,
+    right=8pt,
+    top=3pt,
+    bottom=3pt,
+    shadow={2pt}{-2pt}{0pt}{black!25},
+    title={\ttfamily\footnotesize \detokenize{#2}},
+    fonttitle=\ttfamily\footnotesize,
+    center title,
+    lefttitle=0pt,
+    righttitle=0pt,
+    titlerule=0pt,
+    toptitle=2pt,
+    bottomtitle=2pt,
+    overlay={\@ceacarbondots}}
 
 % --- Notebook cell environments ---
 \newtcblisting{notebookin}{%
-  enhanced,
-  sharp corners,
-  boxrule=1pt,
-  colframe=nbinFrame,
-  colback=nbinBg,
-  listing only,
-  listing options={style=ceanotebookin},
-  left=36pt,
-  right=8pt,
-  top=2pt,
-  bottom=2pt,
-  before upper={\only<1>{\refstepcounter{nbcell}}},
-  overlay={\@nbprompt{In}{nbinColor}}}
+    enhanced,
+    sharp corners,
+    boxrule=1pt,
+    colframe=nbinFrame,
+    colback=nbinBg,
+    listing only,
+    listing options={style=ceanotebookin},
+    left=16pt,
+    right=8pt,
+    top=1pt,
+    bottom=1pt,
+    before upper={\refstepcounter{nbcell}},
+    overlay={\@nbprompt{nbinColor}}}
+
+\newtcblisting{notebookinmd}{%
+    enhanced,
+    sharp corners,
+    boxrule=1pt,
+    colframe=nbinFrame,
+    colback=nbinBg,
+    listing only,
+    listing options={style=ceanotebookin, language=HTML},
+    left=16pt,
+    right=8pt,
+    top=1pt,
+    bottom=1pt,
+    before upper={\refstepcounter{nbcell}},
+    overlay={\@nbprompt{nbinColor}}}
 
 \newtcblisting{notebookout}{%
-  enhanced,
-  sharp corners,
-  boxrule=0.5pt,
-  colframe=nboutFrame,
-  colback=nboutBg,
-  listing only,
-  listing options={style=ceanotebookout},
-  left=36pt,
-  right=8pt,
-  top=2pt,
-  bottom=2pt,
-  before skip=0pt,
-  after skip=2pt,
-  overlay={\@nbprompt{Out}{nboutColor}}}
+    enhanced,
+    sharp corners,
+    boxrule=0.5pt,
+    colframe=nboutFrame,
+    colback=nboutBg,
+    listing only,
+    listing options={style=ceanotebookout},
+    left=16pt,
+    right=8pt,
+    top=1pt,
+    bottom=1pt,
+    before skip=0pt,
+    after skip=2pt,
+    overlay={\@nbprompt{nboutColor}}}
 
 % --- Sequential reveal patterns (documented for users) ---
 %

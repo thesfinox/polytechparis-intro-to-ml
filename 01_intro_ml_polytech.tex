@@ -1,12 +1,41 @@
 % !TeX root = 01_intro_ml_polytech.tex
-% !TeX program = pdflatex
 % !TeX encoding = UTF-8
+% !TeX spellcheck = en_GB
 \documentclass[t,10pt,aspectratio=169,rounded]{beamer}
 \usetheme{CEA23}
 
 \usepackage[utf8x]{inputenc}
 \usepackage[english]{babel}
 \usepackage{csquotes}
+\usepackage{physics}
+\usepackage{svg}
+
+% Tikz styles
+\usetikzlibrary{shadows, fit, backgrounds, positioning}
+\tikzset{
+  % Base style: rounded rectangle with a soft drop shadow
+  set/.style = {
+    rectangle,
+    rounded corners = 8pt,
+    draw = CEAblue,
+    line width = 0.8pt,
+    fill = CEAblue!5!white,
+    inner sep = 12pt,
+    drop shadow = {shadow xshift = 2pt, shadow yshift = -2pt,
+                   opacity = 0.35, fill = black},
+  },
+  % Colour variants (inherit everything from `set`)
+  set green/.style = {set, fill = CEAgreen!5!white, draw = CEAgreen},
+  set red/.style   = {set, fill = CEAred!5!white,   draw = CEAred},
+  % Label anchored at the upper-left corner, inside the set
+  set label/.style = {
+    anchor = south west,
+    inner sep = 4pt,
+    font = \bfseries\small,
+  },
+  % Element dot
+  elem/.style = {circle, fill = black, inner sep = 1.2pt},
+}
 
 % Code listings: Carbon-style "code snapshot" cards (see code_listings_demo.tex)
 \usepackage{beamer-code-listings}
@@ -26,14 +55,14 @@
 
 \seminar[PolytechParis]{Machine Learning - PolytechParis}
 
-\CEAmerci{Thank you}
+\CEAmerci{See you next time!}
 \CEAcenter{CEA SACLAY}
 \addr{91\,191 Gif-sur-Yvette Cedex\\France}
 \CEAemail{\href{mailto:riccardo.finotello@cea.fr}{\texttt{riccardo.finotello@cea.fr}}}
 
 % --- TITLE SLIDE ---
 \begin{frame}[plain]
-	\titlepage
+    \titlepage
 \end{frame}
 
 % ------------------------------------------------------------------
@@ -45,8 +74,26 @@
 % only (no preamble, no \begin{document}).
 % ------------------------------------------------------------------
 
+\input{01_slides/00_liad.tex}
+
+\section{Machine Learning and Material Science}
+
+\input{01_slides/01_ml_intro.tex}
+
+\section{Setting Up a Python Project}
+
+\input{01_slides/02_uv_setup.tex}
+
+\section{Recalling Statistics and Python}
+
+\input{01_slides/03_stats.tex}
+
+\section{Data Exploration}
+
+\input{01_slides/04_data.tex}
+
 % --- CONCLUDING SLIDE ---
 \begin{frame}[plain]
-	\usebeamertemplate*{last page}
+    \usebeamertemplate*{last page}
 \end{frame}
 \end{document}
