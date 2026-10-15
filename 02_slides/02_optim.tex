@@ -1,0 +1,43 @@
+\begin{frame}{How do particles move?}{A little bit of physics\dots}
+    \begin{columns}[c]
+        \begin{column}{0.55\textwidth}
+            Consider a \textbf{particle} (coords.\ $\vec{x}$) moving in a \textbf{potential}
+            \begin{equation*}
+                U(\vec{x})
+            \end{equation*}
+
+            \includegraphics[height=12pt]{01_slides/img/brain.pdf}~Where will it land when it reaches a \textbf{stable equilibrium}?
+        \end{column}
+        \hfil
+        \begin{column}{0.4\textwidth}
+            \input{02_slides/img/potential.tex}
+        \end{column}
+    \end{columns}
+
+    \vfill
+
+    \begin{onlyenv}<2->
+        The \textbf{equilibrium} is reached when
+        \begin{equation*}
+            \vec{x}^{*} = \arg\min_{\vec{x} \in \mathbb{R}^d} U(\vec{x})
+            \quad \Rightarrow \quad
+            \vec{F} = \vec{\nabla} U(\vec{x}) = \vec{0},
+        \end{equation*}
+        which gives us a good criterion to find the \textbf{optimum}.
+    \end{onlyenv}
+\end{frame}
+
+\begin{frame}{How do particles move?}{A little bit of physics\dots}
+    \begin{columns}[c]
+        \begin{column}{0.55\textwidth}
+            So now suppose you have a set of \enquote{parameters} $\Theta = \{ \theta_i \}_{i = 1}^d$, governed by a function
+            \begin{equation*}
+                L = L(\Theta)
+            \end{equation*}
+        \end{column}
+        \hfil
+        \begin{column}{0.4\textwidth}
+            %\input{02_slides/img/loss_profile.tex}
+        \end{column}
+    \end{columns}
+\end{frame}

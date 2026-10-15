@@ -1,0 +1,24 @@
+\begin{tikzpicture}
+    \begin{axis}[
+            width=9cm, height=7cm,
+            view={0}{90},                % top-down view of the surface
+            colormap name=jet,
+            colorbar,
+            colorbar style={ylabel={$\log(1+\mathcal{L})$}},
+            xlabel={$\theta_1$}, ylabel={$\theta_2$},
+            xmin=-1.5, xmax=1.8, ymin=-0.5, ymax=2.5,
+            axis on top,
+            point meta min=0, point meta max=4.5,
+            zmin=-1, zmax=1,
+        ]
+        \addplot3[
+            surf, shader=interp,
+            samples=60, domain=-1.5:1.8, y domain=-0.5:2.5,
+            point meta={ln(1+(1-x)^2+5*(y-x^2)^2)},
+        ] {0};
+        \node[star, star points=5, star point ratio=2.25, fill=white, draw=black,
+            line width=0.6pt, inner sep=2.5pt,
+            label={[font=\small]above right:$\theta^\star$}]
+        at (axis cs:1,1,0) {};
+    \end{axis}
+\end{tikzpicture}

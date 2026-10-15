@@ -51,7 +51,7 @@
     }
 \end{frame}
 
-\begin{frame}{Preparing a ML model}
+\begin{frame}{Preparing a ML model}{Mathematically precise\dots}
     Let $\mathcal{D}$ be the whole data set.
     The procedure we just saw leaves you with:
     \begin{equation*}
@@ -78,4 +78,195 @@
     \vfill
 
     {\tiny Clearly, the more $\mathcal{D}_{\text{train}}$ \enquote{looks like} $\mathcal{D}_{\text{test}}$ the better!}
+\end{frame}
+
+\begin{frame}[fragile]{Preparing a ML model}{\includegraphics[height=12pt]{01_slides/img/tool.pdf}~Hands-on session\dots}
+    Let us split the data using \textbf{holdout validation}:
+    \begin{enumerate}
+        \item \alert<2>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Create a new notebook called \texttt{machine\_learning.ipynb}}
+        \item \alert<3>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Use \texttt{np.load} to load the \textbf{data} and their \textbf{annotations} (assign them to variables $X$ and $y$, for instance)}
+        \item \alert<4>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Reshape $X$ to list all pixels in the first column. Match the shape of $y$.}
+        \item \alert<5>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Import the function \texttt{train\_test\_split} from the library \texttt{scikit\_learn} and study its documentation}
+        \item \alert<6>{\includegraphics[height=12pt]{01_slides/img/brain.pdf}~What kind of parameters do we need to use for test and validation?}
+        \item \alert<7>{\includegraphics[height=12pt]{01_slides/img/brain.pdf}~What is a sensible \textbf{size} for the splits?}
+        \item \alert<8>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Create a first split for the \textbf{test} set ($X_{\text{test}}$ and $y_{\text{test}}$)}
+        \item \alert<9>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Create a second split for the \textbf{validation} set ($X_{\text{val}}$ and $y_{\text{val}}$)}
+        \item \alert<10>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Verify the size (fraction) of $X_{\text{train}}$, $X_{\text{val}}$, $X_{\text{test}}$}
+    \end{enumerate}
+
+    \begin{onlyenv}<2>
+        \input{02_slides/img/new_nb.tex}
+    \end{onlyenv}
+
+    \begin{onlyenv}<3>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=30em, yshift=-3em, xshift=-2em] at (current page.center) {
+                \begin{notebookin}
+import numpy as np
+
+X = np.load("../data/HC_norm.npy")
+y = np.load("../data/HC_labels.npy")
+print("X.shape =", X.shape)
+print("y.shape =", y.shape)
+                \end{notebookin}
+                \begin{notebookout}
+X.shape = (167, 418, 600)
+y.shape = (418, 600)
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<4>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=30em, yshift=-2em, xshift=-2em] at (current page.center) {
+                \begin{notebookin}
+C = X.shape[0]
+X = X.transpose(1, 2, 0).reshape(-1, C)
+y = y.reshape(-1,)
+print("X.shape =", X.shape)
+print("y.shape =", y.shape)
+                \end{notebookin}
+                \begin{notebookout}
+X.shape = (250800, 167)
+y.shape = (250800,)
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<5>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=30em, yshift=-2em, xshift=-2em] at (current page.center) {
+                \begin{notebookin}
+from sklearn.model_selection import train_test_split
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<8>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=30em, yshift=-2em, xshift=-2em] at (current page.center) {
+                \begin{notebookin}
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, shuffle=True, random_state=42)
+print("X_train.shape =", X_train.shape)
+print("y_train.shape =", y_train.shape)
+print("X_test.shape =", X_test.shape)
+print("y_test.shape =", y_test.shape)
+                \end{notebookin}
+                \begin{notebookout}
+X_train.shape = (225720, 167)
+y_train.shape = (225720,)
+X_test.shape = (25080, 167)
+y_test.shape = (25080,)
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<9>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=30em, yshift=-2em, xshift=-2em] at (current page.center) {
+                \begin{notebookin}
+X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.1)
+print("X_train.shape =", X_train.shape)
+print("y_train.shape =", y_train.shape)
+print("X_val.shape =", X_val.shape)
+print("y_val.shape =", y_val.shape)
+                \end{notebookin}
+                \begin{notebookout}
+X_train.shape = (203148, 167)
+y_train.shape = (203148,)
+X_val.shape = (22572, 167)
+y_val.shape = (22572,)
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<10>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, yshift=-4em, xshift=-2em] at (current page.center) {
+                \begin{notebookin}
+frac_train = X_train.shape[0] / X.shape[0]
+frac_val = X_val.shape[0] / X.shape[0]
+frac_test = X_test.shape[0] / X.shape[0]
+print(f"Train frac: {frac_train:.1%} (N = {X_train.shape[0]})")
+print(f"Val frac: {frac_val:.1%} (N = {X_val.shape[0]})")
+print(f"Test frac: {frac_test:.1%} (N = {X_test.shape[0]})")
+                \end{notebookin}
+                \begin{notebookout}
+Train frac: 81.0% (N = 203148)
+Val frac: 9.0% (N = 22572)
+Test frac: 10.0% (N = 25080)
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+\end{frame}
+
+\begin{frame}{Data Normalisation}{Working with different scales\dots}
+    Suppose we want to predict values $y \in \mathbb{R}$ from data $X \in \mathbb{R}^3$, but\dots
+
+    \vfill \pause
+
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \dots we have this situation:
+            \begin{center}
+                \input{02_slides/img/input_data.tex}
+            \end{center}
+        \end{column}
+        \hfil
+        \begin{column}{0.4\textwidth}
+            Consider for simplicity:
+            \begin{equation*}
+                y = \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_3
+            \end{equation*}
+            \begin{itemize}
+                \item \includegraphics[height=12pt]{01_slides/img/brain.pdf}~What is the impact of \enquote{slightly} changing a single $\beta_i$?
+                \item \includegraphics[height=12pt]{01_slides/img/brain.pdf}~What would happen if the \textbf{test} data happens to be an \textbf{outlier} of each $x_i$?
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Data Normalisation}{Working with different scales\dots}
+    The common practice is to \textbf{normalise} the data:
+    \begin{equation*}
+        \vec{x} \to \vec{x}^{\;\prime} = \operatorname{norm}(\vec{x})
+        \quad \Rightarrow \quad
+        y = f(\vec{x}^{\;\prime})
+    \end{equation*}
+
+    \vfill
+
+    \begin{columns}[T]
+        \begin{column}{0.4\textwidth}
+            \begin{center}
+                \input{02_slides/img/norm_data.tex}
+            \end{center}
+        \end{column}
+        \hfil
+        \begin{column}{0.6\textwidth}<2->
+            Always work with \textbf{similar distributions} of variables:
+            \begin{itemize}
+                \footnotesize
+                \item \textbf{Standard Scaling:} (also \emph{standardisation})
+                      \begin{equation*}
+                          \vec{x}_{(n)}^{\;\prime} = \left( \frac{x_{(n)\,i} - \mu_i}{\sigma_i} \right)_{i = 1}^d
+                      \end{equation*}
+                \item \textbf{MinMax Scaling:}
+                      \begin{equation*}
+                          \vec{x}_{(n)}^{\;\prime} = \left( \frac{x_{(n)\,i} - \min\{ x_i \}}{\max\{x_i\} - \min\{x_i\}} \right)_{i = 1}^d
+                      \end{equation*}
+                \item \textbf{Log Transform:}
+                      \begin{equation*}
+                          \vec{x}_{(n)}^{\;\prime} = \left( \log(1 + x_i) \right)_{i = 1}^d
+                      \end{equation*}
+                \item {\tiny \includegraphics[height=8pt]{01_slides/img/brain.pdf}~Can you guess what type of transformations are eligible?}
+            \end{itemize}
+        \end{column}
+    \end{columns}
 \end{frame}
