@@ -1,0 +1,34 @@
+stages:
+  - build
+
+.shell_base:
+  tags:
+    - is247648
+
+# "build" stage: compile the four module Beamer decks to PDF.
+# The CEA23 Beamer theme (\usetheme{CEA23}) is not distributed with this
+# repository; it must be installed on the runner (available on is247648).
+# The decks \usepackage{svg} and call \includesvg on the tracked SVG icons,
+# so the runner also needs inkscape and pdflatex must run with -shell-escape
+# for the SVG-to-PDF conversion (output lands in the ignored svg-inkscape/).
+# code_listings_demo.tex is intentionally NOT built here.
+build_slides:
+  extends: .shell_base
+  stage: build
+  parallel:
+    matrix:
+      - DECK: ["01_intro_ml_polytech", "02_intro_ml_polytech", "03_intro_ml_polytech", "04_intro_ml_polytech"]
+  script:
+    # Pull Git LFS objects (img/ photos, cover art, plots) before building
+    - git lfs install && git lfs pull
+    # Check the syntax (non-fatal; log kept as artifact)
+    - chktex -v2 "$DECK.tex" > "$DECK_chktex.log" 2>&1 || true
+    # Build the PDF (latexmk runs pdflatex the required number of passes
+    # for the TOC and \AtBeginSection outline to settle; -shell-escape
+    # lets the svg package convert the SVG icons with inkscape)
+    - latexmk -pdf -pdflatex="pdflatex -shell-escape %O %S" -interaction=nonstopmode "$DECK.tex"
+  artifacts:
+    paths:
+      - "$DECK.pdf"
+      - "$DECK_chktex.log"
+    expire_in: 30 days
