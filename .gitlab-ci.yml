@@ -17,16 +17,22 @@ build_slides:
   stage: build
   parallel:
     matrix:
-      - DECK: ["01_intro_ml_polytech", "02_intro_ml_polytech", "03_intro_ml_polytech", "04_intro_ml_polytech"]
+      - DECK:
+          [
+            "01_intro_ml_polytech",
+            "02_intro_ml_polytech",
+            "03_intro_ml_polytech",
+            "04_intro_ml_polytech",
+          ]
   script:
     # Pull Git LFS objects (img/ photos, cover art, plots) before building
     - git lfs install && git lfs pull
     # Check the syntax (non-fatal; log kept as artifact)
-    - chktex -v2 "$DECK.tex" > "$DECK_chktex.log" 2>&1 || true
+    - chktex -v2 "${DECK}.tex" > "${DECK}_chktex.log" 2>&1 || true
     # Build the PDF (latexmk runs pdflatex the required number of passes
     # for the TOC and \AtBeginSection outline to settle; -shell-escape
     # lets the svg package convert the SVG icons with inkscape)
-    - latexmk -pdf -pdflatex="pdflatex -shell-escape %O %S" -interaction=nonstopmode "$DECK.tex"
+    - latexmk -pdf -interaction=nonstopmode "${DECK}.tex"
   artifacts:
     paths:
       - "$DECK.pdf"
