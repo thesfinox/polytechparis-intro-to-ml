@@ -1,27 +1,27 @@
 \begin{tikzpicture}[scale=0.6, every node/.style={scale=0.6}]
     % Source files
-    \node[label=right:src/] (src) at (0, 0) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
+    \node[label=right:src/] (src) at (0, 0) {\includegraphics[height=12pt]{01_slides/img/folder.pdf}};
 
     % Main module
-    \node[label=right:mypackage/, below right=0.25em of src] (main) {\includesvg[width=12pt]{01_slides/img/folder.svg}};
-    \node[label=right:\_\_init\_\_.py, below right=0.25em of main] (init) {\includesvg[height=12pt]{01_slides/img/python.svg}};
+    \node[label=right:mypackage/, below right=0.25em of src] (main) {\includegraphics[width=12pt]{01_slides/img/folder.pdf}};
+    \node[label=right:\_\_init\_\_.py, below right=0.25em of main] (init) {\includegraphics[height=12pt]{01_slides/img/python.pdf}};
 
     % Subpackage
-    \node[label=right:mysubpackage1/, below=0.25em of init] (sub1) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
-    \node[label=right:\_\_init\_\_.py, below right=0.25em of sub1] (init1) {\includesvg[height=12pt]{01_slides/img/python.svg}};
-    \node[label=right:mysubmodule1.py, below=0.25em of init1] (mod11) {\includesvg[height=12pt]{01_slides/img/python.svg}};
-    \node[label=right:mysubmodule2.py, below=0.25em of mod11] (mod12) {\includesvg[height=12pt]{01_slides/img/python.svg}};
+    \node[label=right:mysubpackage1/, below=0.25em of init] (sub1) {\includegraphics[height=12pt]{01_slides/img/folder.pdf}};
+    \node[label=right:\_\_init\_\_.py, below right=0.25em of sub1] (init1) {\includegraphics[height=12pt]{01_slides/img/python.pdf}};
+    \node[label=right:mysubmodule1.py, below=0.25em of init1] (mod11) {\includegraphics[height=12pt]{01_slides/img/python.pdf}};
+    \node[label=right:mysubmodule2.py, below=0.25em of mod11] (mod12) {\includegraphics[height=12pt]{01_slides/img/python.pdf}};
 
-    \node[label=right:mysubpackage2/, below left=0.25em of mod12] (sub2) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
-    \node[label=right:\_\_init\_\_.py, below right=0.25em of sub2] (init2) {\includesvg[height=12pt]{01_slides/img/python.svg}};
-    \node[label=right:mysubmodule1.py, below=0.25em of init2] (mod21) {\includesvg[height=12pt]{01_slides/img/python.svg}};
+    \node[label=right:mysubpackage2/, below left=0.25em of mod12] (sub2) {\includegraphics[height=12pt]{01_slides/img/folder.pdf}};
+    \node[label=right:\_\_init\_\_.py, below right=0.25em of sub2] (init2) {\includegraphics[height=12pt]{01_slides/img/python.pdf}};
+    \node[label=right:mysubmodule1.py, below=0.25em of init2] (mod21) {\includegraphics[height=12pt]{01_slides/img/python.pdf}};
 
     % Scripts
-    \node[label=right:myscript.py, below left=0.25em of mod21] (script) {\includesvg[height=12pt]{01_slides/img/python.svg}};
+    \node[label=right:myscript.py, below left=0.25em of mod21] (script) {\includegraphics[height=12pt]{01_slides/img/python.pdf}};
 
     % Configurations
-    \node[label=right:pyproject.toml, below=0.25em of script, xshift=-4.5em] (toml) {\includesvg[height=12pt]{01_slides/img/toml.svg}};
-    \node[label=right:README.md, below=0.25em of toml] (readme) {\includesvg[height=12pt]{01_slides/img/readme.svg}};
+    \node[label=right:pyproject.toml, below=0.25em of script, xshift=-4.5em] (toml) {\includegraphics[height=12pt]{01_slides/img/toml.pdf}};
+    \node[label=right:README.md, below=0.25em of toml] (readme) {\includegraphics[height=12pt]{01_slides/img/readme.pdf}};
 
     % Explanations
     \node<2->[CEAred, text width=12em, align=center] (init_exp) at (12, -1) {Must always be present! \\ {\tiny (may contain instructions for packaging)}};

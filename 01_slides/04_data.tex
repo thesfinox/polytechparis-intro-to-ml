@@ -1,4 +1,4 @@
-\begin{frame}{\includesvg[height=12pt]{01_slides/img/tool.svg}~A First Look at the Data}{Download the data\dots}
+\begin{frame}{\includegraphics[height=12pt]{01_slides/img/tool.pdf}~A First Look at the Data}{Download the data\dots}
     Download the data in the \texttt{data} directory:
     \begin{center}
         \href{https://drive.google.com/drive/folders/1jgY7HknDzpB-sSn2zHAWcyknVQWESx_X?usp=sharing}{Data (Google Drive)}
@@ -13,11 +13,11 @@
         \begin{column}{0.45\textwidth}
             \centering
             \begin{tikzpicture}
-                \node[label=right:data/] (data) at (0, 0) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
-                \node[below=0.25em of data, label=right:src/] (src) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
-                \node[below=0.25em of src, label=right:notebooks/] (nb) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
-                \node[label=right:pyproject.toml, below=0.25em of nb] (toml) {\includesvg[height=12pt]{01_slides/img/toml.svg}};
-                \node[label=right:README.md, below=0.25em of toml] (readme) {\includesvg[height=12pt]{01_slides/img/readme.svg}};
+                \node[label=right:data/] (data) at (0, 0) {\includegraphics[height=12pt]{01_slides/img/folder.pdf}};
+                \node[below=0.25em of data, label=right:src/] (src) {\includegraphics[height=12pt]{01_slides/img/folder.pdf}};
+                \node[below=0.25em of src, label=right:notebooks/] (nb) {\includegraphics[height=12pt]{01_slides/img/folder.pdf}};
+                \node[label=right:pyproject.toml, below=0.25em of nb] (toml) {\includegraphics[height=12pt]{01_slides/img/toml.pdf}};
+                \node[label=right:README.md, below=0.25em of toml] (readme) {\includegraphics[height=12pt]{01_slides/img/readme.pdf}};
             \end{tikzpicture}
         \end{column}
         \hfil
@@ -31,33 +31,33 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{\includesvg[height=12pt]{01_slides/img/tool.svg}~A First Look at the Data}{Opening the data\dots}
+\begin{frame}[fragile]{\includegraphics[height=12pt]{01_slides/img/tool.pdf}~A First Look at the Data}{Opening the data\dots}
     \begin{enumerate}
-        \item \alert<2>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Create and open a new notebook called \texttt{data\_tidying.ipynb}}
-        \item \alert<3>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Import the following libraries:}
+        \item \alert<2>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Create and open a new notebook called \texttt{data\_tidying.ipynb}}
+        \item \alert<3>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Import the following libraries:}
               \begin{itemize}
                   \item \texttt{numpy} and \texttt{matplotlib.pyplot} to manipulate and visualise the data
                   \item from \texttt{scipy.io} import \texttt{loadmat} to open Matlab files
                   \item from \texttt{spectral.io} import \texttt{envi} to open ENVI headers
               \end{itemize}
-        \item \alert<4>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Open one of the \texttt{*.hdr} files using \texttt{envi.open}}
-        \item \alert<5>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Isolate metadata and store the following values into separate variables:}
+        \item \alert<4>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Open one of the \texttt{*.hdr} files using \texttt{envi.open}}
+        \item \alert<5>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Isolate metadata and store the following values into separate variables:}
               \begin{itemize}
                   \item the list of wavelengths and the list of \enquote{bad wavelengths} (\texttt{bbl} from \enquote{Bad Bands List})
                   \item values that must be ignored
                   \item the type of interleave of the object
               \end{itemize}
-        \item \alert<6>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Convert the list of (bad) wavelengths to a Numpy array of (boolean) decimal values}
-        \item \alert<7>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Open the image using \texttt{open\_memmap}}
+        \item \alert<6>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Convert the list of (bad) wavelengths to a Numpy array of (boolean) decimal values}
+        \item \alert<7>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Open the image using \texttt{open\_memmap}}
     \end{enumerate}
 
     \begin{onlyenv}<2>
         \begin{tikzpicture}[overlay]
-            \node[label=right:data/] (data) at (current page.center) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
-            \node[below=0.25em of data, label=right:src/] (src) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
-            \node[below=0.25em of src, label=right:notebooks/] (nb) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
-            \node[below right=0.25em of nb, label=right:first\_tutorial.ipynb] (nbtut) {\includesvg[height=12pt]{01_slides/img/python.svg}};
-            \node[below=0.25em of nbtut, label=right:data\_tidying.ipynb] (nbdat) {\includesvg[height=12pt]{01_slides/img/python.svg}};
+            \node[label=right:data/] (data) at (current page.center) {\includegraphics[height=12pt]{01_slides/img/folder.pdf}};
+            \node[below=0.25em of data, label=right:src/] (src) {\includegraphics[height=12pt]{01_slides/img/folder.pdf}};
+            \node[below=0.25em of src, label=right:notebooks/] (nb) {\includegraphics[height=12pt]{01_slides/img/folder.pdf}};
+            \node[below right=0.25em of nb, label=right:first\_tutorial.ipynb] (nbtut) {\includegraphics[height=12pt]{01_slides/img/python.pdf}};
+            \node[below=0.25em of nbtut, label=right:data\_tidying.ipynb] (nbdat) {\includegraphics[height=12pt]{01_slides/img/python.pdf}};
 
             \begin{scope}[on background layer]
                 \node[set, fit=(data)(src)(nb)(nbtut)(nbdat), minimum width=18em, minimum height=10em, xshift=7em, yshift=-4em] at (current page.center) {};
@@ -148,13 +148,13 @@ Original shape: (545, 420, 640)
     \end{onlyenv}
 \end{frame}
 
-\begin{frame}[fragile]{\includesvg[height=12pt]{01_slides/img/tool.svg}~A First Look at the Data}{Tidying the data\dots}
+\begin{frame}[fragile]{\includegraphics[height=12pt]{01_slides/img/tool.pdf}~A First Look at the Data}{Tidying the data\dots}
     \begin{enumerate}
-        \item \alert<2>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Keep only the correct wavelengths (i.e.\ where \texttt{BBL} is \texttt{True})}
-        \item \alert<3-4>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Remove values to ignore from the spectral cube}
-        \item \alert<5-6>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Display the image in \enquote{fake colours} (choose three bands to represent 3 colour channels of a \enquote{normal} RGB image)}
-        \item \alert<7>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Choose 5 pixels on the image and display the intensity of the wavelengths (the spectra)}
-        \item \alert<8-9>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Restrict the data to only the \textbf{SWIR} (\emph{Short-Wave InfraRed}) range (1400 nm - 2500 nm)}
+        \item \alert<2>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Keep only the correct wavelengths (i.e.\ where \texttt{BBL} is \texttt{True})}
+        \item \alert<3-4>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Remove values to ignore from the spectral cube}
+        \item \alert<5-6>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Display the image in \enquote{fake colours} (choose three bands to represent 3 colour channels of a \enquote{normal} RGB image)}
+        \item \alert<7>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Choose 5 pixels on the image and display the intensity of the wavelengths (the spectra)}
+        \item \alert<8-9>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Restrict the data to only the \textbf{SWIR} (\emph{Short-Wave InfraRed}) range (1400 nm - 2500 nm)}
     \end{enumerate}
 
     \begin{onlyenv}<2>
@@ -335,28 +335,28 @@ SWIR image.shape = (167, 418, 600)
     }
 \end{frame}
 
-\begin{frame}[fragile]{\includesvg[height=12pt]{01_slides/img/tool.svg}~A First Look at the Data}{Normalising the data\dots}
+\begin{frame}[fragile]{\includegraphics[height=12pt]{01_slides/img/tool.pdf}~A First Look at the Data}{Normalising the data\dots}
     \begin{enumerate}
-        \item \alert<2>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Create a new file \texttt{normalisation.py} inside the \texttt{src} directory}
-        \item \alert<3>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Inside \texttt{normalisation.py}, develop a function \texttt{convex\_hull} to compute the convex hull of a spectrum:}
+        \item \alert<2>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Create a new file \texttt{normalisation.py} inside the \texttt{src} directory}
+        \item \alert<3>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Inside \texttt{normalisation.py}, develop a function \texttt{convex\_hull} to compute the convex hull of a spectrum:}
               \begin{itemize}
                   \item Use the vector of \texttt{wavelengths} and the spectrum as inputs
                   \item Return the indices of the points that form the convex hull
               \end{itemize}
-        \item \alert<4>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Back to the notebook \texttt{data\_tidying.ipynb}, import the new function}
-        \item \alert<5-6>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Compute the convex hull of each spectrum in the SWIR image}
-        \item \alert<7>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Save the image in the \texttt{data} directory using \texttt{np.save}}
+        \item \alert<4>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Back to the notebook \texttt{data\_tidying.ipynb}, import the new function}
+        \item \alert<5-6>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Compute the convex hull of each spectrum in the SWIR image}
+        \item \alert<7>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Save the image in the \texttt{data} directory using \texttt{np.save}}
     \end{enumerate}
 
     \begin{onlyenv}<2>
         \begin{tikzpicture}[overlay]
-            \node[label=right:data/] (data) at (current page.center) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
-            \node[below=0.25em of data, label=right:notebooks/] (nb) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
-            \node[below=0.25em of nb, label=right:src/] (src) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
-            \node[below right=0.25em of src, label=right:mlintro/] (mlintro) {\includesvg[height=12pt]{01_slides/img/folder.svg}};
-            \node[below right=0.25em of mlintro, label=right:\_\_init\_\_.py/] (init) {\includesvg[height=12pt]{01_slides/img/python.svg}};
-            \node[below=0.25em of init, label=right:naive\_classifier.py/] (naive) {\includesvg[height=12pt]{01_slides/img/python.svg}};
-            \node[below=0.25em of naive, label=right:normalisation.py/] (norm) {\includesvg[height=12pt]{01_slides/img/python.svg}};
+            \node[label=right:data/] (data) at (current page.center) {\includegraphics[height=12pt]{01_slides/img/folder.pdf}};
+            \node[below=0.25em of data, label=right:notebooks/] (nb) {\includegraphics[height=12pt]{01_slides/img/folder.pdf}};
+            \node[below=0.25em of nb, label=right:src/] (src) {\includegraphics[height=12pt]{01_slides/img/folder.pdf}};
+            \node[below right=0.25em of src, label=right:mlintro/] (mlintro) {\includegraphics[height=12pt]{01_slides/img/folder.pdf}};
+            \node[below right=0.25em of mlintro, label=right:\_\_init\_\_.py/] (init) {\includegraphics[height=12pt]{01_slides/img/python.pdf}};
+            \node[below=0.25em of init, label=right:naive\_classifier.py/] (naive) {\includegraphics[height=12pt]{01_slides/img/python.pdf}};
+            \node[below=0.25em of naive, label=right:normalisation.py/] (norm) {\includegraphics[height=12pt]{01_slides/img/python.pdf}};
 
             \begin{scope}[on background layer]
                 \node[set, fit=(data)(src)(mlintro)(init)(naive)(norm)(nb), minimum width=18em, minimum height=10em, xshift=7em, yshift=-6em] at (current page.center) {};
@@ -438,14 +438,14 @@ np.save("../data/HC_norm.npy", img_swir_norm)
     \end{onlyenv}
 \end{frame}
 
-\begin{frame}[fragile]{\includesvg[height=12pt]{01_slides/img/tool.svg}~A First Look at the Data}{Opening the annotations\dots}
+\begin{frame}[fragile]{\includegraphics[height=12pt]{01_slides/img/tool.pdf}~A First Look at the Data}{Opening the annotations\dots}
     \begin{enumerate}
-        \item \alert<2>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Use the \texttt{loadmat} function to load the \textbf{ground truth} annotations (relative to the image you chose!)}
-        \item \alert<3>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Select the object containing the labels}
-        \item \alert<4>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Pad the annotations to fit the image (add zeros to the right and the bottom where necessary)}
-        \item \alert<5>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Display the annotations in different colours}
-        \item \alert<6>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~Select spectra based on the different labels and plot the average spectra of each mineral}
-        \item \alert<7>{\includesvg[height=12pt]{01_slides/img/pen-tool.svg}~As in the previous case, use \texttt{np.save} to save the labels to file}
+        \item \alert<2>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Use the \texttt{loadmat} function to load the \textbf{ground truth} annotations (relative to the image you chose!)}
+        \item \alert<3>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Select the object containing the labels}
+        \item \alert<4>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Pad the annotations to fit the image (add zeros to the right and the bottom where necessary)}
+        \item \alert<5>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Display the annotations in different colours}
+        \item \alert<6>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Select spectra based on the different labels and plot the average spectra of each mineral}
+        \item \alert<7>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~As in the previous case, use \texttt{np.save} to save the labels to file}
     \end{enumerate}
 
     \begin{onlyenv}<2>
