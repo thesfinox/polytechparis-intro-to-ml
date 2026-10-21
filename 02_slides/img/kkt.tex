@@ -1,0 +1,20 @@
+\begin{tikzpicture}
+    % Axes
+    \draw[thick, ->] (-0.25, 0.0) -- (3.0, 0.0) node[below] {$\theta_1$};
+    \draw[thick, ->] (0.0, -0.25) -- (0.0, 3.0) node[left] {$\theta_2$};
+
+    % Ellipses
+    \draw[thin, CEAblue, fill=CEAblue!25] (1.5, 1.5) ellipse (0.75 and 1.25);
+    \draw[thin, CEAgreen, fill=CEAgreen!25] (1.5, 1.5) ellipse (0.5 and 0.75);
+    \draw[thin, CEAred, fill=CEAred!25] (1.5, 1.5) ellipse (0.25 and 0.25);
+
+    % Avoid area
+    \draw<3->[thin, CEAblack, fill=CEAblack!85] (1.5, 1.5) node[white] {$\infty$} circle (0.65);
+
+    % Possible minima
+    \draw<4>[CEAred, fill=CEAred!50] (1.5, 1.65) circle (2pt);
+    \draw<4>[CEAred, fill=CEAred] (1.5, 2.15) circle (2pt);
+    \draw<4>[CEAred, dashed, ->] (1.5, 1.70) -- (1.5, 2.05);
+
+    \draw<5>[CEAred, fill=CEAred] (1.75, 2.5) circle (2pt);
+\end{tikzpicture}

@@ -1,0 +1,143 @@
+% !TeX root = 02_intro_ml_polytech.tex
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_GB
+\begin{frame}[fragile]{A Simple Exercise}{\includegraphics[height=12pt]{01_slides/img/tool.pdf}Classifying some data\dots}
+    \begin{enumerate}
+        \item \alert<2>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Go back to your \texttt{linear\_models.ipynb} notebook}
+        \item \alert<3-4>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Generate classification data in $K$ different clusters (e.g.\ $K = 4$) in 2D:}
+              \begin{itemize}
+                  \item Create a vector of $K$ 2D points (they will be the centres of the clusters)
+                  \item Create a vector of $250$ labels for each cluster
+                  \item Create Gaussian-distributed data as \enquote{center(k) + random noise} for all labels
+                  \item Visualise the result using a scatter plot
+              \end{itemize}
+        \item \alert<5>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Split the data in train and test (remember to shuffle!)}
+        \item \alert<6>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Use, for instance, \texttt{statsmodels}' \textbf{MNLogit} (\emph{multinomial logit}) to fit your data and print the summary}
+        \item \alert<7-8>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Compute the confusion matrix of the classifier}
+        \item \alert<9>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Compute accuracy, precision, and recall of the classifier}
+              \begin{itemize}
+                  \item \includegraphics[height=12pt]{01_slides/img/brain.pdf}~This is a \textbf{multiclass} task: how to represent these metrics with a single value (\emph{micro} and \emph{macro} averages)?
+              \end{itemize}
+    \end{enumerate}
+
+    \begin{onlyenv}<3>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=34em, xshift=-2em, yshift=-3em] at (current page.center) {
+                \begin{notebookin}
+import numpy as np
+
+means = np.array([[0.0, 0.0], [0.0, 3.0], [3.0, 0.0], [3.0, 3.0]])
+y = np.repeat((0, 1, 2, 3), 250)  # 250 samples per class
+X = means[y] + 0.6 * np.random.randn(4 * 250, 2)
+print("X.shape =", X.shape)
+print("y.shape =", y.shape)
+                \end{notebookin}
+                \begin{notebookout}
+X.shape = (1000, 2)
+y.shape = (1000,)
+        \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<4>
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-3em] at (current page.center) {
+                \centering
+                \includegraphics[width=0.55\textwidth]{02_slides/img/gaussian_data.png}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<5>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, xshift=-2em, yshift=1em] at (current page.center) {
+                \begin{notebookin}
+idx = np.random.permutation(X.shape[0])
+X_train = X[idx[:800]]; y_train = y[idx[:800]]
+X_test = X[idx[800:]]; y_test = y[idx[800:]]
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<6>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, xshift=-2em, yshift=-3em] at (current page.center) {
+                \begin{notebookin}
+model = sm.MNLogit(y_train, sm.add_constant(X_train))
+results = model.fit()
+print(results.summary())
+                \end{notebookin}
+
+                \includegraphics[height=0.5\textheight]{02_slides/img/mnlogit.png}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<7>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, xshift=-2em, yshift=-3em] at (current page.center) {
+                \begin{notebookin}
+from sklearn.metrics import confusion_matrix
+
+X_test = sm.add_constant(X_test)
+y_pred = np.asarray(results.predict(X_test)).argmax(axis=1)
+conf = confusion_matrix(y_test, y_pred)
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<8>
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-3em] at (current page.center) {
+                \centering
+                \includegraphics[height=0.6\textheight]{02_slides/img/conf_mat.png}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<9>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=37em, xshift=-2em, yshift=-3em] at (current page.center) {
+                \begin{notebookin}
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+acc = accuracy_score(y_test, y_pred); print(f"Accuracy = {acc:.1%}")
+for score in [precision_score, recall_score, f1_score]:
+    for average in ["micro", "macro"]:
+        metric = score(y_test, y_pred, average=average)
+        print(f"{score.__name__.capitalize().removesuffix("_score")} ({average}) = {metric:.1%}")
+                \end{notebookin}
+                \begin{notebookout}
+Accuracy = 98.5%
+Precision (micro) = 98.5%
+Precision (macro) = 98.4%
+Recall (micro) = 98.5%
+Recall (macro) = 98.6%
+F1 (micro) = 98.5%
+F1 (macro) = 98.5%
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+\end{frame}
+
+\begin{frame}{Linear Models and Evaluation}{Preparing for next time\dots}
+    You should now have mastered:
+    \begin{itemize}
+        \item How to prepare your data for ML (train/test splits, normalisation)
+        \item What loss functions are and how to choose them
+        \item How to define and use linear models for regression and classification
+        \item How to regularise your models (and justify it)
+    \end{itemize}
+    \vfill \pause
+    \begin{center}
+        \huge
+        Remember where you saved the data! Next time we shall start from there!
+        \\[1em]
+        Are there questions?
+    \end{center}
+    \vfill
+\end{frame}

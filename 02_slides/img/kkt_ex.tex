@@ -1,0 +1,17 @@
+\begin{tikzpicture}[scale=0.6, every node/.style={scale=0.6}]
+    % Values
+    \draw[CEAblue, fill=CEAblue!25] (0, 0) circle (2.0);
+    \draw[CEAgreen, fill=CEAgreen!25] (0, 0) circle (1.25);
+    \draw[CEAred, fill=CEAred!25] (0, 0) circle (0.5);
+
+    % Axes
+    \draw[thick, CEAblack, ->] (-2.5, 0.0) -- (2.5, 0.0) node[below] {$\theta_1$};
+    \draw[thick, CEAblack, ->] (0.0, -2.5) -- (0.0, 2.5) node[left] {$\theta_2$};
+
+    % Avoid
+    \draw<3->[CEAblack, fill=CEAblack!85] (0, 0) circle (0.75);
+    \node<3->[CEAblack, anchor=west] at (0.4, 0.7) {$\theta_1^2 + \theta_2^2 = 4$};
+
+    % Optima
+    \draw<4->[CEAred, ultra thick, fill=none] (0, 0) circle (0.75);
+\end{tikzpicture}

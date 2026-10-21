@@ -1,3 +1,6 @@
+% !TeX root = 02_intro_ml_polytech.tex
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_GB
 \begin{frame}{Preparing a ML model}{The overfitting problem\dots}
     \begin{center}
         \input{02_slides/img/overfitting.tex}
@@ -269,4 +272,92 @@ Test frac: 10.0% (N = 25080)
             \end{itemize}
         \end{column}
     \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Data Normalisation}{\includegraphics[height=12pt]{01_slides/img/tool.pdf}~Playing with data\dots}
+    \begin{enumerate}
+        \item \alert<2>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Choose a scaling function from the package \emph{Scikit-Learn} (\texttt{sklearn} in Python)}
+        \item \alert<3>{\includegraphics[height=12pt]{01_slides/img/brain.pdf}~What split do we use to compute the normalisation parameters?}
+        \item \alert<4>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Fit and apply the transformation to the training, validation, and test data}
+        \item \alert<5>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Compute the relevant statistics for the normalisation and verify the match the expectation}
+        \item \alert<6->{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Plot the average spectra for training, validation, and test data}
+    \end{enumerate}
+
+    \begin{onlyenv}<2>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, yshift=-8em, xshift=-2em] at (current page.center) {
+                \begin{notebookin}
+from sklearn.preprocessing import StandardScaler
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<3>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, yshift=-11em, xshift=-2em] at (current page.center) {
+                \begin{enumerate}
+                    \item \textbf{Fit} the scaler on \textbf{training} data
+                    \item \textbf{Transform} train, validation, and test data
+                \end{enumerate}
+
+                \begin{center}
+                    \textbf{Never} (re-)fit the scaler on validation and test data! You change the evaluation distribution!
+                \end{center}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<4>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, yshift=-11em, xshift=-2em] at (current page.center) {
+                \begin{notebookin}
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_val = scaler.transform(X_val)
+X_test = scaler.transform(X_test)
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<5>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, yshift=-11em, xshift=-2em] at (current page.center) {
+                \begin{notebookin}
+print("X_train.mean = ", X_train.mean())
+print("X_val.mean = ", X_val.mean())
+print("X_test.mean = ", X_test.mean())
+                \end{notebookin}
+                \begin{notebookout}
+X_train.mean =  1.4968364e-08
+X_val.mean =  -0.001627614
+X_test.mean =  0.0061483374
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<6>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, yshift=-11em, xshift=-2em] at (current page.center) {
+                \begin{notebookin}
+fig, ax = plt.subplots(ncols=3, figsize=(15, 5), layout="constrained")
+for n, X in enumerate([X_train, X_val, X_test]):
+    ax[n].plot(X.mean(axis=0), "k-", label="train")
+    ax[n].set(xlabel="channel", ylabel="intensity (a.u.)")
+    ax[n].ticklabel_format(axis="y", style="scientific", scilimits=(0, 0), useMathText=True)
+plt.show()
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<7>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, yshift=-9em, xshift=-2em] at (current page.center) {
+                \includegraphics[width=\textwidth]{02_slides/img/normalisation.png}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
 \end{frame}

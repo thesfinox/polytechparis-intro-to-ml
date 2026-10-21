@@ -1,0 +1,62 @@
+\begin{tikzpicture}[scale=0.5, every node/.style={scale=0.5}]
+    % Bullseye
+    \draw<2->[thick, CEAblack, fill=white] (0, 0) circle (4cm);
+    \draw<2->[thick, CEAblue, fill=CEAblue!35] (0, 0) circle (3cm);
+    \draw<2->[thick, CEAblack, fill=CEAblack!35] (0, 0) circle (2cm);
+    \draw<2->[thick, CEAred, fill=CEAred!35] (0, 0) circle (1cm);
+    \draw<2->[thick, CEAyellow, fill=CEAyellow!35] (0, 0) circle (0.35cm);
+
+    % Points
+    \draw<3->[CEAred, fill=CEAred!85] (1.0, 3.0) circle (3pt);
+    \draw<3->[CEAred, fill=CEAred!85] (1.2, 2.75) circle (3pt);
+    \draw<3->[CEAred, fill=CEAred!85] (1.1, 2.9) circle (3pt);
+    \draw<3->[CEAred, fill=CEAred!85] (1.2, 3.1) circle (3pt);
+    \draw<3->[CEAred, fill=CEAred!85] (1.15, 3.03) circle (3pt);
+    \draw<3->[CEAred, fill=CEAred!85] (1.25, 3.23) circle (3pt);
+    \draw<3->[CEAred, fill=CEAred!85] (1.05, 2.8) circle (3pt);
+
+    % Description
+    \node<3->[anchor=north] at (0, -4.25) {\huge \textbf{HIGH PRECISION}};
+
+    \begin{scope}[xshift=9cm]
+        % Bullseye
+        \draw<2->[thick, CEAblack, fill=white] (0, 0) circle (4cm);
+        \draw<2->[thick, CEAblue, fill=CEAblue!35] (0, 0) circle (3cm);
+        \draw<2->[thick, CEAblack, fill=CEAblack!35] (0, 0) circle (2cm);
+        \draw<2->[thick, CEAred, fill=CEAred!35] (0, 0) circle (1cm);
+        \draw<2->[thick, CEAyellow, fill=CEAyellow!35] (0, 0) circle (0.35cm);
+
+        % Points
+        \draw<3->[CEAred, fill=CEAred!85] (0.5, 0.5) circle (3pt);
+        \draw<3->[CEAred, fill=CEAred!85] (-0.5, 0.4) circle (3pt);
+        \draw<3->[CEAred, fill=CEAred!85] (0.3, 0.25) circle (3pt);
+        \draw<3->[CEAred, fill=CEAred!85] (-0.35, -0.5) circle (3pt);
+        \draw<3->[CEAred, fill=CEAred!85] (0.4, -0.1) circle (3pt);
+        \draw<3->[CEAred, fill=CEAred!85] (0.6, 0.39) circle (3pt);
+        \draw<3->[CEAred, fill=CEAred!85] (-0.1, -0.2) circle (3pt);
+
+        % Description
+        \node<3->[anchor=north] at (0, -4.25) {\huge \textbf{HIGH ACCURACY}};
+    \end{scope}
+
+    \begin{scope}[xshift=18cm]
+        % Bullseye
+        \draw<2->[thick, CEAblack, fill=white] (0, 0) circle (4cm);
+        \draw<2->[thick, CEAblue, fill=CEAblue!35] (0, 0) circle (3cm);
+        \draw<2->[thick, CEAblack, fill=CEAblack!35] (0, 0) circle (2cm);
+        \draw<2->[thick, CEAred, fill=CEAred!35] (0, 0) circle (1cm);
+        \draw<2->[thick, CEAyellow, fill=CEAyellow!35] (0, 0) circle (0.35cm);
+
+        % Points
+        \draw<3->[CEAred, fill=CEAred!85] (0.15, 0.05) circle (3pt);
+        \draw<3->[CEAred, fill=CEAred!85] (-0.05, 0.04) circle (3pt);
+        \draw<3->[CEAred, fill=CEAred!85] (0.1, 0.15) circle (3pt);
+        \draw<3->[CEAred, fill=CEAred!85] (-0.05, -0.2) circle (3pt);
+        \draw<3->[CEAred, fill=CEAred!85] (0.05, -0.1) circle (3pt);
+        \draw<3->[CEAred, fill=CEAred!85] (0.01, 0.1) circle (3pt);
+        \draw<3->[CEAred, fill=CEAred!85] (-0.01, -0.05) circle (3pt);
+
+        % Description
+        \node<3->[anchor=north, text width=25em, align=center] at (0, -4.25) {\huge \textbf{HIGH ACCURACY AND HIGH PRECISION}};
+    \end{scope}
+\end{tikzpicture}

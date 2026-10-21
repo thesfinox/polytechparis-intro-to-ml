@@ -1,3 +1,6 @@
+% !TeX root = 02_intro_ml_polytech.tex
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_GB
 \begin{frame}{How do particles move?}{A little bit of physics\dots}
     \begin{columns}[c]
         \begin{column}{0.55\textwidth}
@@ -33,11 +36,234 @@
             So now suppose you have a set of \enquote{parameters} $\Theta = \{ \theta_i \}_{i = 1}^d$, governed by a function
             \begin{equation*}
                 L = L(\Theta)
+                \quad \Rightarrow \quad
+                \Theta^* = \arg\min\limits_{\theta} L(\theta_1, \theta_2, \dots)
             \end{equation*}
+
+            But how to reach it?
         \end{column}
         \hfil
         \begin{column}{0.4\textwidth}
-            %\input{02_slides/img/loss_profile.tex}
+            \centering
+            \input{02_slides/img/loss_profile.tex}
         \end{column}
     \end{columns}
+
+    \vfill \pause
+
+    \begin{itemize}
+        \item \textbf{Case 1:} (simple) $\vec{\nabla} L(\Theta) = 0$ can be solved analytically $\Rightarrow$ you immediately get the $\Theta^*$
+        \item \textbf{Case 2:} (\emph{gradient descent}) You need to iteratively modify your path towards the optimum \textbf{in the direction of} $-\vec{\nabla} L(\Theta)$
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Gradient Descent}{How do models learn?}
+    \begin{block}{\textbf{Theorem 1:} Direction of steepest descent}
+        Let $L\colon A \subset \mathbb{R}^d \to \mathbb{R}$, such that $L = L(\theta_1, \theta_2, \dots)$, then
+        \begin{equation*}
+            \vec{\nabla} L(\theta_1, \theta_2, \dots, \theta^d)
+            =
+            \sum\limits_{i = 1}^d \pdv{L}{\theta_i} \vec{e}_i
+        \end{equation*}
+        is in the direction of \textbf{steepest ascent}.
+    \end{block}
+
+    \vfill
+
+    \only<2>{\tiny
+    \textcolor{CEAblack!65}{%
+    Let $\vec{v}$ such that $\norm{\vec{v}} = 1$ be an arbitrary direction, then the \textbf{rate of variation} in the direction of $\vec{v}$ is $\vec{\nabla}_{\vec{v}} L(\theta_1, \dots) = \vec{\nabla} L(\theta_1, \dots) \cdot \vec{v}$, and
+    \begin{equation*}
+        \norm{\vec{\nabla} L(\theta_1, \dots) \cdot \vec{v}}
+        =
+        \norm{\vec{\nabla} L(\theta_1, \dots)} \cos \phi,
+    \end{equation*}
+    where $\phi$ is the angle between the two vectors.
+    The \textbf{norm} is \textbf{maximal} iff $\cos \phi = 1$, i.e.\ when $\vec{v}$ is in the \textbf{direction} of the \textbf{gradient}.
+    }
+    }
+\end{frame}
+
+\begin{frame}{Gradient Descent}{How do models learn?}
+    \begin{block}{\textbf{Theorem 2:} Gradient Descent}
+        Let $L_n = L(\Theta_n)$ be the function at step $n$, then the \textbf{gradient descent} algorithm states that
+        \begin{equation*}
+            L_{n+1} = L(\Theta_{n+1})
+            \quad \text{such that} \quad
+            \Theta_{n+1} = \Theta_n - \eta \vec{\nabla} L(\Theta_n)
+        \end{equation*}
+        for $\eta > 0$ is in the direction of \textbf{steepest descent} ($L_1 > L_2 > \dots > L_n \ge 0$).
+    \end{block}
+
+    \vfill
+
+    \only<2>{\tiny
+        \textcolor{CEAblack!65}{%
+            (Proof in 1D) Consider the fundamental theorem of calculus
+            \begin{equation*}
+                f(x)
+                =
+                f(x_0) + \int_{x_0}^{x} \dd{t} f^{\prime}(t)
+                \stackrel{\text{by parts}}{=}
+                f(x_0) + (x f^{\prime}(x) - x_0 f^{\prime}(x_0)) - \int_{x_0}^{x} \dd{t} t f^{\prime\prime}(t)
+                =
+                f(x_0) + x\left(f^{\prime}(x_0) + \int_{x_0}^{x} \dd{t} f^{\prime\prime}(t)\right) - x_0 f^{\prime}(x_0) - \int_{x_0}^{x} \dd{t} t f^{\prime\prime}(t)
+            \end{equation*}
+            then $f(x) = f(x_0) + (x - x_0) f^{\prime}(x_0) + \int_{x_0}^{x} \dd{t} (x - t) f^{\prime\prime}(x_0)$.
+            Since $x - t > 0$ $\forall t \in [x_0, x]$, then the mean value theorem:
+            \begin{equation*}
+                f(x)
+                =
+                f(x_0)
+                +
+                (x - x_0) f^{\prime}(x_0)
+                +
+                f^{\prime\prime}(x_0 + c (x - x_0))
+                \int_{x_0}^{x} \dd{t} (x - t)
+                =
+                f(x_0)
+                +
+                (x - x_0) f^{\prime}(x_0)
+                +
+                \frac{1}{2} (x - x_0)^2 f^{\prime\prime}(x_0 + c (x - x_0)).
+            \end{equation*}
+            Finally, approximate $f^{\prime\prime}(x_0 + c (x - x_0)) \simeq \eta^{-1} \Rightarrow g(x) = f(x_0) + (x - x_0) f^{\prime}(x_0) + \frac{1}{2\eta} (x - x_0)^2$, we get
+            \begin{equation*}
+                g^{\prime}(x) = 0
+                \quad \Leftrightarrow \quad
+                \eta f^{\prime}(x_0) + x - x_0 = 0
+                \quad \Leftrightarrow \quad
+                x = x_0 - \eta f^{\prime}(x_0)
+            \end{equation*}
+        }
+    }
+\end{frame}
+
+\begin{frame}{Gradient Descent}{How do models learn?}
+    As a general rule, a ML model thus needs
+    \begin{itemize}
+        \item a set of \textbf{parameters} $\Theta = \{ \theta_1, \theta_2, \dots \}$ used to compute the predictions
+        \item a \textbf{loss function} (or \emph{cost function}) $L(\Theta)$ used to copute the gradient descent step
+    \end{itemize}
+
+    \vfill \pause
+
+    Optionally, they can have:
+    \begin{itemize}
+        \item a set of \textbf{hyperparameters} $\Omega = \{ \omega_1, \omega_2, \dots \}$ that \emph{define} the model
+    \end{itemize}
+
+    Intuitevely, hyperparameters are number of layers of a neural network, type of normalisation, presence of regularisation, etc.
+
+    \vfill \pause
+
+    Informally, we can say:
+    \begin{itemize}
+        \item \textbf{parameters:} something that the algorithm \enquote{learns} based on the data
+        \item \textbf{hyperparameters:} your choices of model type and configuration
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Gradient Descent}{\includegraphics[height=12pt]{01_slides/img/tool.pdf}~Learning from data\dots}
+    \begin{enumerate}
+        \item \alert<2>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Create a new notebook called \texttt{gradient\_descent.ipynb}}
+        \item \alert<3>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Create some data $X$ and their labels $y$ using your preferred relation (i.e.\ some $y = f(X)$)}
+        \item \alert<4>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Visualise the data.}
+        \item \alert<5>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Define the \enquote{parameters} $\Theta$ of your model (e.g.\ use a polynomial) and initialise them with arbitrary values}
+        \item \alert<6>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Write a \texttt{for} loop to compute:}
+              \begin{itemize}
+                  \item The predicted values \texttt{y\_pred}
+                  \item The value of the loss function $L(\Theta) = \frac{1}{2} \mathbb{E}\left[(y - y_{\text{pred}})^2\right]$
+                  \item The value of the $\vec{\nabla} L(\Theta)$ (\emph{be smart!})
+                  \item The gradient descent update of the parameters $\Theta_{t+1} = \Theta_t - \eta \vec{\nabla} L(\Theta)$
+              \end{itemize}
+        \item \alert<7>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Visualise the loss and the new predictions and compare them to the \enquote{ground truth} values}
+    \end{enumerate}
+
+    \begin{onlyenv}<2>
+        \input{02_slides/img/new_nb_2.tex}
+    \end{onlyenv}
+
+    \begin{onlyenv}<3>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=30em, yshift=-3em, xshift=-2em] at (current page.center) {
+                \begin{notebookin}
+import numpy as np
+
+N = 1000
+x = np.random.permutation(np.linspace(-3.0, 3.0, num=N))
+X = np.array([np.ones_like(x), np.log1p(np.abs(x)), x**2, np.cos(2.0 * x) / np.exp(-x)]).T
+print("X.shape =", X.shape)
+theta_true = np.array([0.1, 0.5, 0.74, 1.63])
+print("theta.shape (true) =", theta_true.shape)
+y = X @ theta_true + 0.5 * np.random.randn(N)
+print("y.shape =", y.shape)
+                \end{notebookin}
+                \begin{notebookout}
+X.shape = (1000, 4)
+theta.shape (true) = (4,)
+y.shape = (1000,)
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<4>
+        \begin{tikzpicture}[overlay]
+            \node[set, yshift=-2em, xshift=-2em] at (current page.center) {
+                \centering
+                \includegraphics[width=0.5\textwidth]{02_slides/img/data_viz.png}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<5>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=30em, yshift=-3em, xshift=-2em] at (current page.center) {
+                \begin{notebookin}
+theta = 0.01 * np.random.randn(4)
+print("Theta.shape (init) =", theta.shape)
+                \end{notebookin}
+                \begin{notebookout}
+Theta.shape (init) = (4,)
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<6>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=30em, yshift=-3em, xshift=-2em] at (current page.center) {
+                \begin{notebookin}
+losses = []
+for i in range(100):
+    # Predictions
+    y_pred = X @ theta
+    # Loss function
+    res = y - y_pred
+    loss = float(0.5 * (res**2).mean())  # res = y - X.theta
+    losses.append(loss)
+    # Gradient
+    grad = (-X.T @ res) / N
+    # Update
+    theta -= 0.01 * grad
+print("Theta (final) =", theta)
+                \end{notebookin}
+                \begin{notebookout}
+Theta (final) = [0.14904979 0.17643383 0.81059318 1.61683743]
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<7>
+        \begin{tikzpicture}[overlay]
+            \node[set, yshift=-2em, xshift=-2em] at (current page.center) {
+                \centering
+                \includegraphics[width=0.4\textwidth]{02_slides/img/losses_viz.png}
+                \hfil
+                \includegraphics[width=0.4\textwidth]{02_slides/img/compare.png}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
 \end{frame}

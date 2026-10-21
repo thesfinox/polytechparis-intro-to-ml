@@ -1,0 +1,14 @@
+\begin{tikzpicture}[overlay, scale=0.9, every node/.style={scale=0.9}]
+    \node[label=right:data/, xshift=-2em] (data) at (current page.center) {\includegraphics[height=12pt]{01_slides/img/folder.pdf}};
+    \node[below=0.25em of data, label=right:notebooks] (nb) {\includegraphics[height=12pt]{01_slides/img/folder.pdf}};
+    \node[below right=0.25em of nb, label=right:data\_tidying.ipynb] (tid) {\includegraphics[height=12pt]{01_slides/img/python.pdf}};
+    \node[below=0.25em of tid, label=right:first\_tutorial.ipynb] (tuto) {\includegraphics[height=12pt]{01_slides/img/python.pdf}};
+    \node[below=0.25em of tuto, label=right:gradient\_descent.ipynb] (grad) {\includegraphics[height=12pt]{01_slides/img/python.pdf}};
+    \node[below=0.25em of grad, label=right:machine\_learning.ipynb] (ml) {\includegraphics[height=12pt]{01_slides/img/python.pdf}};
+    \node[below left=0.25em of ml, label=right:src/] (src) {\includegraphics[height=12pt]{01_slides/img/folder.pdf}};
+    \node[below=0.25em of src] (dots) {\dots};
+
+    \begin{scope}[on background layer]
+        \node[set, fit=(data)(nb)(tuto)(tid)(grad)(ml)(src)(dots), minimum height=8em, minimum width=17em, xshift=5em] {};
+    \end{scope}
+\end{tikzpicture}
