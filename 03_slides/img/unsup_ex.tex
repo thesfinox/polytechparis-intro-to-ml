@@ -1,0 +1,48 @@
+\begin{tikzpicture}
+    % Axes
+    \draw[thick, CEAblack, ->] (-0.25, 0.0) -- (3.0, 0.0);
+    \draw[thick, CEAblack, ->] (0.0, -0.25) -- (0.0, 3.0);
+
+    \pgfmathsetseed{42} % fixed seed -> reproducible figure
+
+    % Box–Muller: after \boxmuller, \gx and \gy are two independent N(0,1) draws
+    \newcommand{\boxmuller}{%
+        \pgfmathsetmacro{\bmR}{sqrt(-2*ln(1-rnd))}%
+        \pgfmathsetmacro{\bmT}{360*rnd}% degrees: PGF trig is in degrees
+        \pgfmathsetmacro{\gx}{\bmR*cos(\bmT)}%
+        \pgfmathsetmacro{\gy}{\bmR*sin(\bmT)}%
+    }
+
+    % Blob 1: mean (3.0, 2.5), sigma = 0.3
+    \foreach \i in {1,...,25} {
+            \boxmuller
+            \pgfmathsetmacro{\px}{3.0 + 0.3*\gx}
+            \pgfmathsetmacro{\py}{2.5 + 0.3*\gy}
+            \fill<1,2,3>[CEAblack!70] (\px,\py) circle (1.5pt);
+            \fill<4->[CEAblue!70] (\px,\py) circle (1.5pt);
+        }
+
+    % Blob 2: mean (0.5, 2.0), sigma = 0.2
+    \foreach \i in {1,...,20} {
+            \boxmuller
+            \pgfmathsetmacro{\px}{0.5 + 0.2*\gx}
+            \pgfmathsetmacro{\py}{2.0 + 0.2*\gy}
+            \fill<1,2,3>[CEAblack!70] (\px,\py) circle (1.5pt);
+            \fill<4->[CEAred!70] (\px,\py) circle (1.5pt);
+        }
+
+    % Ring: centre (2.0, 0.0), R = 0.75, radial noise sigma = 0.06
+    \foreach \i in {1,...,40} {
+            \boxmuller
+            \pgfmathsetmacro{\th}{360*rnd}
+            \pgfmathsetmacro{\rr}{0.75 + 0.06*\gx}
+            \pgfmathsetmacro{\px}{2.0 + \rr*cos(\th)}
+            \pgfmathsetmacro{\py}{0.0 + \rr*sin(\th)}
+            \fill<1,3>[CEAblack!70] (\px,\py) circle (1.5pt);
+            \fill<2,4->[CEAgreen!70] (\px,\py) circle (1.5pt);
+        }
+
+    % Outlier
+    \fill<1,2,4->[CEAblack!70] (-0.25, 0.5) circle (1.5pt);
+    \fill<3>[CEAred!70] (-0.25, 0.5) circle (1.5pt);
+\end{tikzpicture}

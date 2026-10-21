@@ -1,0 +1,58 @@
+% !TeX root = 03_intro_ml_polytech.tex
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_GB
+\begin{frame}{Different Types of ML}{Unsupervised vs supervised algorithms\dots}
+    We already worked with some ML algorithms (Naive Bayes, linear regression, logistic classification, \dots).
+    However,
+    \begin{center}
+        What type of ML algorithms are there? Can we \enquote{classify} them?
+    \end{center}
+
+    \vfill \pause
+
+    \begin{center}
+        \input{03_slides/img/unsup_sup.tex}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Different Types of ML}{Unsupervised vs supervised algorithms\dots}
+
+    \vfill
+
+    \includegraphics[height=12pt]{01_slides/img/brain.pdf}~Is it \textbf{supervised} or \textbf{unsupervised}?
+
+    \vfill \pause
+
+    \begin{itemize}[<+->]
+        \item Suppose you have a folder of \textbf{images} and a list of what they contain. You want to identify what is in the image.
+        \item You have a list of credit card \textbf{transactions}. You want to identify anomalous/fraudolent events.
+        \item You receive a handful of annotated \textbf{spectroscopic data} (e.g.\ a laser cartography of a rock with mineral phases identified). You want to build a model which identifies the elements contained in each pixel.
+        \item You want to move a robotic arm to reproduce \textbf{actions} in a dangerous environment. You only know what kind of movement are good or bad.
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Unsupervised ML}{The one with no labels\dots}
+    Let us start by considering \textbf{unsupervised learning}:
+    \begin{equation*}
+        \mathcal{D} = \left\{ \vec{x}_i \right\}_{i = 1}^N
+    \end{equation*}
+
+    \vfill
+
+    \begin{columns}[c]
+        \begin{column}{0.5\textwidth}
+            Generally used for:
+            \begin{itemize}
+                \item \alert<2>{Data \textbf{exploration}: useful to see if data have particular properties}
+                \item \alert<3>{Finding \textbf{anomalous} behaviour: can be used to find \emph{outliers}}
+                \item \alert<4>{Identification of common \textbf{characteristics}: used to identify \enquote{similar} samples}
+            \end{itemize}
+        \end{column}
+        \hfil
+        \begin{column}{0.5\textwidth}
+            \centering
+            \input{03_slides/img/unsup_ex.tex}
+        \end{column}
+    \end{columns}
+\end{frame}

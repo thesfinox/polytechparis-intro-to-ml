@@ -1,0 +1,9 @@
+\begin{tikzpicture}
+    \draw<2->[CEAred, fill=CEAred!15, fill opacity=0.15, thick] (0, 0) node[text width=8em, align=center, xshift=-1em, opacity=1.0] (sup) {SUPERVISED MACHINE LEARNING} ellipse (3.5cm and 1.5cm);
+    \draw<2->[CEAgreen, fill=CEAgreen!15, fill opacity=0.15, thick] (4.5cm, 0) node[text width=8em, opacity=1.0, align=center, xshift=2em] (unsup) {UNSUPERVISED MACHINE LEARNING} ellipse (3.5cm and 1.5cm);
+
+    \node<3->[align=center, text width=5em] at (2.25cm, 0) {\tiny fascinating but no time to discuss these\dots};
+
+    \node<3->[text=CEAred] at (-3.5cm, 1.5cm) {$\mathcal{D} = \{ (\vec{x}_i, y_i ) \}_{i = 1}^N$};
+    \node<3->[text=CEAgreen] at (7.5cm, 1.5cm) {$\mathcal{D} = \{ \vec{x}_i \}_{i = 1}^N$};
+\end{tikzpicture}

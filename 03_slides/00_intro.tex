@@ -1,0 +1,49 @@
+% !TeX root = 03_intro_ml_polytech.tex
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_GB
+\begin{frame}[fragile]{Welcome Back}{\includegraphics[height=12pt]{01_slides/img/tool.pdf}~What's in it for today?}
+
+    Last time we studied how to \textbf{prepare data} for ML (train/test splits and normalisation) and how to define \textbf{linear models} (with and without regularisation).
+
+    Concerning your data, you should all have saved two \texttt{.npy} files: one for the spectra, one for the annotations:
+    \begin{enumerate}
+        \item \alert<2>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Open the folder where you saved all your work}
+        \item \alert<3>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Check that the \texttt{data} folder contains the two \texttt{.npy} files}
+        \item \alert<4>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Launch the Jupyter notebook interface}
+    \end{enumerate}
+
+    \begin{onlyenv}<2>
+        \begin{tikzpicture}[overlay]
+            \node[yshift=-17em, xshift=-2em] at (current page.center) {
+                \begin{codewithcard}{Terminal}
+cd /path/to/your/folder
+ls
+                \end{codewithcard}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<3>
+        \input{02_slides/img/starting.tex}
+    \end{onlyenv}
+
+    \begin{onlyenv}<4>
+        \begin{tikzpicture}[overlay]
+            \node[yshift=-17em, xshift=-2em] at (current page.center) {
+                \begin{codewithcard}{Terminal}
+uv run jupyter lab
+                \end{codewithcard}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<5>
+        \vfill
+        Today we will go through:
+        \begin{itemize}
+            \item Differences between \textbf{supervised} and \textbf{unsupervised} ML
+            \item Some unsupervised algorithms for data exploration
+            \item More supervised techniques for ML inference
+        \end{itemize}
+    \end{onlyenv}
+\end{frame}
