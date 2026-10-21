@@ -69,11 +69,11 @@
         \begin{tikzpicture}[overlay]
             \node[set, xshift=-2em, yshift=-3em] at (current page.center) {
                 \begin{notebookin}
-                    from scipy.io import loadmat  # open annotations
-                    from spectral.io import envi  # open images
+from scipy.io import loadmat  # open annotations
+from spectral.io import envi  # open images
 
-                    import numpy as np
-                    import matplotlib.pyplot as plt
+import numpy as np
+import matplotlib.pyplot as plt
                 \end{notebookin}
             };
         \end{tikzpicture}
@@ -83,17 +83,17 @@
         \begin{tikzpicture}[overlay]
             \node[set, text width=35em, xshift=-2em, yshift=-3em] at (current page.center) {
                 \begin{notebookin}
-                    data = envi.open("../data/HC_frt0000580c_07_if164j_ter3.hdr")
-                    print(data)
+data = envi.open("../data/HC_frt0000580c_07_if164j_ter3.hdr")
+print(data)
                 \end{notebookin}
                 \begin{notebookout}
-                    Data Source:   './../data/HC_frt0000580c_07_if164j_ter3.img'
-                    # Rows:            420
-                    # Samples:         640
-                    # Bands:           545
-                    Interleave:        BSQ
-                    Quantization:  32 bits
-                    Data format:   float32
+Data Source:   './../data/HC_frt0000580c_07_if164j_ter3.img'
+# Rows:            420
+# Samples:         640
+# Bands:           545
+Interleave:        BSQ
+Quantization:  32 bits
+Data format:   float32
                 \end{notebookout}
             };
         \end{tikzpicture}
@@ -103,17 +103,17 @@
         \begin{tikzpicture}[overlay]
             \node[set, text width=35em, xshift=-2em, yshift=-3em] at (current page.center) {
                 \begin{notebookin}
-                    metadata = data.metadata
-                    wavelengths = metadata["wavelength"]
-                    bad_wavelengths = metadata["bbl"]
-                    ignore_value = float(metadata["data ignore value"])
-                    interleave = metadata["interleave"]
-                    print("Description:", metadata["description"])
-                    print("List of keys:", list(metadata.keys()))
+metadata = data.metadata
+wavelengths = metadata["wavelength"]
+bad_wavelengths = metadata["bbl"]
+ignore_value = float(metadata["data ignore value"])
+interleave = metadata["interleave"]
+print("Description:", metadata["description"])
+print("List of keys:", list(metadata.keys()))
                 \end{notebookin}
                 \begin{notebookout}
-                    Description: ENVI File, Created [Sun Jun 14 08:14:44 2015]
-                    List of keys: ['description', 'samples', 'lines', 'bands', 'header offset', 'file type', 'data type', 'interleave', 'sensor type', 'byte order', 'default bands', 'sun azimuth', 'sun elevation', 'cloud cover', 'wavelength units', 'data ignore value', 'default stretch', 'wavelength', 'fwhm', 'bbl']
+Description: ENVI File, Created [Sun Jun 14 08:14:44 2015]
+List of keys: ['description', 'samples', 'lines', 'bands', 'header offset', 'file type', 'data type', 'interleave', 'sensor type', 'byte order', 'default bands', 'sun azimuth', 'sun elevation', 'cloud cover', 'wavelength units', 'data ignore value', 'default stretch', 'wavelength', 'fwhm', 'bbl']
                 \end{notebookout}
             };
         \end{tikzpicture}
@@ -123,10 +123,10 @@
         \begin{tikzpicture}[overlay]
             \node[set, text width=35em, xshift=-2em, yshift=-3em] at (current page.center) {
                 \begin{notebookin}
-                    # Parse wavelengths to decimal numbers
-                    wavelengths = np.array(wavelengths).astype("float")
-                    # Parse bad_wavelengths to a boolean array
-                    bad_wavelengths = np.array(bad_wavelengths).astype("bool")
+# Parse wavelengths to decimal numbers
+wavelengths = np.array(wavelengths).astype("float")
+# Parse bad_wavelengths to a boolean array
+bad_wavelengths = np.array(bad_wavelengths).astype("bool")
                 \end{notebookin}
             };
         \end{tikzpicture}
@@ -136,12 +136,12 @@
         \begin{tikzpicture}[overlay]
             \node[set, text width=35em, xshift=-2em, yshift=-3em] at (current page.center) {
                 \begin{notebookin}
-                    # Open the image
-                    img = data.open_memmap(interleave=interleave, writable=False)
-                    print("Original shape:", img.shape)
+# Open the image
+img = data.open_memmap(interleave=interleave, writable=False)
+print("Original shape:", img.shape)
                 \end{notebookin}
                 \begin{notebookout}
-                    Original shape: (545, 420, 640)
+Original shape: (545, 420, 640)
                 \end{notebookout}
             };
         \end{tikzpicture}
@@ -161,18 +161,18 @@
         \begin{tikzpicture}[overlay]
             \node[set, text width=35em, xshift=-2em, yshift=-10em] at (current page.center) {
                 \begin{notebookin}
-                    img = img[bad_wavelengths]
-                    print("Shape (after bad wavelength removal):", img.shape)
-                    wavelengths = wavelengths[bad_wavelengths]
-                    print("wavelengths.shape =", wavelengths.shape)
-                    print("wavelengths.min:", float(wavelengths.min()), "nm")
-                    print("wavelengths.max:", float(wavelengths.max()), "nm")
+img = img[bad_wavelengths]
+print("Shape (after bad wavelength removal):", img.shape)
+wavelengths = wavelengths[bad_wavelengths]
+print("wavelengths.shape =", wavelengths.shape)
+print("wavelengths.min:", float(wavelengths.min()), "nm")
+print("wavelengths.max:", float(wavelengths.max()), "nm")
                 \end{notebookin}
                 \begin{notebookout}
-                    Shape (after bad wavelength removal): (489, 420, 640)
-                    wavelengths.shape = (489,)
-                    wavelengths.min: 436.13 nm
-                    wavelengths.max: 3896.76 nm
+Shape (after bad wavelength removal): (489, 420, 640)
+wavelengths.shape = (489,)
+wavelengths.min: 436.13 nm
+wavelengths.max: 3896.76 nm
                 \end{notebookout}
             };
         \end{tikzpicture}
@@ -182,23 +182,23 @@
         \begin{tikzpicture}[overlay]
             \node[set, text width=35em, xshift=-2em, yshift=-8em] at (current page.center) {
                 \begin{notebookin}
-                    mask = img != ignore_value
-                    print("Mask.shape =", mask.shape)
-                    mask_spatial = mask.sum(axis=0)
-                    print("Shape (spatial mask):", mask_spatial.shape)
-                    good_rows = mask_spatial.sum(axis=1) > 0
-                    print("Rows to keep:", good_rows.sum())
-                    good_cols = mask_spatial.sum(axis=0) > 0
-                    print("Columns to keep:", good_cols.sum())
-                    img = img[:, good_rows, :][:, :, good_cols]
-                    print("img.shape =", img.shape)
+mask = img != ignore_value
+print("Mask.shape =", mask.shape)
+mask_spatial = mask.sum(axis=0)
+print("Shape (spatial mask):", mask_spatial.shape)
+good_rows = mask_spatial.sum(axis=1) > 0
+print("Rows to keep:", good_rows.sum())
+good_cols = mask_spatial.sum(axis=0) > 0
+print("Columns to keep:", good_cols.sum())
+img = img[:, good_rows, :][:, :, good_cols]
+print("img.shape =", img.shape)
                 \end{notebookin}
                 \begin{notebookout}
-                    Mask.shape = (489, 420, 640)
-                    Shape (spatial mask): (420, 640)
-                    Rows to keep: 418
-                    Columns to keep: 600
-                    img.shape = (489, 418, 600)
+Mask.shape = (489, 420, 640)
+Shape (spatial mask): (420, 640)
+Rows to keep: 418
+Columns to keep: 600
+img.shape = (489, 418, 600)
                 \end{notebookout}
             };
         \end{tikzpicture}
@@ -215,14 +215,14 @@
         \begin{tikzpicture}[overlay]
             \node[set, text width=35em, xshift=-2em, yshift=-12em] at (current page.center) {
                 \begin{notebookin}
-                    # Choose the base wavelengths
-                    red = np.abs(wavelengths - 2500.0).argmin()
-                    green = np.abs(wavelengths - 1500.0).argmin()
-                    blue = np.abs(wavelengths - 800.0).argmin()
+# Choose the base wavelengths
+red = np.abs(wavelengths - 2500.0).argmin()
+green = np.abs(wavelengths - 1500.0).argmin()
+blue = np.abs(wavelengths - 800.0).argmin()
 
-                    # Select the bands and normalise in [0, 1]
-                    img_viz = img[[blue, green, red]]
-                    img_viz = (img_viz - img_viz.min()) / (img_viz.max() - img_viz.min())
+# Select the bands and normalise in [0, 1]
+img_viz = img[[blue, green, red]]
+img_viz = (img_viz - img_viz.min()) / (img_viz.max() - img_viz.min())
                 \end{notebookin}
             };
         \end{tikzpicture}
@@ -244,16 +244,16 @@
 
     \begin{onlyenv}<8>
         \begin{tikzpicture}[overlay]
-            \node[set, text width=35em, xshift=-2em, yshift=-3em] at (current page.center) {
+            \node[set, text width=35em, xshift=-2em, yshift=-5em] at (current page.center) {
                 \begin{notebookin}
-                    swir_hi = np.abs(wavelengths - 2500.0).argmin()
-                    swir_lo = np.abs(wavelengths - 1400.0).argmin()
-                    img_swir = img[swir_lo:swir_hi]
-                    wavelengths_swir = wavelengths[swir_lo:swir_hi]
-                    print("SWIR image.shape =", img_swir.shape)
+swir_hi = np.abs(wavelengths - 2500.0).argmin()
+swir_lo = np.abs(wavelengths - 1400.0).argmin()
+img_swir = img[swir_lo:swir_hi]
+wavelengths_swir = wavelengths[swir_lo:swir_hi]
+print("SWIR image.shape =", img_swir.shape)
                 \end{notebookin}
                 \begin{notebookout}
-                    SWIR image.shape = (167, 418, 600)
+SWIR image.shape = (167, 418, 600)
                 \end{notebookout}
             };
         \end{tikzpicture}
@@ -368,19 +368,19 @@
         \begin{tikzpicture}[overlay]
             \node[xshift=-2em, yshift=-8em] at (current page.center) {
                 \begin{codewithcard}{normalisation.py}
-                    import numpy as np
-                    def convex_hull(x, y):
-                    stack = []
-                    for i in range(x.size):
-                    while len(stack) >= 2:
-                    i1, i2 = stack[-2], stack[-1]
-                    cross = (y[i2]-y[i1])*(x[i]-x[i1]) - (x[i2]-x[i1])*(y[i]-y[i1])
-                    if cross < 0.0:
-                    stack.pop()
-                    else:
-                    break
-                    stack.append(i)
-                    return np.asarray(stack, dtype="int")
+import numpy as np
+def convex_hull(x, y):
+    stack = []
+    for i in range(x.size):
+        while len(stack) >= 2:
+            i1, i2 = stack[-2], stack[-1]
+            cross = (y[i2]-y[i1])*(x[i]-x[i1]) - (x[i2]-x[i1])*(y[i]-y[i1])
+            if cross < 0.0:
+                stack.pop()
+            else:
+                break
+        stack.append(i)
+    return np.asarray(stack, dtype="int")
                 \end{codewithcard}
             };
         \end{tikzpicture}
@@ -390,7 +390,7 @@
         \begin{tikzpicture}[overlay]
             \node[set, text width=35em, xshift=-2em, yshift=-5em] at (current page.center) {
                 \begin{notebookin}
-                    from mlintro.normalisation import convex_hull
+from mlintro.normalisation import convex_hull
                 \end{notebookin}
             };
         \end{tikzpicture}
@@ -400,19 +400,19 @@
         \begin{tikzpicture}[overlay]
             \node[set, text width=35em, xshift=-2em, yshift=-8em] at (current page.center) {
                 \begin{notebookin}
-                    C, H, W = img_swir.shape
-                    img_swir_flat = img_swir.reshape(C, -1).T
-                    print("Flat shape =", img_swir_flat.shape)
-                    for i, s in enumerate(img_swir_flat):
-                    idx = convex_hull(wavelengths_swir, s)
-                    hull = np.interp(wavelengths_swir, wavelengths_swir[idx], s[idx])
-                    img_swir_flat[i] = 1.0 - np.where(hull > 0, s / hull, 0.0)
-                    img_swir_norm = img_swir_flat.T.reshape(C, H, W)
-                    print("Normalised image.shape =", img_swir_norm.shape)
+C, H, W = img_swir.shape
+img_swir_flat = img_swir.reshape(C, -1).T
+print("Flat shape =", img_swir_flat.shape)
+for i, s in enumerate(img_swir_flat):
+    idx = convex_hull(wavelengths_swir, s)
+    hull = np.interp(wavelengths_swir, wavelengths_swir[idx], s[idx])
+    img_swir_flat[i] = 1.0 - np.where(hull > 0, s / hull, 0.0)
+img_swir_norm = img_swir_flat.T.reshape(C, H, W)
+print("Normalised image.shape =", img_swir_norm.shape)
                 \end{notebookin}
                 \begin{notebookout}
-                    Flat shape = (250800, 167)
-                    Normalised image.shape = (167, 418, 600)
+Flat shape = (250800, 167)
+Normalised image.shape = (167, 418, 600)
                 \end{notebookout}
             };
         \end{tikzpicture}
@@ -431,8 +431,8 @@
         \begin{tikzpicture}[overlay]
             \node[set, text width=35em, xshift=-2em, yshift=-8em] at (current page.center) {
                 \begin{notebookin}
-                    np.save("../data/HC_norm.npy", img_swir_norm)
-                \end{notebookin}
+np.save("../data/HC_norm.npy", img_swir_norm)
+            \end{notebookin}
             };
         \end{tikzpicture}
     \end{onlyenv}
@@ -452,11 +452,11 @@
         \begin{tikzpicture}[overlay]
             \node[set, text width=35em, xshift=-2em, yshift=-5em] at (current page.center) {
                 \begin{notebookin}
-                    annot = loadmat("../data/HC_ground_truth.mat")
-                    print(list(annot.keys()))
+annot = loadmat("../data/HC_ground_truth.mat")
+print(list(annot.keys()))
                 \end{notebookin}
                 \begin{notebookout}
-                    ['__header__', '__version__', '__globals__', 'holden_gt']
+['__header__', '__version__', '__globals__', 'holden_gt']
                 \end{notebookout}
             };
         \end{tikzpicture}
@@ -466,11 +466,11 @@
         \begin{tikzpicture}[overlay]
             \node[set, text width=35em, xshift=-2em, yshift=-8em] at (current page.center) {
                 \begin{notebookin}
-                    labels = annot["holden_gt"]
-                    print("Labels.shape =", labels.shape)
+labels = annot["holden_gt"]
+print("Labels.shape =", labels.shape)
                 \end{notebookin}
                 \begin{notebookout}
-                    Labels.shape = (418, 595)
+Labels.shape = (418, 595)
                 \end{notebookout}
             };
         \end{tikzpicture}
@@ -480,20 +480,20 @@
         \begin{tikzpicture}[overlay]
             \node[set, text width=35em, xshift=-2em, yshift=-7em] at (current page.center) {
                 \begin{notebookin}
-                    if labels.shape != img_swir_norm.shape[1:]:
-                    pad_rows = img_swir_norm.shape[1] - labels.shape[0]
-                    pad_cols = img_swir_norm.shape[2] - labels.shape[1]
-                    if (pad_rows >= 0) and (pad_cols >= 0):
-                    labels = np.pad(
-                    labels,
-                    ((0, pad_rows), (0, pad_cols)),
-                    mode="constant",
-                    constant_values=0,
-                    )
-                    print("Labels.shape (new) =", labels.shape)
+if labels.shape != img_swir_norm.shape[1:]:
+    pad_rows = img_swir_norm.shape[1] - labels.shape[0]
+    pad_cols = img_swir_norm.shape[2] - labels.shape[1]
+if (pad_rows >= 0) and (pad_cols >= 0):
+    labels = np.pad(
+        labels,
+        ((0, pad_rows), (0, pad_cols)),
+        mode="constant",
+        constant_values=0,
+        )
+print("Labels.shape (new) =", labels.shape)
                 \end{notebookin}
                 \begin{notebookout}
-                    Labels.shape (new) = (418, 600)
+Labels.shape (new) = (418, 600)
                 \end{notebookout}
             };
         \end{tikzpicture}
@@ -521,8 +521,8 @@
         \begin{tikzpicture}[overlay]
             \node[set, text width=35em, xshift=-2em, yshift=-5em] at (current page.center) {
                 \begin{notebookin}
-                    np.save("../data/HC_labels.npy", labels)
-                \end{notebookin}
+np.save("../data/HC_labels.npy", labels)
+            \end{notebookin}
             };
         \end{tikzpicture}
     \end{onlyenv}
