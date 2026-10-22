@@ -1,0 +1,59 @@
+\begin{tikzpicture}
+    % Axes
+    \draw[thick, CEAblack, ->] (-0.25, 0.0) -- (3.0, 0.0);
+    \draw[thick, CEAblack, ->] (0.0, -0.25) -- (0.0, 3.0);
+
+    \pgfmathsetseed{42} % fixed seed -> reproducible figure
+
+    % Box–Muller: after \boxmuller, \gx and \gy are two independent N(0,1) draws
+    \newcommand{\boxmuller}{%
+        \pgfmathsetmacro{\bmR}{sqrt(-2*ln(1-rnd))}%
+        \pgfmathsetmacro{\bmT}{360*rnd}% degrees: PGF trig is in degrees
+        \pgfmathsetmacro{\gx}{\bmR*cos(\bmT)}%
+        \pgfmathsetmacro{\gy}{\bmR*sin(\bmT)}%
+    }
+
+    % Ring 1: centre (1.5, 1.5), R = 1.5, radial noise sigma = 0.06
+    \foreach \i in {1,...,60} {
+            \boxmuller
+            \pgfmathsetmacro{\th}{360*rnd}
+            \pgfmathsetmacro{\rr}{1.5 + 0.06*\gx}
+            \pgfmathsetmacro{\px}{1.5 + \rr*cos(\th)}
+            \pgfmathsetmacro{\py}{1.5 + \rr*sin(\th)}
+            \fill[CEAblack!70] (\px,\py) circle (1.5pt);
+            \fill<8>[CEAblue!70] (\px,\py) circle (1.5pt);
+        }
+
+    % Ring 2: centre (1.5, 1.5), R = 0.65, radial noise sigma = 0.06
+    \foreach \i in {1,...,60} {
+            \boxmuller
+            \pgfmathsetmacro{\th}{360*rnd}
+            \pgfmathsetmacro{\rr}{0.65 + 0.06*\gx}
+            \pgfmathsetmacro{\px}{1.5 + \rr*cos(\th)}
+            \pgfmathsetmacro{\py}{1.5 + \rr*sin(\th)}
+            \fill[CEAblack!70] (\px,\py) circle (1.5pt);
+            \ifthenelse{\i = 25}{%
+                \fill<3-4>[CEAred] (\px, \py) circle (1.5pt);
+                \begin{scope}[on background layer]
+                    \draw<4>[CEAred, fill=CEAred!50, fill opacity=0.35] (\px, \py) circle (1.25em);
+                \end{scope}
+            }{}
+            \ifthenelse{\i = 25 \OR \i = 19 \OR \i = 17}{%
+                \fill<5-6>[CEAred] (\px, \py) circle (1.5pt);
+                \begin{scope}[on background layer]
+                    \draw<6>[CEAred, fill=CEAred!50, fill opacity=0.35] (\px, \py) circle (1.25em);
+                \end{scope}
+            }{}
+            \ifthenelse{\i < 60}{%
+                \fill<7>[CEAred] (\px, \py) circle (1.5pt);
+            }{}
+            \ifthenelse{\i = 60}{%
+                \begin{scope}[on background layer]
+                    \draw<7>[CEAred, fill=CEAred!50, fill opacity=0.35] (\px, \py) circle (1.25em);
+                \end{scope}
+            }{}
+            \fill<8>[CEAred] (\px, \py) circle (1.5pt);
+        }
+
+    % Select P and neighbours
+\end{tikzpicture}

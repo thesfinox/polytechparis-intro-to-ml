@@ -8,9 +8,10 @@
 \usepackage[english]{babel}
 \usepackage{csquotes}
 \usepackage{physics}
+\usepackage{ifthen}
 
 % Tikz styles
-\usetikzlibrary{shadows, fit, backgrounds, positioning}
+\usetikzlibrary{shadows, fit, backgrounds, positioning, shapes.geometric}
 \tikzset{
   % Base style: rounded rectangle with a soft drop shadow
   set/.style = {
@@ -61,7 +62,7 @@
 
 % --- TITLE SLIDE ---
 \begin{frame}[plain]
-  \titlepage
+    \titlepage
 \end{frame}
 
 % ------------------------------------------------------------------
@@ -83,12 +84,8 @@
 
 \input{03_slides/02_supervised.tex}
 
-\section{Data Exploration}
-
-\input{03_slides/03_data.tex}
-
 % --- CONCLUDING SLIDE ---
 \begin{frame}[plain]
-  \usebeamertemplate*{last page}
+    \usebeamertemplate*{last page}
 \end{frame}
 \end{document}

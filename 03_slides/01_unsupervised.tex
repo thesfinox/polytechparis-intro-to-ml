@@ -56,3 +56,365 @@
         \end{column}
     \end{columns}
 \end{frame}
+
+\begin{frame}{KMeans Clustering}{Grouping based on proximity\dots}
+    The first algorithm is \textbf{KMeans} clustering:
+
+    \vfill
+
+    \begin{columns}[c]
+        \begin{column}{0.6\textwidth}
+            \alert<2>{\textbf{Start:} choose a number of \enquote{groups} $K$ and choose their centre randomly}
+
+            \textbf{Loop N times:}
+            \begin{enumerate}
+                \item \alert<3>{Assign samples to the nearest group centre}
+                \item \alert<4>{Use samples in the group to compute again the centre}
+                \item \textbf{After N iterations:} stop and perform a final assignment of samples
+            \end{enumerate}
+        \end{column}
+        \hfil
+        \begin{column}{0.4\textwidth}
+            \centering
+            \input{03_slides/img/kmeans.tex}
+        \end{column}
+    \end{columns}
+
+    \vfill
+
+    The procedure is based on \textbf{Euclidean distance}: $d(\vec{x}, \vec{c}) = \norm{\vec{x} - \vec{c}}$.
+    It can be \textbf{trained} on a set and \enquote{applied} on another!
+\end{frame}
+
+\begin{frame}{DBSCAN}{Grouping based on density\dots}
+    The second algorithm we see is \textbf{DBSCAN}:
+
+    \vfill
+
+    \begin{columns}[c]
+        \begin{column}{0.6\textwidth}
+            \alert<2>{\textbf{Start:} Set the number of clusters to $0$}
+
+            \textbf{Loop over all points P:}
+            \begin{enumerate}
+                \item if P was already considered then skip
+                \item \alert<3>{select P and assign it to a \enquote{group} (\emph{cluster})}
+                \item \alert<4>{\textbf{Loop over all points Q near P:}}
+                      \begin{enumerate}
+                          \item \alert<5>{select Q and add it to cluster}
+                          \item \alert<6-7>{Extend the cluster with neighbours of Q}
+                          \item \alert<8>{Close the cluster when no more points are unexplored in the vicinity}
+                      \end{enumerate}
+            \end{enumerate}
+        \end{column}
+        \hfil
+        \begin{column}{0.4\textwidth}
+            \centering
+            \input{03_slides/img/dbscan.tex}
+        \end{column}
+    \end{columns}
+
+    \vfill
+
+    \textbf{Key difference:} You do no need to set the number of clusters to start! Only based on \enquote{density}: does \textbf{not transfer} to different sets
+\end{frame}
+
+\begin{frame}{Clustering}{Grouping similar objects\dots}
+    There is plenty of possibilities to choose from:
+    \begin{center}
+        \includegraphics[width=0.55\textwidth]{03_slides/img/cluster_comp.png}
+    \end{center}
+    Even though the idea is similar: \emph{similar objects go together}
+\end{frame}
+
+
+\begin{frame}{Clustering}{Is it like classification?}
+    Clustering creates \textbf{pseudo-labels}:
+    \begin{center}
+        \begin{tabular}{@{}cccc@{}}
+            $x_1$ & $x_2$ & $x_3$ & $K$   \\ \hline
+            0.3   & 0.1   & 0.4   & 1     \\
+            -0.3  & 0.14  & 0.24  & 2     \\
+            -0.4  & 0.12  & 0.26  & 2     \\
+            \dots & \dots & \dots & \dots
+        \end{tabular}
+    \end{center}
+
+    \vfill \pause
+
+    However, we cannot score it like classification.
+    Most used metrics:
+    \begin{itemize}
+        \item if \textbf{ground truth} is available $\rightarrow$ \emph{Rand score}:
+              \begin{equation*}
+                  \operatorname{Rand} = \frac{\text{no.\ of matching pairs}}{\text{total pairs}}
+              \end{equation*}
+        \item if \textbf{no ground truth} is available $\rightarrow$ \emph{Silhouette score}:
+              \begin{equation*}
+                  \operatorname{S} = \frac{1}{N} \sum\limits_{i = 1}^N \frac{b_i - a_i}{\max\{ a_i, b_i \}},
+                  \quad
+                  a_i = \mathbb{E}_{i \neq j \in C_i}\left[ \operatorname{dist}(i, j) \right],
+                  \quad
+                  b_i = \mathbb{E}_{i \neq j \in \text{nearest~}C_j}\left[ \operatorname{dist}(i, j) \right]
+              \end{equation*}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Clustering}{\includegraphics[height=12pt]{01_slides/img/tool.pdf}~Back to our data}
+    \begin{enumerate}
+        \item \alert<2>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Go back to the notebook \texttt{machine\_learning.ipynb} and run all the cells}
+        \item \alert<3>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Select only the spectra and the labels that are \textbf{not} background}
+        \item \alert<4>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Import and use the \texttt{KMeans} class from \texttt{sklearn.cluster}}
+        \item \alert<5>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Import and use the \texttt{rand\_score} and \texttt{silhouette\_score} functions from \texttt{sklearn.metrics}}
+        \item \alert<6>{\includegraphics[height=12pt]{01_slides/img/brain.pdf}~Can you consider it a good clustering?}
+        \item \alert<7>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Import and use the \texttt{DBSCAN} class from \texttt{sklearn.cluster}}
+        \item \alert<8>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~How many \textbf{unique} clusters did the DBSCAN find? Can you compute the silhouette score?}
+        \item \alert<9>{\includegraphics[height=12pt]{01_slides/img/brain.pdf}~What parameters impacts the result the most?}
+    \end{enumerate}
+
+    \begin{onlyenv}<3>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=30em, xshift=-2em, yshift=-6em] at (current page.center) {
+                \begin{notebookin}
+X_train_sel = X_train[y_train != 0]
+y_train_sel = y_train[y_train != 0]
+print("X_train_sel.shape =", X_train_sel.shape)
+X_val_sel = X_val[y_val != 0]
+y_val_sel = y_val[y_val != 0]
+print("X_val_sel.shape =", X_val_sel.shape)
+X_test_sel = X_test[y_test != 0]
+y_test_sel = y_test[y_test != 0]
+print("X_test_sel.shape =", X_test_sel.shape)
+                \end{notebookin}
+                \begin{notebookout}
+X_train_sel.shape = (16332, 167)
+X_val_sel.shape = (1780, 167)
+X_test_sel.shape = (1978, 167)
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<4>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=30em, xshift=-2em, yshift=-6em] at (current page.center) {
+                \begin{notebookin}
+from sklearn.cluster import KMeans
+
+kmeans = KMeans(n_clusters=6)
+y_train_kmeans = kmeans.fit_predict(X_train_sel)
+y_val_kmeans = kmeans.predict(X_val_sel)
+y_test_kmeans = kmeans.predict(X_test_sel)
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<5>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=41em, xshift=-2em, yshift=-6em] at (current page.center) {
+                \begin{notebookin}
+from sklearn.metrics import rand_score, silhouette_score
+
+for name, x, y, y_pred in [("train", X_train_sel, y_train_sel, y_train_kmeans),
+                           ("val", X_val_sel, y_val_sel, y_val_kmeans),
+                           ("test", X_test_sel, y_test_sel, y_test_kmeans)]:
+    rand = rand_score(y, y_pred)
+    silhouette = silhouette_score(x, y_pred)
+    print(f"Rand - KMeans ({name}) = {rand:.3f}")
+    print(f"Silhouette - KMeans ({name}) = {silhouette:.3f}")
+               \end{notebookin}
+                \begin{notebookout}
+Rand - KMeans (train) = 0.711
+Silhouette - KMeans (train) = 0.152
+Rand - KMeans (val) = 0.717
+Silhouette - KMeans (val) = 0.149
+Rand - KMeans (test) = 0.728
+Silhouette - KMeans (test) = 0.160
+               \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<7>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=35em, xshift=-2em, yshift=-6em] at (current page.center) {
+                \begin{notebookin}
+from sklearn.cluster import DBSCAN
+
+dbscan = DBSCAN(eps=10.0)
+y_train_dbscan = dbscan.fit_predict(X_train_sel)
+y_val_dbscan = dbscan.fit_predict(X_val_sel)
+y_test_dbscan = dbscan.fit_predict(X_test_sel)
+               \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<8>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=42em, xshift=-2em, yshift=-6em] at (current page.center) {
+                \begin{notebookin}
+for name, x, y, y_pred in [("train", X_train_sel, y_train_sel, y_train_dbscan),
+                           ("val", X_val_sel, y_val_sel, y_val_dbscan),
+                           ("test", X_test_sel, y_test_sel, y_test_dbscan)]:
+    unique = np.unique(y_pred); print(f"Unique clusters ({name}): {unique}")
+    if len(unique) > 1:
+        rand = rand_score(y, y_pred); silhouette = silhouette_score(x, y_pred)
+        print(f"Rand - DBSCAN ({name}) = {rand:.3f}")
+        print(f"Silhouette - DBSCAN ({name}) = {silhouette:.3f}")
+               \end{notebookin}
+                \begin{notebookout}
+Unique clusters (train): [-1  0  1  2  3]
+Rand - DBSCAN (train) = 0.333
+Silhouette - DBSCAN (train) = 0.687
+Unique clusters (val): [-1  0]
+Rand - DBSCAN (val) = 0.335
+Silhouette - DBSCAN (val) = 0.559
+Unique clusters (test): [-1  0]
+Rand - DBSCAN (test) = 0.333
+Silhouette - DBSCAN (test) = 0.680
+               \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+\end{frame}
+
+\begin{frame}{Visualisation in High Dimension}{What to do with large data?}
+    We have been talking about \textbf{visualising} data and \textbf{clustering} (defining groups) of data, but
+    \begin{center}
+        \emph{How do we \enquote{look at} data in high dimension ($D > 3$)?}
+    \end{center}
+
+    \vfill \pause
+
+    Suppose you have spectral data:
+    \begin{equation*}
+        \vec{x}_1 \in \mathbb{R}^d,
+        \quad
+        \vec{x}_2 \in \mathbb{R}^d,
+        \quad
+        \dots
+    \end{equation*}
+    and need to \enquote{compare} different spectra amongst them:
+
+    \begin{itemize}
+        \item \includegraphics[height=12px]{01_slides/img/brain.pdf}~What kind of comparison methods would you use?
+        \item \includegraphics[height=12px]{01_slides/img/brain.pdf}~How would you \textbf{present} your data?
+        \item \includegraphics[height=12px]{01_slides/img/brain.pdf}~How would you \textbf{verify} your assumptions?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Visualisation in High Dimension}{What to do with large data?}
+    The principal idea is then to find:
+    \begin{equation*}
+        f\colon \quad \mathbb{R}^d \longrightarrow \mathbb{R}^{p}
+    \end{equation*}
+    where
+    \begin{equation*}
+        p \ll d
+    \end{equation*}
+    and ideally $p = 2, 3$.
+    This way,
+    \begin{equation*}
+        \vec{x}^{\prime} = f(\vec{x})
+    \end{equation*}
+    would become \enquote{manageable}.
+
+    \vfill \pause
+
+    What \textbf{properties} must we require?
+    We will mainly see:
+    \begin{itemize}
+        \item (PCA) If data contains \enquote{signal}, rotate it in the right direction
+        \item (tSNE) Preserve the concept of \enquote{distance} in high and low dimensions
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Principal Components Analysis}{Finding the direction of signal\dots}
+    \begin{block}{Prerequisite 1: the Spectral Theorem}
+        Let $C$ be a square symmetric real matrix $C = C^{\top} \in \mathbb{R}^{d \times d}$, then
+        \begin{equation*}
+            \exists \Lambda = \operatorname{diag}\left( \lambda_1, \lambda_2, \dots, \lambda_d \right)
+        \end{equation*}
+        where $\lambda_i$ are \textbf{eigenvalues} of $C$, and
+        \begin{equation*}
+            W = \left( \vec{w}_i^{\top} \right)_{i = 1}^d,
+            \quad
+            \vec{w}_i = \left( w_{i1}~w_{i2}~\dots~w_{id} \right)
+        \end{equation*}
+        is the matrix of associated \textbf{eigenvectors} (as columns), such that
+        \begin{equation*}
+            C = W \Lambda W^{\top}.
+        \end{equation*}
+    \end{block}
+
+    \vfill
+
+    In other words:
+    \begin{equation*}
+        C = \sum\limits_{i = 1}^d \lambda_i \vec{w}_i^T \vec{w}_i
+    \end{equation*}
+\end{frame}
+
+\begin{frame}{Principal Components Analysis}{\includegraphics[height=12pt]{01_slides/img/tool.pdf}~Finding the direction of signal\dots}
+    Consider some data such that $\mathbb{E}[X] = 0$:
+    \begin{equation*}
+        X = \left( \mathbb{I}_{n \times p} + \beta \vec{v}^{\top} \vec{u} \right)^{\frac{1}{2}} Z \simeq
+        \left( \mathbb{I}_{n \times p} + \frac{1}{2} \beta \vec{v}^{\top} \vec{u} \right) Z \in \mathbb{R}^{n \times p}
+    \end{equation*}
+    where $\norm{\vec{u}} = \norm{\vec{v}} = 1$ and $\beta > 0$, and $Z = \mathbb{I}_{p \times p} + \frac{1}{\sqrt{n}} W$, and $W \sim \mathcal{N}(O, \mathbb{I}_{p \times p})$.
+
+    \vfill \pause
+
+    \includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Let us build the \textbf{covariance matrix} (symmetric):
+    \vfill \pause
+    \begin{equation*}
+        \begin{split}
+            C
+            =
+            \frac{1}{n} X^{\top} X
+            & =
+            Z^{\top}
+            (
+            \mathbb{I}_{p \times p}
+            +
+            \beta
+            \overbrace{\frac{\vec{u}^{\top} \vec{v}\,  \mathbb{I}_{n \times p} + \mathbb{I}_{p \times n}\, \vec{v}^{\top} \vec{u}}{2}}^{A = A^T \in \mathbb{R}^{p \times p}}
+            ) Z
+            +
+            \mathcal{O}(\beta^2)
+            \\
+            & \simeq
+            \mathbb{I}_{p \times p}
+            +
+            \beta A
+            +
+            \frac{1}{\sqrt{n}} \left( W^{\top} + W \right)
+            \\
+            & =
+            \underbrace{%
+                \mathbb{I}_{p \times p}
+                +
+                \beta A
+                +
+                \widetilde{W}
+            }_{\text{all symmetric!}}
+            \only<3>{%
+            \alert{%
+            =
+            \sum\limits_{i = 1}^d
+            \vec{1}_i^{T} \vec{1}_i
+            +
+            \beta
+            \vec{a}^{\top} \vec{a}
+            +
+            \sum\limits_{i = 1}^d
+            \tilde{\lambda}_i
+            \tilde{\vec{w}}_i^{\top}
+            \tilde{\vec{w}}_i
+            }
+            }
+        \end{split}
+    \end{equation*}
+\end{frame}
