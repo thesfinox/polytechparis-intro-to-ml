@@ -1,0 +1,38 @@
+\begin{tikzpicture}[
+        ax/.style={CEAblack, thick, ->},
+        classif/.style={CEAgreen, ultra thick, dashed},
+        corridor/.style={CEAgreen, thick, dotted},
+        dist/.style={CEAgreen, thick, <->}
+    ]
+    \pgfmathsetseed{42} % fixed seed -> reproducible figure
+    \newcommand{\boxmuller}{%
+        \pgfmathsetmacro{\bmR}{sqrt(-2*ln(1-rnd))}%
+        \pgfmathsetmacro{\bmT}{360*rnd}% degrees: PGF trig is in degrees
+        \pgfmathsetmacro{\gx}{\bmR*cos(\bmT)}%
+        \pgfmathsetmacro{\gy}{\bmR*sin(\bmT)}%
+    }
+
+    % Axes
+    \draw[ax] (-0.25, 0.0) -- (3.5, 0.0) node[below] {$x_1$};
+    \draw[ax] (0.0, -0.25) -- (0.0, 3.0) node[left] {$x_2$};
+
+    % Points
+    \foreach \i in {1,...,25} {
+            \boxmuller
+            \pgfmathsetmacro{\px}{2.5 + 0.3*\gx}
+            \pgfmathsetmacro{\py}{0.5 + 0.3*\gy}
+            \fill[CEAred!70] (\px,\py) circle (1.5pt);
+        }
+    \foreach \i in {1,...,25} {
+            \boxmuller
+            \pgfmathsetmacro{\px}{0.5 + 0.3*\gx}
+            \pgfmathsetmacro{\py}{2.5 + 0.4*\gy}
+            \fill[CEAblue!70] (\px,\py) circle (1.5pt);
+        }
+
+    % Classification
+    \draw[classif] (0.05, -0.1) -- (2.85, 2.9);
+    \draw[corridor] (1.05, -0.25) -- (2.85, 1.7) node[right] {$\ell_+$};
+    \draw[corridor] (0.05, 0.9) -- (1.95, 3.0) node[right] {$\ell_-$};
+    \draw[dist] (1.2, 2.1) -- (2.25, 1.05);
+\end{tikzpicture}

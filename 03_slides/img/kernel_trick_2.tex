@@ -1,0 +1,62 @@
+\begin{tikzpicture}
+    % Axes
+    \draw[thick, CEAblack, ->] (-2.0, 0.0) -- (2.0, 0.0) node[below] {$x_1$};
+    \draw[thick, CEAblack, ->] (0.0, -2.0) -- (0.0, 2.0) node[left] {$x_2$};
+
+    \pgfmathsetseed{42} % fixed seed -> reproducible figure
+
+    % Box–Muller: after \boxmuller, \gx and \gy are two independent N(0,1) draws
+    \newcommand{\boxmuller}{%
+        \pgfmathsetmacro{\bmR}{sqrt(-2*ln(1-rnd))}%
+        \pgfmathsetmacro{\bmT}{360*rnd}% degrees: PGF trig is in degrees
+        \pgfmathsetmacro{\gx}{\bmR*cos(\bmT)}%
+        \pgfmathsetmacro{\gy}{\bmR*sin(\bmT)}%
+    }
+
+    \foreach \i in {1,...,100} {
+            \boxmuller
+            \pgfmathsetmacro{\th}{360*rnd}
+            \pgfmathsetmacro{\rr}{1.5 + 0.25*\gx}
+            \pgfmathsetmacro{\px}{0.0 + \rr*cos(\th)}
+            \pgfmathsetmacro{\py}{0.0 + \rr*sin(\th)}
+            \fill[CEAred!70] (\px,\py) circle (1.5pt);
+        }
+
+    \foreach \i in {1,...,100} {
+            \boxmuller
+            \pgfmathsetmacro{\th}{360*rnd}
+            \pgfmathsetmacro{\rr}{0.25 + 0.06*\gx}
+            \pgfmathsetmacro{\px}{0.0 + \rr*cos(\th)}
+            \pgfmathsetmacro{\py}{0.0 + \rr*sin(\th)}
+            \fill[CEAblue!70] (\px,\py) circle (1.5pt);
+        }
+
+    % Arrow
+    \begin{scope}[xshift=3cm]
+        \node at (0, 0) {\Huge $\Rightarrow$};
+    \end{scope}
+
+    % 3D plot
+    \begin{scope}[xshift=5cm]
+        \draw[thick, CEAblack, ->] (0.0, 0.0) -- (2.0, 0.0) node[below] {$x_1$};
+        \draw[thick, CEAblack, ->] (0.0, 0.0) -- (-1.0, -1.0) node[left] {$x_2$};
+        \draw[thick, CEAblack, ->] (0.0, 0.0) -- (0.0, 2.0) node[left] {$x_3$};
+
+        \foreach \n in {0,...,50} {
+                \pgfmathsetmacro{\px}{2.0 * rnd - 1.0};
+                \pgfmathsetmacro{\py}{0.5 * (rnd - 0.65)};
+                \fill[CEAred!70] (\px,\py) circle (1.5pt);
+                \pgfmathsetmacro{\qx}{2.0 * rnd - 1.0};
+                \pgfmathsetmacro{\qy}{0.5 * (rnd - 0.25)};
+                \fill[CEAred!70, opacity=0.5] (\qx,\qy) circle (1.5pt);
+                \pgfmathsetmacro{\ux}{0.5 * (rnd - 0.5)};
+                \pgfmathsetmacro{\uy}{0.5 * (rnd + 2.5)};
+                \fill[CEAblue!70] (\ux,\uy) circle (1.5pt);
+                \pgfmathsetmacro{\vx}{0.5 * (rnd - 0.5)};
+                \pgfmathsetmacro{\vy}{0.5 * (rnd + 2.5)};
+                \fill[CEAblue!70, opacity=0.5] (\vx,\vy) circle (1.5pt);
+            }
+
+        \draw[CEAblack!70, fill=CEAblack!15, fill opacity=0.25] (-1.5, 0.7) -- (1.5, 0.7) -- (1.9, 1.1) -- (-1.1, 1.1) -- cycle;
+    \end{scope}
+\end{tikzpicture}

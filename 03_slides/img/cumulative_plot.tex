@@ -1,0 +1,15 @@
+\def\scree{(0.2,1.1) (0.6,1.7) (1.0,2.1) (1.4,2.3) (1.8,2.4) (2.2,2.45) (2.6,2.46) (3.0,2.48) (3.4,2.49)}
+\def\screepts{0.2/1.1, 0.6/1.7, 1.0/2.1, 1.4/2.3, 1.8/2.4, 2.2/2.45, 2.6/2.46, 3.0/2.48, 3.4/2.49}
+
+\begin{tikzpicture}
+    \draw[thick, CEAblack, ->] (-0.25, 0.0) -- (3.5, 0.0) node[below] {components};
+    \draw[thick, CEAblack, ->] (0.0, -0.25) -- (0.0, 3.0) node[above left, rotate=90] {variance};
+
+    \draw[CEAblue, dashed] plot coordinates {\scree};
+    \foreach \px/\py [count=\i from 1] in \screepts
+    {
+        \fill[CEAblue] (\px, \py) node[above] {\footnotesize$\lambda_{\i}$} circle (1.5pt);
+    }
+
+    \draw[CEAred, thick, dashed] (0.0, 2.35) -- (3.5, 2.35) node[below] {threshold};
+\end{tikzpicture}

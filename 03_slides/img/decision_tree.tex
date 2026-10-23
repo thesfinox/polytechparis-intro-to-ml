@@ -1,0 +1,41 @@
+\begin{tikzpicture}[
+        scale=0.65,
+        every node/.style={scale=0.65},
+        leaf/.style={
+                circle,
+                CEAblack,
+                fill=CEAblack!15,
+                align=center,
+                drop shadow = {shadow xshift = 2pt, shadow yshift = -2pt,
+                        opacity = 0.35, fill = black},
+            }
+    ]
+    \node<1>[set] (n0) at (0, 0) {question};
+    \node<1>[set, yshift=-1em, below left=0.35em of n0] (n00) {question};
+    \node<1>[set, yshift=-1em, below right=0.35em of n0] (n01) {question};
+    \node<1>[set, yshift=-1em, below left=0.35em of n00] (n000) {question};
+    \node<1>[leaf, yshift=-1em, below right=0.15em of n00] (n001) {decision};
+    \node<1>[set, yshift=-1em, below left=0.15em of n000] (n0000) {question};
+    \node<1>[set, yshift=-1em, below right=0.35em of n000] (n0001) {question};
+    \node<1>[leaf, yshift=-1em, below left=0.35em of n0000] (n00000) {decision};
+    \node<1>[leaf, yshift=-1em, below right=0.35em of n0000] (n00001) {decision};
+
+    \node<2->[set] (n0) at (0, 0) {$x_1 < 0.3$};
+    \node<2->[set, yshift=-1em, below left=0.35em of n0] (n00) {$x_2 > 0.1$};
+    \node<2->[set, yshift=-1em, below right=0.35em of n0] (n01) {$x_2 < 0.7$};
+    \node<2->[set, yshift=-1em, below left=0.35em of n00] (n000) {$x_1 > 1.5$};
+    \node<2->[leaf, yshift=-1em, below right=0.15em of n00] (n001) {class = 1};
+    \node<2->[set, yshift=-1em, below left=0.15em of n000] (n0000) {$x_2 < 0.5$};
+    \node<2->[set, yshift=-1em, below right=0.35em of n000] (n0001) {$x_1 < -0.1$};
+    \node<2->[leaf, yshift=-1em, below left=0.35em of n0000] (n00000) {class = 0};
+    \node<2->[leaf, yshift=-1em, below right=0.35em of n0000] (n00001) {class = 2};
+
+    \draw[->, CEAblack] (n0.south) -- (n00.north east);
+    \draw[->, CEAblack] (n0.south) -- (n01.north west);
+    \draw[->, CEAblack] (n00.south) -- (n000.north east);
+    \draw[->, CEAblack] (n00.south) -- (n001.north west);
+    \draw[->, CEAblack] (n000.south) -- (n0000.north east);
+    \draw[->, CEAblack] (n000.south) -- (n0001.north west);
+    \draw[->, CEAblack] (n0000.south) -- (n00000.north east);
+    \draw[->, CEAblack] (n0000.south) -- (n00001.north west);
+\end{tikzpicture}

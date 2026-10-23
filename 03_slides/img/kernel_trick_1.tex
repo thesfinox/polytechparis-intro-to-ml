@@ -1,0 +1,33 @@
+\begin{tikzpicture}
+    % Axes
+    \draw[thick, CEAblack, ->] (-2.0, 0.0) -- (2.0, 0.0) node[below] {$x_1$};
+    \draw[thick, CEAblack, ->] (0.0, -2.0) -- (0.0, 2.0) node[left] {$x_2$};
+
+    \pgfmathsetseed{42} % fixed seed -> reproducible figure
+
+    % Box–Muller: after \boxmuller, \gx and \gy are two independent N(0,1) draws
+    \newcommand{\boxmuller}{%
+        \pgfmathsetmacro{\bmR}{sqrt(-2*ln(1-rnd))}%
+        \pgfmathsetmacro{\bmT}{360*rnd}% degrees: PGF trig is in degrees
+        \pgfmathsetmacro{\gx}{\bmR*cos(\bmT)}%
+        \pgfmathsetmacro{\gy}{\bmR*sin(\bmT)}%
+    }
+
+    \foreach \i in {1,...,100} {
+            \boxmuller
+            \pgfmathsetmacro{\th}{360*rnd}
+            \pgfmathsetmacro{\rr}{1.5 + 0.25*\gx}
+            \pgfmathsetmacro{\px}{0.0 + \rr*cos(\th)}
+            \pgfmathsetmacro{\py}{0.0 + \rr*sin(\th)}
+            \fill[CEAred!70] (\px,\py) circle (1.5pt);
+        }
+
+    \foreach \i in {1,...,100} {
+            \boxmuller
+            \pgfmathsetmacro{\th}{360*rnd}
+            \pgfmathsetmacro{\rr}{0.25 + 0.06*\gx}
+            \pgfmathsetmacro{\px}{0.0 + \rr*cos(\th)}
+            \pgfmathsetmacro{\py}{0.0 + \rr*sin(\th)}
+            \fill[CEAblue!70] (\px,\py) circle (1.5pt);
+        }
+\end{tikzpicture}

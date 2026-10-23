@@ -369,52 +369,459 @@ Silhouette - DBSCAN (test) = 0.680
 
     \includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Let us build the \textbf{covariance matrix} (symmetric):
     \vfill \pause
-    \begin{equation*}
-        \begin{split}
-            C
-            =
-            \frac{1}{n} X^{\top} X
-            & =
-            Z^{\top}
-            (
-            \mathbb{I}_{p \times p}
-            +
-            \beta
-            \overbrace{\frac{\vec{u}^{\top} \vec{v}\,  \mathbb{I}_{n \times p} + \mathbb{I}_{p \times n}\, \vec{v}^{\top} \vec{u}}{2}}^{A = A^T \in \mathbb{R}^{p \times p}}
-            ) Z
-            +
-            \mathcal{O}(\beta^2)
-            \\
-            & \simeq
-            \mathbb{I}_{p \times p}
-            +
-            \beta A
-            +
-            \frac{1}{\sqrt{n}} \left( W^{\top} + W \right)
-            \\
-            & =
-            \underbrace{%
+    \begin{onlyenv}<2-3>
+        \begin{equation*}
+            \begin{split}
+                C
+                =
+                \frac{1}{n} X^{\top} X
+                & =
+                Z^{\top}
+                (
+                \mathbb{I}_{p \times p}
+                +
+                \beta
+                \overbrace{\frac{\vec{u}^{\top} \vec{v}\,  \mathbb{I}_{n \times p} + \mathbb{I}_{p \times n}\, \vec{v}^{\top} \vec{u}}{2}}^{A = A^T \in \mathbb{R}^{p \times p}}
+                ) Z
+                +
+                \mathcal{O}(\beta^2)
+                \\
+                & \simeq
                 \mathbb{I}_{p \times p}
                 +
                 \beta A
                 +
-                \widetilde{W}
-            }_{\text{all symmetric!}}
-            \only<3>{%
-            \alert{%
+                \frac{1}{\sqrt{n}} \left( W^{\top} + W \right)
+                \\
+                & =
+                \underbrace{%
+                    \beta A
+                    +
+                    \widetilde{W}
+                }_{\text{all symmetric!}}
+                \only<3>{%
+                \alert{%
+                =
+                \beta
+                \vec{a}^{\top} \vec{a}
+                +
+                \sum\limits_{i = 1}^d
+                \tilde{\lambda}_i
+                \tilde{\vec{w}}_i^{\top}
+                \tilde{\vec{w}}_i
+                }
+                }
+            \end{split}
+        \end{equation*}
+    \end{onlyenv}
+    \begin{onlyenv}<4>
+        \begin{equation*}
+            C
             =
-            \sum\limits_{i = 1}^d
-            \vec{1}_i^{T} \vec{1}_i
+            \beta \vec{a}^{\top} \vec{a}
             +
-            \beta
-            \vec{a}^{\top} \vec{a}
-            +
-            \sum\limits_{i = 1}^d
-            \tilde{\lambda}_i
-            \tilde{\vec{w}}_i^{\top}
-            \tilde{\vec{w}}_i
-            }
-            }
-        \end{split}
+            \sum\limits_{i = 1}^d \tilde{\lambda}_i \tilde{\vec{w}}_i^{\top} \tilde{\vec{w}}_i
+            =
+            \sum\limits_{i = 1}^d \lambda_i \vec{w}_i^{\top} \vec{w}_i,
+        \end{equation*}
+        where $\lambda_1 = \beta + \tilde{\lambda}_1$, and $\lambda_1 > \lambda_2 > \dots > \lambda_d$.
+    \end{onlyenv}
+\end{frame}
+
+\begin{frame}{Principal Components Analysis}{Finding the direction of signal\dots}
+    We need a way to find $\beta$ (though we do not know \emph{where} it is  and \emph{if} we can see it):
+    \begin{equation*}
+        C
+        =
+        \sum\limits_{i = 1}^d \lambda_i \vec{w}_i^{\top} \vec{w}_i,
+        \gets
+        \beta~\text{is somewhere there}
     \end{equation*}
+    which means that we need to look for a \textbf{transformation}
+    \begin{equation*}
+        X^{\prime} = X\, T,
+        \quad
+        T = T^{\top} \in \mathbb{R}^{p \times p}
+    \end{equation*}
+    such that
+    \begin{equation*}
+        \vec{t}_1
+        =
+        \arg\max\limits_{\vec{t} \mid \norm{t} = 1}
+        \operatorname{Var}(\vec{x}^{\prime}_1)
+        =
+        \arg\max\limits_{\vec{t}}
+        \frac{\vec{t}^{\,\top} X^{\top} X \vec{t}}{\vec{t}^{\top} \vec{t}}
+        =
+        \arg\max\limits_{\vec{t}}
+        \frac{\vec{t}^{\,\top} C \vec{t}}{\vec{t}^{\top} \vec{t}},
+    \end{equation*}
+    and so on\dots
+
+    \vfill \pause
+
+    \begin{center}
+        \textbf{Property:} $\vec{t}_i$ ($i = 1, \dots, d$) must be \textbf{eigenvectors} of $C$.
+    \end{center}
+
+    \vfill
+
+    {\tiny
+        Clearly, this is only going to be possible if $\beta$ is large enough to be detected!
+    }
+\end{frame}
+
+\begin{frame}{Principal Components Analysis}{Finding the direction of signal\dots}
+    We thus find that
+    \begin{equation*}
+        \operatorname{Var}(\vec{t}_i)
+        =
+        \vec{t}_i^{\,\top} C \vec{t}_i
+        =
+        \lambda_i
+    \end{equation*}
+    and in particular \emph{if good conditions are met}:
+    \begin{equation*}
+        \operatorname{Var}(\vec{t}_1)
+        =
+        \vec{t}_1^{\,\top} C \vec{t}_1
+        =
+        \alert{\beta + \tilde{\lambda}_i}
+    \end{equation*}
+
+    \vfill \pause
+
+    \begin{center}
+        \huge
+        We found the direction ($\vec{t}_1$) of the signal!
+    \end{center}
+
+    \vfill \pause
+
+    This is called called \textbf{Principal Components Analysis} (PCA):
+    \begin{equation*}
+        \underbrace{~~X^{\prime}~~}_{\text{scores/principal components}} = X \underbrace{~~T~~}_{\text{loadings}}.
+    \end{equation*}
+    They enable \textbf{ranking} the content of the data, according to their \textbf{variance} (\emph{importance})
+\end{frame}
+
+\begin{frame}{Principal Components Analysis}{Reducing the dimensionality of the data\dots}
+    PCA has an interesting byproduct:
+    \begin{center}
+        \input{03_slides/img/pca.tex}
+    \end{center}
+    \begin{enumerate}
+        \item<1-> Suppose you have data $X \in \mathbb{R}^{n \times p}$ and find $T \in \mathbb{R}^{p \times p}$ for PCA
+        \item<2-> Then, naturally, $X^{\prime} \in \mathbb{R}^{n \times p}$
+        \item<3-> However, the important part is concentrated in few components of $T_{a} \preceq T$, $a < p$.
+        \item<4-> Hence, the product $\alert{X^{\prime}_a} = X \alert{T_a \in \mathbb{R}^{n \times a}}$ has a \textbf{reduced dimensionality}, but not \textbf{reduced information}!
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Principal Components Analysis}{Reducing the dimensionality of the data\dots}
+    PCA allows you to choose a subset of components from your data, losing as little information as possible:
+    \vfill
+    \begin{columns}[c]
+        \begin{column}{0.6\textwidth}
+            The eigenvalues of the covariance matrix define the \textbf{explained variance} of each component:
+            \begin{enumerate}
+                \item \alert<1>{You can select all components that are \textbf{higher} than a certain threshold (e.g.\ $\lambda_i > 5\%$)}
+                \item \alert<2>{You can select all components that \textbf{cumulatively} add up to a certain variance threshold (e.g.\ $\sum_{i < a} \lambda_i \le 95\%$)}
+            \end{enumerate}
+        \end{column}
+        \hfil
+        \only<1>{
+            \begin{column}{0.4\textwidth}
+                \input{03_slides/img/scree_plot.tex}
+
+                {\footnotesize \emph{Scree plot} of variance vs components}
+            \end{column}
+        }
+        \only<2>{
+            \begin{column}{0.4\textwidth}
+                \input{03_slides/img/cumulative_plot.tex}
+
+                {\footnotesize \emph{Cumulative plot} of variance vs components}
+            \end{column}
+        }
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Principal Components Analysis}{\includegraphics[height=12pt]{01_slides/img/tool.pdf}~Working on spectroscopy data}
+    \begin{itemize}
+        \item \alert<2>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Open the \texttt{machine\_learning.ipynb} notebook and run all cells}
+        \item \alert<3>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Import the \texttt{PCA} class from the \texttt{decomposition} module of Scikit-Learn}
+        \item \alert<4>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Apply PCA (keep 2 dimensions) to the \emph{selected} training points (no background) and verify the shape}
+        \item \alert<5>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Store the loadings somewhere and check their shape}
+        \item \alert<6-7>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Plot the 2d points and colour them based on their labels and on their KMeans clusters}
+        \item \alert<8>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Plot the loadings. \includegraphics[height=12pt]{01_slides/img/brain.pdf}~What is their interpretation?}
+        \item \alert<9>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Verify that the loadings are orthogonal.}
+    \end{itemize}
+
+    \begin{onlyenv}<3>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=30em, xshift=-2em, yshift=-6em] at (current page.center) {
+                \begin{notebookin}
+from sklearn.decomposition import PCA
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<4>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=30em, xshift=-2em, yshift=-6em] at (current page.center) {
+                \begin{notebookin}
+pca = PCA(n_components=2)
+X_train_pca = pca.fit_transform(X_train_sel)
+X_val_pca = pca.transform(X_val_sel)
+X_test_pca = pca.transform(X_test_sel)
+print("X_{pca}.shape =", X_train_pca.shape)
+                \end{notebookin}
+                \begin{notebookout}
+X_{pca}.shape = (16283, 2)
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<5>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=30em, xshift=-2em, yshift=-8em] at (current page.center) {
+                \begin{notebookin}
+loadings = pca.components_
+print("Loadings.shape =", loadings.shape)
+                \end{notebookin}
+                \begin{notebookout}
+Loadings.shape = (2, 167)
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<6>
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-6em] at (current page.center) {
+                \centering
+                \includegraphics[width=0.55\textwidth]{03_slides/img/pca.png}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<7>
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-6em] at (current page.center) {
+                \centering
+                \includegraphics[width=0.55\textwidth]{03_slides/img/pca_cluster.png}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<8>
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-6em] at (current page.center) {
+                \centering
+                \includegraphics[width=0.55\textwidth]{03_slides/img/loadings.png}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<9>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=30em, xshift=-2em, yshift=-4em] at (current page.center) {
+                \begin{notebookin}
+prod = loadings[0] @ loadings[1]
+print(f"Scalar product: t_0 . t_1 = {prod:.2e}")
+                \end{notebookin}
+                \begin{notebookout}
+Scalar product: t_0 . t_1 = -5.08e-09
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+\end{frame}
+
+\begin{frame}{Visualisation Tools}{Keeping the distance\dots}
+    Another \textbf{dimensionality reduction} technique is
+    \vfill
+    \begin{center}
+        \large
+        \emph{t-distributed Stochastic Neighbours Embedding} (tSNE)
+    \end{center}
+    \vfill
+    The idea is the following:
+    \begin{columns}[c]
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                \item You need to find \emph{mathematical objects} that do not change in high- and low-dimension
+                \item You need something that relates data (something \emph{relative})
+            \end{itemize}
+
+            \includegraphics[height=12pt]{01_slides/img/brain.pdf}~What kind of objects can we use? What property do they have?
+        \end{column}
+        \hfil
+        \only<2>{
+            \begin{column}{0.5\textwidth}
+                \begin{center}
+                    \large
+                    We use \textbf{distances} between points!
+
+                    They are scalars and do not transform differently in different dimensions!
+                \end{center}
+            \end{column}
+        }
+        \only<3>{
+            \begin{column}<3>{0.4\textwidth}
+                \begin{center}
+                    \large
+                    \textbf{Key idea:} maintain the same \emph{distance} value in high dimension and low dimension!
+                \end{center}
+            \end{column}
+        }
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Visualisation Tools}{Keeping the distance\dots}
+    \vfill
+    \begin{columns}[T]
+        \begin{column}<1->{0.48\textwidth}
+            Consider two \emph{existing} $\vec{x}_i \in \mathbb{R}^D$ and $\vec{x}_j \in \mathbb{R}^D$:
+            \begin{center}
+                \large \textbf{HIGH DIMENSION}
+            \end{center}
+            Compute a \enquote{distance probability}:
+            \begin{equation*}
+                P(\vec{x}_i, \vec{x}_j)
+                =
+                \frac{
+                    e^{-\frac{\norm{\vec{x}_i - \vec{x}_j}^2}{2 \sigma_i^2}}
+                }{
+                    \sum\limits_{i \neq j}
+                    e^{-\frac{\norm{\vec{x}_i - \vec{x}_j}^2}{2 \sigma_i^2}}
+                }
+                +
+                (i \leftrightarrow j)
+            \end{equation*}
+
+            This is a \textbf{Gaussian} distribution over distances.
+        \end{column}
+        \hfil
+        \begin{column}<2->{0.48\textwidth}
+            Consider two \emph{images} $\vec{z}_i \in \mathbb{R}^d$ and $\vec{z}_j \in \mathbb{R}^d$:
+            \begin{center}
+                \large \textbf{LOW DIMENSION}
+                Compute a \emph{desired} \enquote{distance probability}:
+                \begin{equation*}
+                    Q(\vec{x}_i, \vec{x}_j)
+                    =
+                    \frac{
+                        \left( 1 + \norm{\vec{z}_i - \vec{z}_j}^2 \right)^{-1}
+                    }{
+                        \sum\limits_{i \neq j}
+                        \left( 1 + \norm{\vec{z}_i - \vec{z}_j}^2 \right)^{-1}
+                    }
+                    +
+                    (i \leftrightarrow j)
+                \end{equation*}
+
+                This is a \textbf{Cauchy} distribution over distances.
+            \end{center}
+        \end{column}
+    \end{columns}
+    \vfill
+\end{frame}
+
+\begin{frame}{Visualisation Tools}{Keeping the distance\dots}
+    What is the advantage of using this?
+
+    \vfill \pause
+
+    Using \textbf{gradient descent}, we can minimise the distance between the two distributions:
+    \vfill
+    \begin{columns}[c]
+        \begin{column}{0.4\textwidth}
+            \begin{equation*}
+                \begin{split}
+                    \operatorname{dist}(P, Q)
+                    & =
+                    \mathrm{D}_{\text{KL}}\left( P \Vert Q \right)
+                    \\
+                    & =
+                    \frac{1}{N}
+                    \sum\limits_{i, j}
+                    P(\vec{x}_i, \vec{x}_j)
+                    \ln
+                    \frac{P(\vec{x}_i, \vec{x}_j)}{Q(\vec{x}_i, \vec{x}_j)}
+                \end{split}
+            \end{equation*}
+        \end{column}
+        \hfil
+        \begin{column}{0.55\textwidth}
+            \centering
+            \input{03_slides/img/tsne_distr.tex}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Visualisation Tools}{Keeping the distance\dots}
+    Overall, \textbf{tSNE} enables to keep similar distances in lower dimension:
+    \vfill
+    \begin{columns}[c]
+        \begin{column}<1->{0.45\textwidth}
+            \centering
+            \includegraphics[width=0.75\textwidth]{03_slides/img/mnist.png}
+
+            \includegraphics[width=0.75\textwidth]{03_slides/img/pca_mnist.pdf}
+        \end{column}
+        \hfil
+        \begin{column}<2->{0.5\textwidth}
+            \centering
+            \includegraphics[width=0.95\textwidth]{03_slides/img/tsne_mnist.pdf}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Visualisation Tools}{\includegraphics[height=12pt]{01_slides/img/tool.pdf}~Using tSNE\dots}
+    \begin{itemize}
+        \item \alert<2>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Open the \texttt{machine\_learning.ipynb} notebook and run all cells}
+        \item \alert<3>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Import the \texttt{TSNE} class from the \texttt{manifold} module of Scikit-learn}
+        \item \alert<4>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Apply tSNE on the selected training data (no background) and reduce to 2 dimensions}
+        \item \alert<5>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Plot the results as a scatter and colour points based on labels and on KMeans clusters}
+    \end{itemize}
+
+    \begin{onlyenv}<3>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=30em, xshift=-2em, yshift=-9em] at (current page.center) {
+                \begin{notebookin}
+from sklearn.manifold import TSNE
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<4>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=30em, xshift=-2em, yshift=-11em] at (current page.center) {
+                \begin{notebookin}
+tsne = TSNE(n_components=2)
+X_train_tsne = tsne.fit_transform(X_train_sel)
+print("X_{tsne}.shape =", X_train_tsne.shape)
+                \end{notebookin}
+                \begin{notebookout}
+X_{tsne}.shape = (16283, 2)
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<5>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=30em, xshift=-2em, yshift=-9em] at (current page.center) {
+                \centering
+                \includegraphics[width=0.48\textwidth]{03_slides/img/tsne.png}
+                \hfil
+                \includegraphics[width=0.48\textwidth]{03_slides/img/tsne_cluster.png}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
 \end{frame}

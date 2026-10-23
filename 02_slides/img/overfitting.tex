@@ -11,16 +11,17 @@
         test/.style={fill=CEAblue, draw=none, circle, inner sep=1.6pt},
         ax/.style={thick, CEAblack, ->}
     ]
-    \foreach \xs/\firsttitle/\title/\curve/\col/\msetrain/\msetest/\name/\effect/\adjective in {
-            0/Model 1/Overfitting/\overfitcurve/CEAblack/0.0/0.153/overfitting/memorised the training data/unreliable,
-            4.7/Model 2/Generalisation/\goodcurve/CEAblack/0.044/0.030/generalisation/adjusted to the training data/great,
-            9.4/Model 3/Underfitting/\underfitcurve/CEAblack/0.200/0.148/underfitting/not learnt the training data/useless}
+    \foreach \xs/\firsttitle/\subtitle/\title/\curve/\col/\msetrain/\msetest/\name/\effect/\adjective in {
+            0/Model 1/Overfitting/High Variance/\overfitcurve/CEAblack/0.0/0.153/overfitting/memorised the training data/unreliable,
+            4.7/Model 2/Generalisation/Optimal/\goodcurve/CEAblack/0.044/0.030/generalisation/adjusted to the training data/great,
+            9.4/Model 3/Underfitting/High Bias/\underfitcurve/CEAblack/0.200/0.148/underfitting/not learnt the training data/useless}
         {
             \begin{scope}[xshift=\xs cm]
                 \draw[ax] (-0.2,0) -- (3.6,0) node[below] {$x$};
                 \draw[ax] (0,-0.2) -- (0,3.0) node[left] {$y$};
                 \node<1-3>[above] at (1.7,2.9) {\textbf{\firsttitle}};
                 \node<4->[above] at (1.7,2.9) {\textcolor{CEAred}{\textbf{\title}}};
+                \node<4->[above] at (1.7,3.4) {\footnotesize\textcolor{CEAred}{\textbf{\subtitle}}};
                 \draw[\col, thick, smooth] plot coordinates {\curve};
                 \foreach \px/\py in \trainpts \node[train] at (\px,\py) {};
                 \only<3->{%

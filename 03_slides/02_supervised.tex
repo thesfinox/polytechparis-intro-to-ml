@@ -1,3 +1,420 @@
 % !TeX root = 03_intro_ml_polytech.tex
 % !TeX encoding = UTF-8
 % !TeX spellcheck = en_GB
+\begin{frame}{Supervised Learning}{(Re-)introducing labels\dots}
+    Differently from unsupervised learning, \textbf{supervised learning} deals with \textbf{labeled} datasets:
+    \begin{equation*}
+        \mathcal{D} = \left\lbrace \left(\vec{x}_i, y_i\right) \right\rbrace_{i = 1}^N
+    \end{equation*}
+
+    \vfill \pause
+
+    The key point is to find:
+    \begin{equation*}
+        f\colon \mathbb{R}^{d_1 \times d_2 \times \dots} \to \mathbb{R}^{k_1 \times k_2 \times \dots}
+    \end{equation*}
+    {\footnotesize
+    For instance, we can have:
+    \begin{itemize}
+        \item \textbf{tabular data} $X \in \mathbb{R}^{N \times P}$:
+              \begin{itemize}
+                  \item \textbf{regression:} ($\mathbb{R}$) \emph{find the critical heat flux value, given conditions in a nuclear plant}
+                  \item \textbf{classification:} ($\mathbb{R}^{k_1 \times k_2 \times \dots}$) \emph{assign a mineral class to a series of spectroscopic values}
+                  \item \dots
+              \end{itemize}
+        \item \textbf{images} $X \in \mathbb{R}^{C \times H \times W}$:
+              \begin{itemize}
+                  \item \textbf{regression:} ($\mathbb{R}$) \emph{find the Reynolds number given a thermofluidic slice}
+                  \item \textbf{segmentation:} ($\mathbb{R}^{H \times W}$) \emph{isolate pixels of different animals/minerals/objects}
+                  \item \dots
+              \end{itemize}
+        \item \textbf{videos} $X \in \mathbb{R}^{T \times C \times H \times W}$:
+              \begin{itemize}
+                  \item \textbf{segmentation:} ($\mathbb{R}^{T \times H \times W}$) \emph{follow pixels of different animals/minerals/objects}
+                  \item \textbf{detection:} ($\mathbb{R}$) \emph{detect a phase transition point in a finite-element simulation}
+                  \item \dots
+              \end{itemize}
+    \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}{Supervised Methods}{Building some intuition\dots}
+    Let us start by something which can be \textbf{linearly separated}:
+    \vfill
+    \begin{columns}[T]
+        \begin{column}{0.32\textwidth}
+            \begin{center}
+                \input{03_slides/img/logistic_reg.tex}
+
+                \textbf{Logistic regression} provides a \emph{thresholding} framework to classify objects
+            \end{center}
+        \end{column}
+        \hfil
+        \begin{column}<2->{0.32\textwidth}
+            \begin{center}
+                \input{03_slides/img/svm_principle.tex}
+
+                \only<2-3>{%
+                    What if we asked to create the \enquote{most separation} between the objects?
+                }
+            \end{center}
+        \end{column}
+        \hfil
+        \begin{column}<3->{0.32\textwidth}
+            \begin{center}
+                \input{03_slides/img/tree_principle.tex}
+
+                \only<3>{%
+                    What if we asked to \enquote{divide the space} in patches and assign the objects?
+                }
+            \end{center}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Support Vector Machines}{Optimising the corridor\dots}
+    Let us define the two \textbf{corridor} lines:
+    \begin{equation*}
+        \ell_{\pm}\colon \vec{a} \cdot \vec{x} + b =
+        \begin{cases}
+            +1 & \qif y = 1~\text{(blue)} \\
+            -1 & \qif y = -1~\text{(red)}
+        \end{cases}
+    \end{equation*}
+    \vfill
+    \begin{columns}[c]
+        \begin{column}{0.4\textwidth}
+            \centering
+            \input{03_slides/img/svm_principle.tex}
+        \end{column}
+        \hfil
+        \begin{column}{0.6\textwidth}
+            We can now \textbf{maximise} the distance between the lines $\ell_+$ and $\ell_-$:
+            \begin{equation*}
+                \operatorname{dist}(\ell_+, \ell_-)
+                =
+                \frac{2}{\norm{\vec{a}}}
+            \end{equation*}
+            constrained to:
+            \begin{equation*}
+                y_i \left( \vec{a} \cdot \vec{x}_i + b \right) \ge 1
+            \end{equation*}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Support Vector Machines}{Optimising the corridor\dots}
+    The condition becomes:
+    \begin{equation*}
+        \left(\vec{a}^*, b^*\right)
+        =
+        \arg\min\limits_{\vec{a}, b}
+        \frac{\norm{\vec{a}}}{2}
+        +
+        \only<1>{\sum\limits_{i = 1}^N}
+        \only<2>{\alert{\sum\limits_{i = 1}^S}}
+        \mu_i y_i \left( \vec{a} \cdot \vec{x}_i + b\right)
+    \end{equation*}
+    \vfill
+    \begin{columns}[c]
+        \begin{column}{0.4\textwidth}
+            \centering
+            \input{03_slides/img/svm_principle.tex}
+        \end{column}
+        \hfil
+        \begin{column}<2->{0.6\textwidth}
+            But we know that the \textbf{constraint} is active \textbf{only} for the points on the \textbf{border}:
+
+            \begin{center}
+                \large
+                The method only depends on $S$ \textbf{support vectors} and is hence called:
+
+                \vspace{0.5em}
+
+                {\huge
+                    Support Vector Machine
+                }
+            \end{center}
+
+            \begin{equation*}
+                \vec{a}^{*}
+                =
+                \sum\limits_{i = 1}^S \mu_i y_i \vec{x}_i,
+                \quad
+                b^*
+                =
+                y_i - \vec{a}^* \cdot \vec{x}_{\hat\i}
+            \end{equation*}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Support Vector Machines}{Creating non-linear separation\dots}
+    The only issue so far is that we worked with linearly separarable samples.
+    But what if?
+    \vfill
+    \begin{center}
+        \input{03_slides/img/kernel_trick_1.tex}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Support Vector Machines}{Creating non-linear separation\dots}
+    The idea is \enquote{artificially} create the separation by \enquote{adding dimensions}:
+    \begin{equation*}
+        \vec{x} = (x_1, x_2) \in \mathbb{R}^2
+        \quad \longmapsto \quad
+        \vec{x}^{\prime} = (x_1, x_2, e^{-(x_1^2 + x_2^2)}) \in \mathbb{R}^3
+    \end{equation*}
+
+    \vfill
+
+    \begin{center}
+        \input{03_slides/img/kernel_trick_2.tex}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Support Vector Machines}{Creating non-linear separation\dots}
+    This is called \textbf{kernel trick}:
+    \begin{equation*}
+        \vec{x} \mapsto \vec{\phi}(\vec{x})
+        \quad \Rightarrow \quad
+        \vec{a}^*
+        =
+        \sum\limits_{i = 1}^S \mu_i y_i \vec{\phi}(\vec{x}_i)
+    \end{equation*}
+    which means that the classification function becomes:
+    \begin{equation*}
+        f(\vec{x}_j)
+        =
+        \vec{a}^* \cdot \vec{x}_j + b
+        \quad \longrightarrow \quad
+        f(\vec{x}_j)
+        =
+        \sum\limits_{i = 1}^S \mu_i y_i \underbrace{\vec{\phi}(\vec{x}_i) \cdot \vec{\phi}(\vec{x}_j)}_{= K(\vec{x}_i, \vec{x}_j)} + b
+    \end{equation*}
+
+    \vfill \pause
+
+    We only need to know the combination:
+    \begin{equation*}
+        K(\vec{x}_i, \vec{x}_j)
+        =
+        \begin{cases}
+            \vec{x}_i \cdot \vec{x}_j                                & \text{linear kernel}                      \\
+            (1 + \vec{x}_i \cdot \vec{x}_j)^p                        & \text{polynomial kernel}                  \\
+            \exp(-\frac{\norm{\vec{x}_i - \vec{x}_j}^2}{2 \sigma})^p & \text{RBF (\emph{radial basis function})} \\
+            \dots
+        \end{cases}
+    \end{equation*}
+\end{frame}
+
+\begin{frame}{Decision Trees}{Separating into buckets\dots}
+    Another useful \textbf{supervised} algorithm uses \textbf{partitions} of the space to \enquote{assign samples to buckets}:
+
+    \vfill
+
+    \begin{columns}[c]
+        \begin{column}{0.4\textwidth}
+            \centering
+            \input{03_slides/img/tree_principle.tex}
+        \end{column}
+        \hfil
+        \begin{column}{0.6\textwidth}
+            \centering
+            \input{03_slides/img/decision_tree.tex}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Decision Trees}{Separating into buckets\dots}
+    Like SVMs, \textbf{decision trees} are trained via \textbf{gradient descent} against particular losses:
+    \begin{itemize}
+        \item \textbf{SVM for classification:} standard cross-entropy
+        \item \textbf{SVM for regression:} standard MSE
+        \item \textbf{Decision trees for classification:} \emph{Gini impurity} or cross-entropy
+        \item \textbf{Decision trees for regression:} standard MSE
+    \end{itemize}
+
+    \vfill \pause
+
+    The main issue with trees is that
+    \begin{center}
+        \emph{the natural outcome \enquote{without stopping} is \enquote{one point per bucket/leaf}}
+    \end{center}
+
+    \vfill \pause
+
+    \includegraphics[height=12pt]{01_slides/img/brain.pdf}~Are they a high-variance or a high-bias algorithm?
+
+    \vfill \pause
+
+    \begin{center}
+        \textbf{Decision trees} are very high \textbf{variance} algorithms (they tend to overfit)
+    \end{center}
+\end{frame}
+
+\begin{frame}{Decision Trees}{Separating into buckets\dots}
+    To mitigate:
+
+    \vfill
+
+    \begin{itemize}
+        \item \textbf{Pruning:} create some rules to stop from getting to the end
+              \begin{itemize}
+                  \item Limit the number of \textbf{leaf nodes} (terminal nodes)
+                  \item Randomise the \textbf{input features}
+                  \item Limit the \textbf{depth level}
+                  \item \dots
+              \end{itemize}
+        \item \textbf{Ensembling:} train multiple pruned decision trees and take the average value $\Rightarrow$ these are called \textbf{Random Forests}
+        \item \textbf{Boosting:} iteratively train a tree and re-weight the badly classified/regresses points $\Rightarrow$ the procedure is called \textbf{Gradient Boosting}
+    \end{itemize}
+
+    \vfill
+\end{frame}
+
+\begin{frame}[fragile]{Supervised Learning}{\includegraphics[height=12pt]{01_slides/img/tool.pdf}~Working on spectroscopy data}
+    \begin{itemize}
+        \item \alert<2>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Open the \texttt{machine\_learning.ipynb} notebook and run all cells}
+        \item \alert<3>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Import the \textbf{Support Vector Classifier} class (\texttt{SVC}) from Scikit-learn}
+        \item \alert<4>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Train the \texttt{SVC} on the PCA-transformed data, then predict the labels of training and validation data}
+        \item \alert<5-6>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Compute the confusion matrix, the accuracy, the precision, the recall, and the F1 score}
+        \item \alert<7>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Import the \texttt{XGBClassifier} from \texttt{xgboost}}
+        \item \alert<8>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Train the gradient boosting algorithm on the PCA-transformed data, then predict the labels of training and validation data}
+        \item \alert<9-10>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Compute the confusion matrix, the accuracy, the precision, the recall, and the F1 score}
+        \item \alert<11>{\includegraphics[height=12pt]{01_slides/img/brain.pdf}~What can we say about the two classification algorithms?}
+    \end{itemize}
+
+    \begin{onlyenv}<3>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=30em, xshift=-2em, yshift=-6em] at (current page.center) {
+                \begin{notebookin}
+from sklearn.svm import SVC
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<4>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=38em, xshift=-2em, yshift=-6em] at (current page.center) {
+                \begin{notebookin}
+svc = SVC(kernel="rbf")
+svc.fit(X_train_pca, y_train_sel-1)  # use -1 to start from zero
+                \end{notebookin}
+                \begin{notebookin}
+y_train_pred = svc.predict(X_train_pca)
+y_val_pred = svc.predict(X_val_pca)
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<5>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=41em, xshift=-3em, yshift=-6em] at (current page.center) {
+                \begin{notebookin}
+from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
+
+for name, true, pred in [("train", y_train_sel, y_train_pred),
+                         ("val", y_val_sel, y_val_pred)]:
+    acc = accuracy_score(true-1, pred); print(f"Accuracy ({name}) = {acc:.1%}")
+    for score in [precision_score, recall_score, f1_score]:
+        value = score(true-1, pred, average="macro")
+        print(f"{score.__name__.capitalize().removesuffix('_score')} ({name}) = {value:.1%}")
+                \end{notebookin}
+                \begin{notebookout}
+Accuracy (train) = 73.5%
+Precision (train) = 56.8%
+Recall (train) = 45.8%
+F1 (train) = 44.5%
+Accuracy (val) = 72.2%
+Precision (val) = 52.4%
+Recall (val) = 46.1%
+F1 (val) = 44.7%
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<6>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=38em, xshift=-3em, yshift=-6em] at (current page.center) {
+                \centering
+                \includegraphics[width=0.45\textwidth]{03_slides/img/svc_conf_train.png}
+                \includegraphics[width=0.45\textwidth]{03_slides/img/svc_conf_val.png}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<7>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=30em, xshift=-2em, yshift=-6em] at (current page.center) {
+                \begin{notebookin}
+from xgboost import XGBClassifier
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<8>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=37em, xshift=-2em, yshift=-6em] at (current page.center) {
+                \begin{notebookin}
+boost = XGBClassifier(n_estimators=250)
+boost.fit(X_train_pca, y_train_sel-1)  # use -1 to start from zero
+                \end{notebookin}
+                \begin{notebookin}
+y_train_pred = boost.predict(X_train_pca)
+y_val_pred = boost.predict(X_val_pca)
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<9>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=41em, xshift=-3em, yshift=-6em] at (current page.center) {
+                \begin{notebookin}
+# same as before
+                \end{notebookin}
+                \begin{notebookout}
+Accuracy (train) = 83.5%
+Precision (train) = 82.9%
+Recall (train) = 68.0%
+F1 (train) = 72.5%
+Accuracy (val) = 71.4%
+Precision (val) = 51.8%
+Recall (val) = 47.5%
+F1 (val) = 47.9%
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<10>
+        \begin{tikzpicture}[overlay]
+            \node[set, text width=38em, xshift=-3em, yshift=-6em] at (current page.center) {
+                \centering
+                \includegraphics[width=0.45\textwidth]{03_slides/img/xgb_conf_train.png}
+                \includegraphics[width=0.45\textwidth]{03_slides/img/xgb_conf_val.png}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+\end{frame}
+
+\begin{frame}{Supervised and Unsupervised ML}{Preparing for next time\dots}
+    You should now be proficient in:
+    \begin{itemize}
+        \item Unsupervised ML methods for data exploration and visualisation
+        \item Non linear supervised ML methods for classification and regression
+    \end{itemize}
+    \vfill \pause
+    \begin{center}
+        \huge
+        Remember where you saved the data! Next time we shall start from there!
+        \\[1em]
+        Are there questions?
+    \end{center}
+    \vfill
+\end{frame}

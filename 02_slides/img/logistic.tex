@@ -14,10 +14,10 @@
             legend pos = north west
         ]
         % Standard Logistic (Sigmoid) Function: f(x) = 1 / (1 + exp(-x))
-        \addplot[color=blue] {1 / (1 + exp(-x))};
+        \addplot[color=CEAblue] {1 / (1 + exp(-x))};
 
         % Asymptotic Boundaries y = 0 and y = 1
-        \draw[dashed, red!70!black, thin] (axis cs:-6,1) -- (axis cs:6,1);
+        \draw[dashed, CEAred!70!CEAblack, thin] (axis cs:-6,1) -- (axis cs:6,1);
 
     \end{axis}
 \end{tikzpicture}
