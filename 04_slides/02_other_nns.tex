@@ -1,0 +1,218 @@
+\begin{frame}{Neural Network Types}{What kind of inductive bias?}
+    We talked about the \textbf{bias} of a model:
+
+    \vfill
+
+    \begin{center}
+        \input{04_slides/img/overfitting.tex}
+    \end{center}
+
+    \vfill
+
+    And we saw that \textbf{higher bias} leads to a more constrained model, and that sometimes it can be more adapted to describe the data (e.g.\ linear data)
+\end{frame}
+
+\begin{frame}{Neural Network Types}{What kind of inductive bias?}
+    How can we impose some \textbf{inductive bias} on our model? What kind of operations are appropriate for different data?
+
+    \vfill
+
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \centering
+            \input{04_slides/img/data.tex}
+        \end{column}
+        \hfil
+        \begin{column}{0.5\textwidth}
+            \onslide<2->{%
+                \textbf{Tabular data:}
+                \begin{itemize}
+                    \item Every column may influence other columns
+                    \item No concept of neighbourhood of columns
+                \end{itemize}
+            }
+            \onslide<3->{%
+                \textbf{Images/Videos:}
+                \begin{itemize}
+                    \item Information is locally connected
+                    \item Distant \emph{pixels} do not share same ops
+                \end{itemize}
+            }
+            \onslide<4->{%
+                \textbf{Sequences:}
+                \begin{itemize}
+                    \item Information depends on distance
+                    \item Next bit depends on previous
+                \end{itemize}
+            }
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Neural Network Types}{Convolution operations}
+    Other than just \textbf{matrix multiplication} in fully connected networks
+    \begin{equation*}
+        \hat{y} =
+        f^{(L)}
+        \left(
+        f^{(L-1)}
+        \left(
+            \dots
+            W^{(L-1)}
+            \right)
+        W^{(L)}
+        \right)
+    \end{equation*}
+    we can also have \emph{sliding doors} operations:
+
+    \begin{center}
+        \input{04_slides/img/conv.tex}
+    \end{center}
+
+    \vfill
+
+    They enable to \textbf{aggregate} local information to reduce information.
+\end{frame}
+
+\begin{frame}{Neural Network Types}{Convolution operations}
+    Formally, they are defined as:
+
+    \begin{equation*}
+        \text{(1D)}~
+        S^{(c)}_{i}
+        =
+        \sum\limits_{c = 1}^C
+        \sum\limits_{u = -\lfloor K_u/2 \rfloor}^{\lfloor K_u/2 \rfloor}
+        \underbrace{\mathcal{K}^{(c c^{\prime})}_{u}}_{\text{kernel}}\;
+        S^{(c^{\prime})}_{i-u}
+        \qor \text{(2D)}~
+        X^{(c)}_{ij}
+        =
+        \sum\limits_{c = 1}^C
+        \sum\limits_{u = -\lfloor K_u/2 \rfloor}^{\lfloor K_u/2 \rfloor}
+        \sum\limits_{v = -\lfloor K_v/2 \rfloor}^{\lfloor K_v/2 \rfloor}
+        \underbrace{\mathcal{K}^{(c c^{\prime})}_{uv}}_{\text{kernel}}\;
+        X^{(c^{\prime})}_{i-u,j-v}
+    \end{equation*}
+
+    and they enable different operations on local clusters of \emph{pixels}:
+
+    \begin{center}
+        \input{04_slides/img/imgconv.tex}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Neural Network Types}{Convolutional Neural Networks}
+    The operation is usually defined as $X_{ij} = (\mathcal{K} * Z)_{ij}$ and a composition of such operations and \textbf{activation functions}:
+
+    \begin{equation*}
+        \hat{y}
+        =
+        f^{(L)}
+        \left(
+        \mathcal{K}^{L} *
+        f^{(L-1)}
+        \left(
+            \mathcal{K}^{(L-1)} *
+            \dots
+            \right)
+        \right)
+    \end{equation*}
+
+    is called (fully) \textbf{convolutional neural network} (CNN).
+
+
+    \vfill \pause
+
+    Fully connected networks and CNNs are often coupled to create powerful models:
+
+    \begin{center}
+        \includegraphics[width=0.6\textwidth]{04_slides/img/AlexNet_architecture.png}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Neural Network Types}{\enquote{Temporal} sequence modelling}
+    Modern AI deals with a lot of \textbf{sequence} modelling (e.g.\ LLMs for text, time series, etc.).
+    Two main ingredients are necessary:
+    \begin{itemize}
+        \item Introduce the concept of \enquote{position} in a \enquote{sentence}
+        \item Study how related are two concepts in the same \enquote{sentence}
+    \end{itemize}
+
+    \vfill \pause
+
+    \begin{center}
+        \input{04_slides/img/simpleattention.tex}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Neural Network Types}{\enquote{Temporal} sequence modelling}
+    The mechanism uses the same idea that you use to find important documents/notes:
+
+    \vfill
+
+    \begin{enumerate}
+        \item<1-> Formulate a sentence/\textbf{sequence} and assign a \enquote{reading direction} (e.g.\ left to right)
+        \item<2-> Identify important parts of the sentence:
+            \begin{itemize}
+                \item \textbf{Query} (Q): the information you want to retrieve
+                \item \textbf{Key} (K): how the information can be looked for in Q
+                \item \textbf{Value} (V): how to rank the information retrieved
+            \end{itemize}
+        \item<3-> \textbf{cross-correlate Q and K}: find how the K matches your request Q
+        \item<4-> \textbf{find the right direction V}: project your search in the direction of \enquote{value}
+    \end{enumerate}
+
+    \vfill
+
+    \begin{onlyenv}<1>
+        \begin{block}{Input data}
+            \begin{equation*}
+                X \gets X + \operatorname{PositionalEncoding}(X) \in \mathbb{R}^{S \times D}
+            \end{equation*}
+        \end{block}
+
+        {\tiny $X$ is multi-dimensional in general. If you think of LLMs, imagine each word as an integer $Z \in \mathbb{N}^{S}$, which is then assigned to a vector of dimension $D$}
+    \end{onlyenv}
+
+    \begin{onlyenv}<2>
+        \begin{block}{Query, Key, Value}
+            \begin{equation*}
+                Q = \operatorname{MLP}_Q(X) \in \mathbb{R}^{S \times D_{\text{emb}}},
+                \quad
+                K = \operatorname{MLP}_K(X \in \mathbb{R}^{S \times D_{\text{emb}}}),
+                \quad
+                V = \operatorname{MLP}_V(X) \in \mathbb{R}^{S \times D_{\text{emb}}}
+            \end{equation*}
+        \end{block}
+    \end{onlyenv}
+
+    \begin{onlyenv}<3>
+        \begin{block}{Attention Matrix}
+            \begin{equation*}
+                A = \operatorname{softmax}\left( \frac{Q\, K^{\top}}{\sqrt{D_{\text{emb}}}} \right) \in \mathbb{R}^{S \times S}
+            \end{equation*}
+        \end{block}
+    \end{onlyenv}
+
+    \begin{onlyenv}<4>
+        \begin{block}{Value Matrix and Output}
+            \begin{equation*}
+                X^{\prime} = \operatorname{FFN}(A\, V) \in \mathbb{R}^{S \times D_{\text{emb}}}
+            \end{equation*}
+            where $\operatorname{FFN}$ is a fully-connected (or \emph{feed forward}) neural network.
+        \end{block}
+    \end{onlyenv}
+\end{frame}
+
+\begin{frame}{Neural Network Types}{MultiHead Attention and Transformers}
+    This mechanism is known as \textbf{attention mechanism} and can be done multiple times in parallel for each $X$ (multiple \enquote{attention heads} can be \textbf{concatenated} to form a \enquote{multi-attention head}).
+
+    \vfill
+
+    This mechanism is the basic block of \textbf{transformers} used for LLMs, time series modelling, etc.:
+
+    \begin{center}
+        \includegraphics[width=0.3\textwidth, angle=90]{04_slides/img/transformer.jpg}
+    \end{center}
+\end{frame}

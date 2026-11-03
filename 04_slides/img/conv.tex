@@ -1,0 +1,14 @@
+\begin{tikzpicture}
+    \foreach \x [count=\i from 0] in {0, 4cm, 8cm} {%
+            \begin{scope}[xshift=\x]
+                \draw[CEAred, fill=CEAred!25] (0+\i*0.5, 0) rectangle (1.5+\i*0.5, 1);
+                \draw[CEAred] (0+\i*0.5, 0) -- (0.5+\i*0.5, -0.5);
+                \draw[CEAred] (1.0+\i*0.5, -0.5) -- (1.5+\i*0.5, 0.0);
+                \draw[CEAgreen, fill=CEAgreen!15, thick, xstep=0.5] (0, 0) grid (3, 1);
+                \draw[CEAgreen, fill=CEAgreen!15, fill opacity=0.25, thick] (0.5, -1.5) rectangle (2.0, -0.5);
+                \draw[CEAgreen, fill=CEAgreen!15, fill opacity=0.25, thick] (1.0, -1.5) -- (1.0, -0.5);
+                \draw[CEAgreen, fill=CEAgreen!15, fill opacity=0.25, thick] (1.5, -1.5) -- (1.5, -0.5);
+                \draw[CEAgreen, fill=CEAgreen!25, thick] (0.5+\i*0.5, -1.5) rectangle (1.0+\i*0.5, -0.5);
+            \end{scope}
+        }
+\end{tikzpicture}

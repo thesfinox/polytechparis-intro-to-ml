@@ -8,6 +8,8 @@
 \usepackage[english]{babel}
 \usepackage{csquotes}
 \usepackage{physics}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
 
 % Tikz styles
 \usetikzlibrary{shadows, fit, backgrounds, positioning}
@@ -54,14 +56,14 @@
 
 \seminar[PolytechParis]{Machine Learning - PolytechParis}
 
-\CEAmerci{Good luck!}
+\CEAmerci{Good luck with your careers!}
 \CEAcenter{CEA SACLAY}
 \addr{91\,191 Gif-sur-Yvette Cedex\\France}
 \CEAemail{\href{mailto:riccardo.finotello@cea.fr}{\texttt{riccardo.finotello@cea.fr}}}
 
 % --- TITLE SLIDE ---
 \begin{frame}[plain]
-  \titlepage
+    \titlepage
 \end{frame}
 
 % ------------------------------------------------------------------
@@ -73,8 +75,20 @@
 % only (no preamble, no \begin{document}).
 % ------------------------------------------------------------------
 
+\input{04_slides/00_intro.tex}
+
+\section{Neural Networks and Backpropagation}
+
+\input{04_slides/01_nn.tex}
+
+\section{Different Types of Neural Networks}
+
+\input{04_slides/02_other_nns.tex}
+
+\section{Hands-on Examples of Neural Networks}
+
 % --- CONCLUDING SLIDE ---
 \begin{frame}[plain]
-  \usebeamertemplate*{last page}
+    \usebeamertemplate*{last page}
 \end{frame}
 \end{document}

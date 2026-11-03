@@ -1,0 +1,64 @@
+\begin{tikzpicture}[scale=0.7, every node/.style={scale=0.7}]
+    \only<2-3,5->{%
+        \begin{axis}[
+                axis lines = middle,
+                xlabel = {$x$},
+                ylabel = {activation},
+                xmin = -2, xmax = 2,
+                ymin = -0.35, ymax = 2,
+                domain = -2:2,
+                samples = 100,
+                smooth,
+                thick,
+                grid = major,
+                grid style = {dashed, gray!30},
+                legend pos = north west
+            ]
+            \only<2>{%
+                \addplot[color=CEAblue, id=ReLU] {max(0, x)};
+                \addlegendentry{ReLU(x) = max(0, x)};
+            }
+            \only<3>{%
+                \addplot[color=CEAblue, id=LeakyReLU] {max(0.1*x, x)};
+                \addlegendentry{Leaky ReLU(x) = max($\alpha$ x, x)};
+            }
+            \only<5>{%
+                \addplot[color=CEAblue, id=GELU] {0.5*x*(1+tanh(sqrt(2/pi)*(x+0.044715*x^3)))};
+                \addlegendentry{GELU(x) = x $\Phi$(x)};
+            }
+            \only<6>{%
+                \addplot[color=CEAblue, id=SiLU] {x/(1+exp(-x))};
+                \addlegendentry{SiLU(x) = x $\sigma$(x)};
+            }
+            \only<7->{%
+                \addplot[color=CEAred, id=ReLU] {max(0, x)};
+                \addlegendentry{ReLU(x) = max(0, x)};
+                \addplot[color=CEAblue, id=LeakyReLU] {max(0.1*x, x)};
+                \addlegendentry{Leaky ReLU(x) = max($\alpha$ x, x)};
+                \addplot[color=CEAgreen, id=GELU] {0.5*x*(1+tanh(sqrt(2/pi)*(x+0.044715*x^3)))};
+                \addlegendentry{GELU(x) = x $\Phi$(x)};
+                \addplot[color=CEAyellow, id=SiLU] {x/(1+exp(-x))};
+                \addlegendentry{SiLU(x) = x $\sigma$(x)};
+            }
+        \end{axis}
+    }
+    \only<4>{%
+        \begin{axis}[
+                axis lines = middle,
+                xlabel = {$x$},
+                ylabel = {activation},
+                xmin = -5, xmax = 5,
+                ymin = -1, ymax = 1,
+                domain = -5:5,
+                samples = 100,
+                smooth,
+                thick,
+                grid = major,
+                grid style = {dashed, gray!30},
+                legend pos = north west
+            ]
+            \addplot[color=CEAblue, id=Tanh] {tanh(x)};
+            \addlegendentry{Tanh(x)};
+        \end{axis}
+    }
+\end{tikzpicture}

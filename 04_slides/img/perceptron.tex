@@ -1,0 +1,13 @@
+\begin{tikzpicture}
+    \node[circle, draw=CEAblack, fill=CEAblack!15] (out) at (2.5, 1.5) {$X \vec{w}$};
+    \foreach \x in {0,...,3} {
+            \node[circle, draw=CEAblack, fill=CEAblack!15]
+            (x\x) at (0, 3-\x) {\footnotesize $x_{\x}$};
+            \draw[thin, ->, CEAblack] (x\x) -- (out) node[midway, above, sloped] {\footnotesize $w_{\x}$};
+        }
+    \node[circle, draw=CEAblack, fill=CEAblack!15] (y) at (5, 1.5) {$\vec{y}$};
+    \draw[thin, ->, CEAblack] (out) -- (y) node[midway, above] {\footnotesize $\sigma$};
+
+    % Perceptron label
+    \node[anchor=north west, font=\bfseries] at (out.south) {Rosenblatt's perceptron (1958)};
+\end{tikzpicture}

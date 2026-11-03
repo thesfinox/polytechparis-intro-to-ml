@@ -1,0 +1,13 @@
+\begin{tikzpicture}[scale=0.8, every node/.style={scale=0.8}]
+    \draw[thick, CEAblack, xstep=0.2, ystep=0.2] (0, 0) grid (3, 3);
+    \draw[thick, CEAblue, fill=CEAblue!25] (0, 3) -- (3, 3) -- (3, 0) -- (3.33, 0.33) -- (3.33, 3.33) -- (0.33, 3.33) -- cycle;
+    \draw[thick, CEAgreen, fill=CEAgreen!25] (0.33, 3.33) -- (3.33, 3.33) -- (3.33, 0.33) -- (3.66, 0.66) -- (3.66, 3.66) -- (0.66, 3.66) -- cycle;
+    \draw[thick, CEAred, fill=CEAred!25] (0.66, 3.66) -- (3.66, 3.66) -- (3.66, 0.66) -- (4, 1) -- (4, 4) -- (1, 4) -- cycle;
+    \draw[thick, CEAblack] (0, 3) -- (1, 4) -- (4, 4) -- (3, 3);
+    \draw[thick, CEAblack] (3, 0) -- (4, 1) -- (4, 4);
+    \draw[very thick, CEAred, fill=CEAred, fill opacity=0.5] (1, 1) rectangle (2.0, 2.0);
+    \draw[ultra thick, CEAred, ->] (2.2, 1.5) -- (3.2, 1.5);
+    \draw[ultra thick, CEAred, ->] (0.8, 1.5) -- (-0.2, 1.5);
+    \draw[ultra thick, CEAred, ->] (1.5, 2.2) -- (1.5, 3.2);
+    \draw[ultra thick, CEAred, ->] (1.5, 0.8) -- (1.5, -0.2);
+\end{tikzpicture}

@@ -1,0 +1,391 @@
+% !TeX root = 04_intro_ml_polytech.tex
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_GB
+\begin{frame}{Neural Networks}{Some history to start\dots}
+    Let us start from what we know (classification):
+    \begin{equation*}
+        \vec{y}
+        =
+        \only<1>{\sigma}
+        \only<2->{\underbrace{\sigma}_{\text{sigmoid}}}
+        \left(
+        X
+        \only<1>{\vec{\beta}}
+        \only<2->{\underbrace{\vec{w}}_{\text{weights}}}
+        \right) \in \left[ 0, 1 \right]^n
+    \end{equation*}
+
+    \vfill \pause
+
+    We can graphically represent this as:
+
+    \begin{center}
+        \input{04_slides/img/perceptron.tex}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Neural Networks}{Rosenblatt's perceptron briefly\dots}
+    Rosenblatt's \textbf{perceptron} (1958) is a simple model of \textbf{artificial neurons}:
+
+    \vfill
+
+    \begin{columns}[c]
+        \begin{column}{0.5\textwidth}
+            \centering
+            {\large \textbf{AND} gate} \\[1em]
+            \input{04_slides/img/and_gate.tex} \\
+            \only<2->{\textbf{Linear separable} by the perceptron}
+        \end{column}
+        \hfil
+        \begin{column}{0.5\textwidth}
+            \centering
+            {\large \textbf{XOR} gate} \\[1em]
+            \input{04_slides/img/xor_gate.tex} \\
+            \only<2->{\textbf{Not linear separable} by the perceptron}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Neural Networks}{Rosenblatt's perceptron briefly\dots}
+    The keyword is \textbf{non-linearity}:
+    \begin{block}{Non-linear decision boundaries}
+        \centering
+        The perceptron must be able to create \textbf{non-linear decision boundaries} to solve complex problems (e.g.\ the XOR gate).
+    \end{block}
+
+    \vfill \pause
+
+    How to achieve this? Let us start from $X \in \mathbb{R}^{n \times p}$:
+    \begin{equation*}
+        \only<2>{X\, W}
+        \only<3>{%
+            X\, W^{(0)}
+        }
+        \only<4>{%
+            \underbrace{\alert{f^{(0)}}(X\, W^{(0)})}_{h^{(0)}}
+        }
+        \only<5>{%
+        \underbrace{\alert{f^{(1)}}(f^{(0)}(X\, W^{(0)})\, \alert{W^{(1)}})}_{h^{(1)}}
+        }
+        \only<6>{%
+        \underbrace{\alert{f^{(2)}}(f^{(1)}(f^{(0)}(X\, W^{(0)})\, W^{(1)})\, \alert{W^{(2)}})}_{h^{(2)}}
+        }
+        \only<7>{%
+        \vec{y}
+        =
+        \alert{\sigma}(\dots
+        f^{(2)}(f^{(1)}(f^{(0)}(X\, W^{(0)})\, W^{(1)})\, W^{(2)})
+        \dots
+        \alert{W^{(L)}})
+        }
+    \end{equation*}
+    where
+    \only<2>{$W \in \mathbb{R}^{p \times m}$}
+    \only<3->{%
+    $W^{(0)} \in \mathbb{R}^{p \times m^{(0)}}$
+    \only<5->{, $W^{(1)} \in \mathbb{R}^{m^{(0)} \times m^{(1)}}$}
+    \only<6->{, $W^{(2)} \in \mathbb{R}^{m^{(1)} \times m^{(2)}}$}
+    \only<7->{, \dots, $W^{(L)} \in \mathbb{R}^{m^{(L-1)} \times n}$}
+    }
+
+    \only<4->{%
+        and $f^{(i)}$ are \textbf{non-linear} functions called \textbf{activation functions} (\emph{activations}).
+    }
+\end{frame}
+
+\begin{frame}{Neural Networks}{Rosenblatt's perceptron briefly\dots}
+    Let us see this graphically:
+
+    \vfill
+
+    \begin{columns}[c]
+        \begin{column}{0.6\textwidth}
+            \centering
+            \input{04_slides/img/nn.tex}
+        \end{column}
+        \hfil
+        \begin{column}{0.4\textwidth}
+            \textbf{Input layer:} $X \in \mathbb{R}^{n \times p}$ \\
+            \textbf{Output class:} $\vec{y} \in \mathbb{R}^{n}$ \\[1em]
+
+            \onslide<2,4,6>{%
+            \textbf{Hidden layer:} $H^{(n)} \in \mathbb{R}^{m^{(n-1)} \times m^{(n)}}$ \\
+            }
+            \onslide<3,5,7>{%
+                \textbf{Activation:} $f^{(n)}$ \\[1em]
+            }
+            \onslide<8->{%
+                \textbf{Final activation:} $\sigma$ \\
+            }
+        \end{column}
+    \end{columns}
+
+    \vfill
+
+    \onslide<9->{%
+        A \textbf{neural network} is a \textbf{composition} of linear and \emph{non-linear} activation functions!
+        These are often called \textbf{fully connected} (or \emph{dense}) neural networks: each neuron of a layer is connected to all neurons of the next layer.
+    }
+\end{frame}
+
+\begin{frame}{Neural Networks}{Activation functions in a nutshell\dots}
+    Activation functions are non-linear and mostly depend on the \emph{role} of the layer in the network:
+
+    \vfill
+
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \centering
+            {\large \textbf{Hidden layers}} \\[1em]
+
+            \alert<2>{ReLU},
+            \alert<3>{Leaky ReLU},
+            \alert<4>{Tanh},
+            \alert<5>{GELU},
+            \alert<6>{SiLU}, etc. \\[1em]
+
+            \input{04_slides/img/activations.tex}
+        \end{column}
+        \hfil
+        \begin{column}{0.5\textwidth}
+            \centering
+            {\large \textbf{Output layer}} \\[1em]
+
+            \begin{itemize}
+                \item<8-> No activation (regression) $$f(x) = x$$
+                \item<9-> Sigmoid (binary classification) $$f(x) = \frac{1}{1 + e^{-x}} \in [0, 1]$$
+                \item<10-> Softmax (multi-class classification) $$f(x_i) = \frac{e^{x_i}}{\sum_{j=1}^{K} e^{x_j}} \in [0, 1]$$
+            \end{itemize}
+
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Neural Networks}{Are they really black boxes?}
+    Neural networks are often called \textbf{black boxes}:
+
+    \vfill
+
+    \begin{center}
+        \input{04_slides/img/black_box.tex}
+    \end{center}
+
+    \begin{itemize}
+        \item<2-> \textbf{Input layer:} this is the layer \emph{you} control (it's the data you feed to the network)
+        \item<3-> \textbf{Output layer:} this layer \emph{predicts} the output of the network
+        \item<4-> \textbf{Hidden layers:} hidden layers perform \emph{known} operations, but you do not control them
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Neural Networks}{How to train a neural network?}
+    As for previous models, we define a \textbf{loss function} $\mathcal{L} = \mathcal{L}(\vec{y}, \hat{\vec{y}}; \Theta)$ which\dots
+    \begin{itemize}
+        \item<2-> \dots depends on the \textbf{true labels} $\vec{y}$ and the \textbf{predictions} $\hat{\vec{y}}$ of the network
+        \item<3-> \dots depends on the \textbf{parameters} (weights) $\Theta = \left\{ W^{(1)}, W^{(2)}, \dots, W^{(L)} \right\}$
+    \end{itemize}
+
+    \vfill \pause
+
+    We then need to find $$\Theta^* = \arg\min_{\Theta} \mathcal{L}(\vec{y}, \hat{\vec{y}}; \Theta)$$
+    which is done by \textbf{gradient descent}:
+    \begin{enumerate}
+        \item<4-> \textbf{Forward pass:} compute the predictions $\hat{\vec{y}}$ of the network
+        \item<5-> \textbf{Backward pass:} compute the gradients of the loss function w.r.t.\ the parameters $\nabla_{W^{(0)}} \mathcal{L}$, $\nabla_{W^{(1)}} \mathcal{L}$, \dots, $\nabla_{W^{(L)}} \mathcal{L}$
+        \item<6-> \textbf{Update:} update each of the parameters $\Theta$: $$W^{(\ell)} \gets W^{(\ell)} - \eta \nabla_{W^{(\ell)}} \mathcal{L}$$
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Neural Networks}{Backpropagating errors\dots}
+    The training of a neural network is done by \textbf{backpropagation} (1986).
+    It uses the fact that
+    \begin{center}
+        \textbf{neural network} = \textbf{composition of functions}
+    \end{center}
+    \begin{equation*}
+        \hat{y}
+        =
+        H^{(L)}
+        \circ
+        H^{(L-1)}
+        \circ
+        \dots
+    \end{equation*}
+    where $\circ$ is the composition operator and $H^{(\ell)} = f^{(\ell)}(Z^{(\ell)})$ and $Z^{(\ell)} = H^{(\ell-1)} W^{(\ell)}$.
+
+    \vfill \pause
+
+    We can use the \emph{chain rule}:
+    \begin{equation*}
+        \footnotesize
+        \begin{split}
+            \pdv{\mathcal{L}}{W^{(\ell)}_{ij}}
+            & =
+            \pdv{\mathcal{L}}{\hat{y}}
+            \pdv{\hat{y}}{W^{(\ell)}_{ij}} \\
+            & =
+            \pdv{\mathcal{L}}{\hat{y}}
+            \pdv{\hat{y}}{f^{(L)}}
+            \pdv{f^{(L)}}{z^{(L-1)}}
+            \pdv{z^{(L-1)}}{W^{(\ell)}_{ij}} \\
+            & =
+            \pdv{\mathcal{L}}{\hat{y}}
+            \pdv{\hat{y}}{f^{(L)}}
+            \pdv{f^{(L)}}{z^{(L-1)}}
+            \pdv{z^{(L-1)}}{f^{(L-2)}}
+            \dots
+            \pdv{f^{(\ell)}}{z^{(\ell-1)}}
+            \pdv{z^{(\ell-1)}}{W^{(\ell)}_{ij}}
+            \Rightarrow
+            W^{(\ell)}_{ij} \gets W^{(\ell)}_{ij} - \eta \pdv{\mathcal{L}}{W^{(\ell)}_{ij}}
+        \end{split}
+    \end{equation*}
+\end{frame}
+
+\begin{frame}{Neural Networks}{\includegraphics[height=12pt]{01_slides/img/tool.pdf}~Computing backpropagation\dots}
+    Consider a \textbf{fully connected} neural network with $2$ hidden layers and ReLU activations trained using a \textbf{MSE} loss on a scalar output $y$:
+    \begin{itemize}
+        \item \alert<2>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Compute the \textbf{derivative of} $\mathcal{L}$ w.r.t.\ the predictions $\hat{y}$}
+        \item \alert<3>{\includegraphics[height=12pt]{01_slides/img/brain.pdf}~Does the network need a sigmoid activation function at the output layer?}
+        \item \alert<4>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Compute the \textbf{derivative of} $\hat{y}$ w.r.t.\ the weights and inputs of the final layer}
+        \item \alert<5->{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Compute the rest of the derivatives and write the update rule}
+    \end{itemize}
+
+    \vfill
+
+    \begin{onlyenv}<2>
+        \tiny
+        \begin{block}{Derivative of the loss function}
+            \begin{equation*}
+                \pdv{\mathcal{L}}{\hat{y}_i}
+                =
+                \pdv{\hat{y}_i} \left(\frac{1}{2n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2\right)
+                =
+                -\frac{1}{n} (y_i - \hat{y}_i)
+            \end{equation*}
+        \end{block}
+    \end{onlyenv}
+
+    \begin{onlyenv}<4>
+        \tiny
+        \begin{block}{Derivative of the output layer (scalar!)}
+            \begin{equation*}
+                \hat{y}_i = \sum\limits_{j} H^{(1)}_{ij} w^{(2)}_{j}
+                \implies
+                \pdv{\hat{y}_i}{w^{(2)}_{j}} = H^{(1)}_{ij}
+                \qand
+                \pdv{\hat{y}_i}{H^{(1)}_{jk}} = \delta_{ij} w^{(2)}_k
+            \end{equation*}
+        \end{block}
+    \end{onlyenv}
+
+    \begin{onlyenv}<5>
+        \tiny
+        \begin{block}{Derivative of the layer $L-1$ (not scalar!)}
+            \begin{equation*}
+                H^{(1)}_{ij}
+                =
+                f^{(1)}(\underbrace{\sum\limits_{k} X_{ik} W^{(1)}_{kj}}_{Z^{(1)}_{ij}})
+                \implies
+                \pdv{H^{(1)}_{ij}}{W^{(1)}_{kl}}
+                =
+                \pdv{H^{(1)}_{ij}}{f^{(1)}}
+                \odot
+                \pdv{Z^{(1)}_{ij}}{W^{(1)}_{kl}}
+                =
+                \theta(Z^{(0)})_{ij}
+                \odot
+                X_{ik} \delta_{jl}
+            \end{equation*}
+        \end{block}
+    \end{onlyenv}
+
+    \begin{onlyenv}<6>
+        \tiny
+        \begin{block}{Update rule (I)}
+            \begin{equation*}
+                w_k^{(2)}
+                \gets
+                w_k^{(2)}
+                -
+                \eta \pdv{\mathcal{L}}{w_k^{(2)}}
+                =
+                w_k^{(2)}
+                -
+                \eta
+                \sum\limits_{i}
+                \pdv{\mathcal{L}}{\hat{y}_i}
+                \pdv{\hat{y}_i}{w_k^{(2)}}
+                =
+                w_k^{(2)}
+                -
+                \frac{\eta}{n}
+                \sum\limits_{i}
+                (\hat{y}_i - y_i) H^{(1)}_{ik}
+                =
+                w_k^{(2)}
+                -
+                \eta\, \mathbb{E}\left[ (\hat{\vec{y}} - \vec{y} ) H^{(1)}\right]
+            \end{equation*}
+        \end{block}
+    \end{onlyenv}
+
+    \begin{onlyenv}<7>
+        \tiny
+        \begin{block}{Update rule (II)}
+            \begin{equation*}
+                \begin{split}
+                    W_{kl}^{(1)}
+                    \gets
+                    W_{kl}^{(1)}
+                    -
+                    \eta \pdv{\mathcal{L}}{W_{kl}^{(1)}}
+                    & =
+                    W_{kl}^{(1)}
+                    -
+                    \eta
+                    \sum\limits_{i,m,n}
+                    \pdv{\mathcal{L}}{\hat{y}_i}
+                    \pdv{\hat{y}_i}{H^{(1)}_{mn}}
+                    \pdv{H^{(1)}_{mn}}{W^{(1)}_{kl}}
+                    =
+                    W_{kl}^{(1)}
+                    -
+                    \frac{\eta}{n}
+                    \sum\limits_{i,m,n}
+                    (\hat{y}_i - y_i) \delta_{im} w_n^{(2)}
+                    \theta(Z^{(0)})_{mn} \odot X_{mk} \delta_{nl}
+                    \\
+                    & =
+                    W_{kl}^{(1)}
+                    -
+                    \frac{\eta}{n}
+                    \sum\limits_{i}
+                    (\hat{y}_i - y_i) w_l^{(2)} \theta(Z^{(0)})_{il} \odot X_{ik}
+                    =
+                    W_{kl}^{(1)}
+                    -
+                    \eta \mathbb{E}\left[ (\hat{\vec{y}} - \vec{y} ) (\theta(Z^{(0)}) \odot X w^{(2), \top} ) \right]
+                \end{split}
+            \end{equation*}
+        \end{block}
+    \end{onlyenv}
+
+    {\tiny Call $\theta(x)$ (1 if $x > 0$, 0 otherwise) the derivative of the ReLU function.}
+\end{frame}
+
+\begin{frame}{Backpropagation}{What are the advantages?}
+    As we just saw, the \textbf{update} depends only on standard building blocks
+    \begin{equation*}
+        \pdv{Z^{(\ell)}}{W^{(\ell)}}, \quad
+        \pdv{H^{(\ell)}}{f^{(\ell)}}, \quad \text{etc.}
+    \end{equation*}
+
+    \vfill
+
+    These can be \textbf{saved} during the forward pass, and simply \textbf{used} in the backward pass:
+    \begin{itemize}
+        \item Compute the forward pass (i.e.\ compute $\hat{y}$)
+        \item Store \emph{layer-by-layer} the blocks containing the derivatives of the layer
+        \item Compute the backward pass by \textbf{multiplying} blocks from the loss to the layer
+    \end{itemize}
+\end{frame}

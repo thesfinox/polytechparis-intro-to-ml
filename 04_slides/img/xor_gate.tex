@@ -1,0 +1,15 @@
+
+\begin{tikzpicture}[
+        ax/.style={->, thick, CEAblack},
+        true/.style={circle, thick, draw=CEAgreen, fill=CEAgreen!15, text=CEAgreen},
+        false/.style={circle, thick, draw=CEAred, fill=CEAred!15, text=CEAred},
+    ]
+
+    \draw[ax] (-2, 0) -- (2, 0) node[below] {$x_1$};
+    \draw[ax] (0, -2) -- (0, 2) node[left] {$x_2$};
+
+    \node[false] at (1, 1) {\tiny (T, T)};
+    \node[true] at (1, -1) {\tiny (T, F)};
+    \node[true] at (-1, 1) {\tiny (F, T)};
+    \node[false] at (-1, -1) {\tiny (F, F)};
+\end{tikzpicture}

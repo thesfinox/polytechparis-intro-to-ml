@@ -1,0 +1,52 @@
+\begin{tikzpicture}[
+        neuron/.style={circle, draw=CEAblack, fill=CEAblack!15},
+        activated/.style={circle, draw=CEAred, fill=CEAred!15},
+        input/.style={neuron, fill=CEAgreen!15},
+        output/.style={neuron, fill=CEAblue!15},
+        weight/.style={draw=CEAblack, thin, ->},
+        scale=0.8,
+        every node/.style={scale=0.8},
+    ]
+
+    \foreach \x in {0,...,4} {
+            \node[input] (i\x) at (0, 4-\x) {\footnotesize $x_{\x}$};
+        }
+    \node[output] (o) at (8, 2) {\footnotesize $y$};
+    \begin{scope}[on background layer]
+        \node<2->[set, fit=(i0)(i4), inner sep=2em, label={[set label]Input layer}] {};
+        \node<3->[set green, fit=(o), inner sep=2em, label={[set label]Output layer}] {};
+    \end{scope}
+
+    % First layer
+    \foreach \x in {0,...,2} {
+            \node[activated] (h1\x) at (1.5, 3-\x) {\tiny $h^{(0)}_{\x}$};
+            \foreach \y in {0,...,4} {
+                    \draw[weight] (i\y) -- (h1\x);
+                }k
+        }
+
+    % Second layer
+    \foreach \x in {0,...,3} {
+            \node[activated] (h2\x) at (3, 3.5-\x) {\tiny $h^{(1)}_{\x}$};
+            \foreach \y in {0,...,2} {
+                    \draw[weight] (h1\y) -- (h2\x);
+                }
+        }
+
+    % Third layer
+    \foreach \x in {0,...,2} {
+            \node[activated] (h3\x) at (4.5, 3-\x) {\tiny $h^{(2)}_{\x}$};
+            \foreach \y in {0,...,3} {
+                    \draw[weight] (h2\y) -- (h3\x);
+                }
+        }
+
+    % Ellipsis
+    \node (h4) at (6, 2) {\tiny $\dots$};
+    \begin{scope}[on background layer]
+        \node<4->[set red, fit=(h10.north west)(h20)(h30)(h12.south west)(h23)(h32)(h4), inner sep=2em, label={[set label]Hidden layers}] {};
+    \end{scope}
+
+    % Output layer
+    \draw[weight] (h4) -- (o) node[midway, above, sloped] {\only<8>{$\sigma$}};
+\end{tikzpicture}

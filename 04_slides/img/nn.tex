@@ -1,0 +1,49 @@
+\begin{tikzpicture}[
+        neuron/.style={circle, draw=CEAblack, fill=CEAblack!15},
+        activated/.style={circle, draw=CEAred, fill=CEAred!15},
+        input/.style={neuron, fill=CEAgreen!15},
+        output/.style={neuron, fill=CEAblue!15},
+        weight/.style={draw=CEAblack, thin, ->},
+        scale=0.8,
+        every node/.style={scale=0.8},
+    ]
+
+    \foreach \x in {0,...,4} {
+            \node[input] (i\x) at (0, 4-\x) {\footnotesize $x_{\x}$};
+        }
+    \node[output] (o) at (8, 2) {\footnotesize $y$};
+
+    % First layer
+    \foreach \x in {0,...,2} {
+            \node<2>[neuron] (h1\x) at (1.5, 3-\x) {\tiny $h^{(0)}_{\x}$};
+            \node<3->[activated] (h1\x) at (1.5, 3-\x) {\tiny $h^{(0)}_{\x}$};
+            \foreach \y in {0,...,4} {
+                    \draw<2->[weight] (i\y) -- (h1\x) node[midway, above, sloped] {\only<2>{\tiny $w^{(0)}_{\y,\x}$}};
+        }k
+    }
+
+    % Second layer
+    \foreach \x in {0,...,3} {
+            \node<4>[neuron] (h2\x) at (3, 3.5-\x) {\tiny $h^{(1)}_{\x}$};
+            \node<5->[activated] (h2\x) at (3, 3.5-\x) {\tiny $h^{(1)}_{\x}$};
+            \foreach \y in {0,...,2} {
+                    \draw<4->[weight] (h1\y) -- (h2\x) node[midway, above, sloped] {\only<4>{\tiny $w^{(1)}_{\y,\x}$}};
+        }
+    }
+
+    % Third layer
+    \foreach \x in {0,...,2} {
+            \node<6>[neuron] (h3\x) at (4.5, 3-\x) {\tiny $h^{(2)}_{\x}$};
+            \node<7->[activated] (h3\x) at (4.5, 3-\x) {\tiny $h^{(2)}_{\x}$};
+            \foreach \y in {0,...,3} {
+                    \draw<6->[weight] (h2\y) -- (h3\x) node[midway, above, sloped] {\only<6>{\tiny $w^{(2)}_{\y,\x}$}};
+        }
+    }
+
+    % Ellipsis
+    \node<7-> (h4) at (6, 2) {\tiny $\dots$};
+
+    % Output layer
+    \draw<8->[weight] (h4) -- (o) node[midway, above, sloped] {\only<8>{$\sigma$}};
+
+\end{tikzpicture}
