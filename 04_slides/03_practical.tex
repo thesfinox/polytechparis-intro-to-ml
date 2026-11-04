@@ -1,0 +1,485 @@
+% !TeX root = 04_intro_ml_polytech.tex
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_GB
+\begin{frame}{Practical Neural Networks}{Some peculiarities of deep learning\dots}
+    Neural network training often uses \textbf{GPU}s which are faster than regular CPUs:
+
+    \vfill
+
+    \begin{itemize}
+        \item GPUs have \emph{usually} \textbf{less memory} than CPUs
+        \item Data sets can contain millions of large files (e.g.\ videos, images, text)
+        \item Data cannot be fed directly into GPU memory but needs to be split into \textbf{batches}
+    \end{itemize}
+
+    \vfill
+
+    \begin{center}
+        \input{04_slides/img/batches.tex}
+    \end{center}
+
+    \vfill
+    {\tiny You can technically have a number of batches equal to the number of data points, in which case you talk about \textbf{stochastic gradient descent}.}
+\end{frame}
+
+\begin{frame}[fragile]{Practical Neural Networks}{PyTorch simplifies all\dots}
+    The library we chose (\textbf{PyTorch}) already contains some helpers:
+
+    \vfill
+
+    \begin{onlyenv}<1>
+        Create a \textbf{dataset} from vectors/tensors:
+        \begin{codewithcard}{Create a dataset}
+import torch
+
+X = np.array(...)
+y = np.array(...)
+
+# Convert to PyTorch objects
+X = torch.from_numpy(X)
+y = torch.from_numpy(y)
+
+# Create a dataset that can be fed to a PyTorch model
+dataset = torch.utils.data.TensorDataset(X, y)
+        \end{codewithcard}
+    \end{onlyenv}
+
+    \begin{onlyenv}<2>
+        Split a dataset into a generator of \textbf{batches}:
+        \begin{codewithcard}{Split into batches}
+batches = torch.utils.data.DataLoader(dataset,
+                                      batch_size=32,
+                                      shuffle=True,  # train: T, val/test: F
+                                      drop_last=True,  # train: T, val/test: F
+                                    )
+        \end{codewithcard}
+
+        \vfill
+        {\tiny It is customary to use powers of 2 for the batch size.}
+    \end{onlyenv}
+
+    \begin{onlyenv}<3->
+        Automatically choose the device (CPU or GPU) to execute the computations:
+        \begin{codewithcard}{Select the device}
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        \end{codewithcard}
+    \end{onlyenv}
+\end{frame}
+
+\begin{frame}[fragile]{Practical Neural Networks}{PyTorch simplifies all\dots Almost\dots}
+    You are then left with the task of handling the model and training \textbf{loop}:
+
+    \vfill
+
+    \begin{onlyenv}<1>
+        \begin{codewithcard}{Model definition}
+in_dimension = ...; out_dimension = ...
+
+model = torch.nn.Sequential(
+            torch.nn.Linear(in_dimension, 8),
+            torch.nn.ReLU(),
+            torch.nn.Linear(8, 4),
+            torch.nn.ReLU(),
+            torch.nn.Linear(4, out_dimension),
+        ).to(device)
+        \end{codewithcard}
+
+        \vfill
+
+        {\tiny Different types of layers and activations are available in the \texttt{torch.nn} module. Notice that \texttt{torch} uses a convolution layer convention where the number of channels $C$ must be explicitly defined as the second axis: tabular data of size $N \times P$, must be reshaped to $N \times 1 \times P$, for instance.}
+    \end{onlyenv}
+
+    \begin{onlyenv}<2>
+        \begin{codewithcard}{Loss and optimiser}
+criterion = torch.nn.MSELoss()
+optim = torch.optim.AdamW(model.parameters(), lr=0.001)
+        \end{codewithcard}
+
+        \vfill
+
+        {\tiny \texttt{AdamW} is a powerful gradient descent algorithm, widely used in deep learning. You can however experiment with other optimisers.}
+    \end{onlyenv}
+
+
+    \begin{onlyenv}<3>
+        \begin{codewithcard}{Training loop}
+for n in range(epochs):  # see the dataset multiple times
+    for X, y in batches:  # batches created before
+            # Move to device
+            X = X.to(device); y = y.to(device)
+
+            # Compute predictions
+            optim.zero_grad(); model.train(True)
+            y_pred = model(X)
+
+            # Compute the loss and optimiser step
+            loss = criterion(y_pred, y); loss.backward()
+            optim.step()
+        \end{codewithcard}
+    \end{onlyenv}
+\end{frame}
+
+\begin{frame}{Practical Neural Networks}{PyTorch simplifies all\dots}
+    Neural networks are very \textbf{versatile} and allow a lot more operations on data.
+    Here is some important information to keep in mind:
+
+    \vfill
+
+    \begin{itemize}
+        \item \textbf{Linear layers} (\texttt{torch.nn.Linear}): they are the classical \emph{fully-connected} layers (\textbf{MLP} layers)
+        \item \textbf{Convolutional layers} (\texttt{torch.nn.ConvXd}): they compute a sliding \emph{convolution} of the input in $X$ dimensions (1, 2, or 3). Must specify kernel size
+        \item \textbf{Activation layers} (e.g.\ \texttt{torch.nn.ReLU}): they are activation functions that need to be inserted between hidden layers
+        \item \textbf{Dropout layers} (\texttt{torch.nn.Dropout}): \emph{dropout} is an operation to switch off some neurons during training for regularisation
+        \item \textbf{Pooling layers} (e.g.\ \texttt{torch.nn.AdaptiveAvgPoolXd}): they are responsable of operations such as mean, max, etc. in $X$ dimensions (1, 2, or 3)
+        \item \textbf{Flatten layer} (\texttt{torch.nn.Flatten}): useful to flatten some axis to make them compatible with other layers
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Hands-on Session Neural Networks}{\includegraphics[height=12pt]{01_slides/img/tool.pdf}~Building neural networks (I)\dots}
+    \begin{itemize}
+        \item \alert<2>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Open the \texttt{machine\_learning.ipynb} notebook and run all cells}
+        \item \alert<3>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Determine what device (GPU or CPU) you are going to use}
+        \item \alert<4>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Create a new Python file called \texttt{tools.py} inside the \texttt{src/mlintro} directory}
+        \item \alert<5>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Define a new function \texttt{create\_dataset} in \texttt{tools.py} which takes features and labels (train, validation, or test) and returns the \texttt{DataLoader} of the batches}
+        \item \alert<6>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Create the training, validation, and test batches in the notebook using the \textbf{PCA}-reduced data}
+        \item \alert<7>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Define a \textbf{fully-connected} model to process the \textbf{PCA}-reduced data}
+        \item \alert<8>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Choose an appropriate classification loss and an optimiser}
+    \end{itemize}
+
+    \begin{onlyenv}<3>
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-5em, text width=35em] at (current page.center) {
+                \begin{notebookin}
+import torch
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print("Device:", device)
+                \end{notebookin}
+                \begin{notebookout}
+Device: cpu
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<5>
+        \begin{tikzpicture}[overlay]
+            \node[xshift=-2em, yshift=-6em, text width=35em] at (current page.center) {
+                \begin{codewithcard}{tools.py}
+import torch
+def create_dataset(features, labels, batch_size=32, train=False):
+    # Convert to tensors
+    features = torch.from_numpy(features)
+    labels = torch.from_numpy(labels)
+    # Create a tensor dataset
+    dataset = torch.utils.data.TensorDataset(features, labels)
+    # Return the batches
+    return torch.utils.data.DataLoader(dataset,
+                                       batch_size=batch_size,
+                                       shuffle=train,
+                                       drop_last=train
+                                      )
+                \end{codewithcard}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<6>
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-6em, text width=35em] at (current page.center) {
+                \begin{notebookin}
+from mlintro.tools import create_dataset
+
+# Use y-1 to have classes start from 0
+train = create_dataset(X_train_pca, y_train_sel-1, train=True)
+val = create_dataset(X_val_pca, y_val_sel-1, train=False)
+test = create_dataset(X_test_pca, y_test_sel-1, train=False)
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<7>
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-6em, text width=35em] at (current page.center) {
+                \begin{notebookin}
+in_dim = X_train_pca.shape[1]
+out_dim = int(y_train_sel.max())
+model = torch.nn.Sequential(
+            torch.nn.Linear(in_dim, 4),
+            torch.nn.ReLU(),
+            torch.nn.Linear(4, 2),
+            torch.nn.ReLU(),
+            torch.nn.Linear(2, out_dim)
+        ).to(device)
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<8>
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-6em, text width=35em] at (current page.center) {
+                \begin{notebookin}
+criterion = torch.nn.CrossEntropyLoss()
+optim = torch.optim.AdamW(model.parameters(), lr=0.001)
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+\end{frame}
+
+\begin{frame}[fragile]{Hands-on Session Neural Networks}{\includegraphics[height=12pt]{01_slides/img/tool.pdf}~Building neural networks (II)\dots}
+    \begin{itemize}
+        \item \alert<2>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Define a function in \texttt{tools.py} that \textbf{trains} a single batch $(X, y)$ of data (the function must return the value of the loss and the accuracy of the batch)}
+        \item \alert<3>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Define a function in \texttt{tools.py} that uses the previous to train a model for an entire \textbf{epoch}}
+        \item \alert<4-5>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Define the previous functions in \texttt{tools.py} but for the \textbf{validation set}}
+        \item \alert<6>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Define a function in \texttt{tools.py} called \texttt{trainer} which \textbf{trains and validates} the model for a given number of epochs. The function must return the list of train/val losses and accuracies per epoch}
+        \item \alert<7>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Define a function in \texttt{tools.py} which \textbf{predicts} the classes (without computing the loss) for a single batch, then a function which \emph{concatenates} the prediction for all batches in the data loader}
+    \end{itemize}
+
+    \begin{onlyenv}<2>
+        \begin{tikzpicture}[overlay]
+            \node[xshift=-2em, yshift=-6em, text width=35em] at (current page.center) {
+                \begin{codewithcard}{tools.py}
+from sklearn.metrics import accuracy_score
+def train_single_batch(X, y, model, optim, criterion, device):
+    # Put on device
+    X = X.to(device); y = y.to(device)
+    # Compute predictions
+    optim.zero_grad(); model.train(True)
+    y_pred = model(X)
+    # Compute loss
+    loss = criterion(y_pred, y); loss.backward(); optim.step()
+    # Compute accuracy
+    acc = float(accuracy_score(y_pred.argmax(dim=1), y))
+    return loss.item(), acc
+                \end{codewithcard}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<3>
+        \begin{tikzpicture}[overlay]
+            \node[xshift=-3em, yshift=-6em, text width=40em] at (current page.center) {
+                \begin{codewithcard}{tools.py}
+def train_single_epoch(batches, model, optim, criterion, device):
+    # Unpack the batches
+    epoch_loss = 0.0; epoch_acc = 0.0
+    for X, y in batches:
+        batch_loss, batch_acc = train_single_batch(X, y, model, optim, criterion, device)
+        epoch_loss += batch_loss; epoch_acc += batch_acc
+    return epoch_loss / len(batches), epoch_acc / len(batches)
+                \end{codewithcard}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<4>
+        \begin{tikzpicture}[overlay]
+            \node[xshift=-2em, yshift=-6em, text width=35em] at (current page.center) {
+                \begin{codewithcard}{tools.py}
+def val_single_batch(X, y, model, criterion, device):
+    # Put on device
+    X = X.to(device); y = y.to(device)
+    # Compute predictions
+    model.train(False)
+    y_pred = model(X)
+    # Compute loss
+    loss = criterion(y_pred, y)
+    # Compute accuracy
+    acc = float(accuracy_score(y_pred.argmax(dim=1), y))
+    return loss.item(), acc
+                \end{codewithcard}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<5>
+        \begin{tikzpicture}[overlay]
+            \node[xshift=-3em, yshift=-6em, text width=40em] at (current page.center) {
+                \begin{codewithcard}{tools.py}
+def val_single_epoch(batches, model, criterion, device):
+    # Unpack the batches
+    epoch_loss = 0.0; epoch_acc = 0.0
+    for X, y in batches:
+        batch_loss, batch_acc = val_single_batch(X, y, model, criterion, device)
+        epoch_loss += batch_loss; epoch_acc += batch_acc
+    return epoch_loss / len(batches), epoch_acc / len(batches)
+                \end{codewithcard}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<6>
+        \begin{tikzpicture}[overlay]
+            \node[xshift=-3em, yshift=-6em, text width=42em] at (current page.center) {
+                \begin{codewithcard}{tools.py}
+def trainer(n_epochs, train_batches, val_batches, model, optim, criterion, device):
+    train_losses, train_accs, val_losses, val_accs = [], [], [], []
+    for n in range(n_epochs):
+        train_loss, train_acc = train_single_epoch(train_batches, model, optim, criterion, device)
+        train_losses.append(train_loss); train_accs.append(train_acc)
+        val_loss, val_acc = val_single_epoch(val_batches, model, criterion, device)
+        val_losses.append(val_loss); val_accs.append(val_acc)
+    return train_losses, val_losses, train_accs, val_accs
+                \end{codewithcard}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<7>
+        \begin{tikzpicture}[overlay]
+            \node[xshift=-3em, yshift=-6em, text width=40em] at (current page.center) {
+                \begin{codewithcard}{tools.py}
+def predict_single_batch(X, model, device):
+    X = X.to(device); model.train(False)
+    y_pred = model(X)
+    return y_pred.squeeze()
+def predict(batches, model, device):
+    pred_list = []
+    for X, _ in batches:
+        pred = predict_single_batch(X, model, device)
+        pred_list.append(pred)
+    return torch.cat(pred_list)
+                \end{codewithcard}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+\end{frame}
+
+\begin{frame}[fragile]{Hands-on Session Neural Networks}{\includegraphics[height=12pt]{01_slides/img/tool.pdf}~Building neural networks (III)\dots}
+    \begin{itemize}
+        \item \alert<2>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Train the fully-connected model using the \texttt{trainer} function}
+        \item \alert<3>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Plot the losses and accuracy as functions of the number of epochs using \texttt{matplotlib}}
+        \item \alert<4>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Use the prediction function to predict the classes of the test set, then compute the accuracy on the test set}
+    \end{itemize}
+
+    \begin{onlyenv}<2>
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-14em, text width=35em] at (current page.center) {
+                \begin{notebookin}
+from mlintro.tools import trainer
+
+(train_losses,
+ val_losses,
+ train_accs,
+ val_accs) = trainer(25, train, val, model, optim, criterion, device)
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<3>
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-13em, text width=35em] at (current page.center) {
+                \centering
+                \includegraphics[height=0.5\textheight]{04_slides/img/training_curves.png}
+                \hfil
+                \includegraphics[height=0.5\textheight]{04_slides/img/training_curves_acc.png}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<4>
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-13em, text width=35em] at (current page.center) {
+                \begin{notebookin}
+logits_pred = predict(test, model, device)
+y_pred = logits_pred.argmax(dim=1)
+
+acc = accuracy_score(y_pred, y_test_sel-1)
+print(f"Test accuracy: {acc:.1%}")
+                \end{notebookin}
+                \begin{notebookout}
+Test accuracy: 71.8%
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+\end{frame}
+
+\begin{frame}[fragile]{Hands-on Session Neural Networks}{\includegraphics[height=12pt]{01_slides/img/tool.pdf}~Building neural networks (IV - optional)\dots}
+    \begin{itemize}
+        \item \alert<2>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Reshape the original data (the \enquote{selected} data, not the PCA-reduced ones) to have $1$ channel (i.e.\ one additional dimension as second axis: shape from $N \times P$ to $N \times 1 \times P$)}
+        \item \alert<3>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Use the \texttt{torch.nn.Conv1d} layer to define a convolutional model. Combine the \texttt{torch.nn.AdaptiveAvgPool1d} layer to compute the mean of the spectral dimension and the \texttt{torch.nn.Flatten} layer to make the output shape compatible with the previous model}
+        \item \alert<4>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~As before, train the model and display the loss and accuracy}
+        \item \alert<5>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~As before, predict the classes on the test set}
+        \item \alert<6>{\includegraphics[height=12pt]{01_slides/img/brain.pdf}~Which model performs best for you?}
+    \end{itemize}
+
+    \begin{onlyenv}<2>
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-8em, text width=38em] at (current page.center) {
+                \begin{notebookin}
+P = X_train_sel.shape[1]
+X_train_sel_conv = X_train_sel.reshape(-1, 1, P)  # 1 channel input
+X_val_sel_conv = X_val_sel.reshape(-1, 1, P)  # 1 channel input
+X_test_sel_conv = X_test_sel.reshape(-1, 1, P)  # 1 channel input
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<3>
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-7em, text width=35em] at (current page.center) {
+                \begin{notebookin}
+model = torch.nn.Sequential(
+            torch.nn.Conv1d(1, 8, kernel_size=5, stride=5),
+            torch.nn.ReLU(),
+            torch.nn.Conv1d(8, 16, kernel_size=3, stride=3),
+            torch.nn.ReLU(),
+            torch.nn.Conv1d(16, out_dim, kernel_size=3),
+            torch.nn.ReLU(),
+            torch.nn.AdaptiveAvgPool1d(1),
+            torch.nn.Flatten(1)  # must be compatible with N x P
+        ).to(device)
+                \end{notebookin}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<4>
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-7em, text width=35em] at (current page.center) {
+                \centering
+                \includegraphics[height=0.5\textheight]{04_slides/img/training_curves_conv.png}
+                \hfil
+                \includegraphics[height=0.5\textheight]{04_slides/img/training_curves_conv_acc.png}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+
+    \begin{onlyenv}<5>
+        \begin{tikzpicture}[overlay]
+            \node[set, xshift=-2em, yshift=-8em, text width=35em] at (current page.center) {
+                \begin{notebookin}
+logits_pred = predict(test, model, device)
+y_pred = logits_pred.argmax(dim=1)
+
+acc = accuracy_score(y_pred, y_test_sel-1)
+print(f"Test accuracy: {acc:.1%}")
+                \end{notebookin}
+                \begin{notebookout}
+Test accuracy: 80.1%
+                \end{notebookout}
+            };
+        \end{tikzpicture}
+    \end{onlyenv}
+\end{frame}
+
+\begin{frame}{Neural Networks}{Preparing for exam!}
+    You should now be proficient in:
+    \begin{itemize}
+        \item What neural networks are and how they are trained
+        \item Using simple neural network models to train a classifier
+    \end{itemize}
+    \vfill \pause
+    \begin{center}
+        \huge
+        Finals are next!
+        \\[1em]
+        Are there questions?
+    \end{center}
+    \vfill
+\end{frame}

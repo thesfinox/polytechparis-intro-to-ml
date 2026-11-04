@@ -1,0 +1,29 @@
+\begin{tikzpicture}[
+        block/.style={thick, CEAred, fill=CEAred!15},
+        block blue/.style={thick, CEAblue, fill=CEAblue!15},
+        output/.style={circle, draw=CEAgreen, fill=CEAgreen!15},
+        direct/.style={ultra thick, CEAblack, ->}
+    ]
+
+    % Data
+    \draw<1>[block] (0, 0) rectangle (2, 3) node[midway] {DATA};
+    \draw<2->[block, opacity=0.5] (0, 0) rectangle (2, 0.4) node[midway] {BATCH$_1$};
+    \draw<2->[block, opacity=0.5] (0, 0.5) rectangle (2, 0.9) node[midway] {BATCH$_2$};
+    \draw<2->[block] (0, 1.0) rectangle (2, 1.4) node[midway] {BATCH$_3$};
+    \draw<2->[block, opacity=0.5] (0, 1.5) rectangle (2, 1.9) node[midway] {BATCH$_4$};
+    \draw<2->[block, opacity=0.5] (0, 2.0) rectangle (2, 2.4) node[midway] {BATCH$_5$};
+    \draw<2->[block, opacity=0.5] (0, 2.5) rectangle (2, 3.0) node[midway] {BATCH$_6$};
+
+    % Model
+    \draw<1->[block blue] (4.0, 1.0) rectangle (6, 2.0) node[midway] {MODEL};
+    \node<1->[output] (o) at (8.3, 1.5) {$\hat{y}$};
+
+    % Arrows
+    \draw<1>[direct] (2.1, 1.5) -- (3.9, 1.5) node[above, midway, sloped] {feed};
+    \draw<2->[direct] (2.1, 1.2) -- (3.9, 1.5) node[above, midway, sloped] {feed};
+
+    \draw<1->[direct] (6.1, 1.5) -- (7.9, 1.5) node[above, midway, sloped] {compute};
+    \draw<1->[direct] (o.south) to[bend left] (5.0, 0.9);
+    \node<1>[anchor=north] at (6.5, 0.5) {gradient descent};
+    \node<2->[anchor=north] at (6.5, 0.5) {\alert{mini-batch} gradient descent};
+\end{tikzpicture}
