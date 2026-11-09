@@ -86,7 +86,7 @@ model = torch.nn.Sequential(
 
         \vfill
 
-        {\tiny Different types of layers and activations are available in the \texttt{torch.nn} module. Notice that \texttt{torch} uses a convolution layer convention where the number of channels $C$ must be explicitly defined as the second axis: tabular data of size $N \times P$, must be reshaped to $N \times 1 \times P$, for instance.}
+        {\tiny Different types of layers and activations are available in the \texttt{torch.nn} module. \texttt{Linear} layers take tabular data of size $N \times P$ directly (convolutional layers need an explicit channel axis, see later).}
     \end{onlyenv}
 
     \begin{onlyenv}<2>
@@ -251,7 +251,7 @@ def train_single_batch(X, y, model, optim, criterion, device):
     # Compute loss
     loss = criterion(y_pred, y); loss.backward(); optim.step()
     # Compute accuracy
-    acc = float(accuracy_score(y_pred.argmax(dim=1), y))
+    acc = float(accuracy_score(y.cpu(), y_pred.argmax(dim=1).cpu()))
     return loss.item(), acc
                 \end{codewithcard}
             };
@@ -283,11 +283,12 @@ def val_single_batch(X, y, model, criterion, device):
     X = X.to(device); y = y.to(device)
     # Compute predictions
     model.train(False)
-    y_pred = model(X)
+    with torch.no_grad():  # no gradients needed
+        y_pred = model(X)
     # Compute loss
     loss = criterion(y_pred, y)
     # Compute accuracy
-    acc = float(accuracy_score(y_pred.argmax(dim=1), y))
+    acc = float(accuracy_score(y.cpu(), y_pred.argmax(dim=1).cpu()))
     return loss.item(), acc
                 \end{codewithcard}
             };
@@ -333,8 +334,9 @@ def trainer(n_epochs, train_batches, val_batches, model, optim, criterion, devic
                 \begin{codewithcard}{tools.py}
 def predict_single_batch(X, model, device):
     X = X.to(device); model.train(False)
-    y_pred = model(X)
-    return y_pred.squeeze()
+    with torch.no_grad():
+        y_pred = model(X)
+    return y_pred
 def predict(batches, model, device):
     pred_list = []
     for X, _ in batches:
@@ -385,9 +387,9 @@ from mlintro.tools import trainer
             \node[set, xshift=-2em, yshift=-13em, text width=35em] at (current page.center) {
                 \begin{notebookin}
 logits_pred = predict(test, model, device)
-y_pred = logits_pred.argmax(dim=1)
+y_pred = logits_pred.argmax(dim=1).cpu()
 
-acc = accuracy_score(y_pred, y_test_sel-1)
+acc = accuracy_score(y_test_sel-1, y_pred)
 print(f"Test accuracy: {acc:.1%}")
                 \end{notebookin}
                 \begin{notebookout}
@@ -400,7 +402,7 @@ Test accuracy: 71.8%
 
 \begin{frame}[fragile]{Hands-on Session Neural Networks}{\includegraphics[height=12pt]{01_slides/img/tool.pdf}~Building neural networks (IV - optional)\dots}
     \begin{itemize}
-        \item \alert<2>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Reshape the original data (the \enquote{selected} data, not the PCA-reduced ones) to have $1$ channel (i.e.\ one additional dimension as second axis: shape from $N \times P$ to $N \times 1 \times P$)}
+        \item \alert<2>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Reshape the original data (the \enquote{selected} data, not the PCA-reduced ones) to have $1$ channel (i.e.\ one additional dimension as second axis: shape from $N \times P$ to $N \times 1 \times P$), then create \textbf{new} batches from them}
         \item \alert<3>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Use the \texttt{torch.nn.Conv1d} layer to define a convolutional model. Combine the \texttt{torch.nn.AdaptiveAvgPool1d} layer to compute the mean of the spectral dimension and the \texttt{torch.nn.Flatten} layer to make the output shape compatible with the previous model}
         \item \alert<4>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~As before, train the model and display the loss and accuracy}
         \item \alert<5>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~As before, predict the classes on the test set}
@@ -409,12 +411,15 @@ Test accuracy: 71.8%
 
     \begin{onlyenv}<2>
         \begin{tikzpicture}[overlay]
-            \node[set, xshift=-2em, yshift=-8em, text width=38em] at (current page.center) {
+            \node[set, xshift=-2em, yshift=-10em, text width=38em] at (current page.center) {
                 \begin{notebookin}
 P = X_train_sel.shape[1]
 X_train_sel_conv = X_train_sel.reshape(-1, 1, P)  # 1 channel input
 X_val_sel_conv = X_val_sel.reshape(-1, 1, P)  # 1 channel input
 X_test_sel_conv = X_test_sel.reshape(-1, 1, P)  # 1 channel input
+train_conv = create_dataset(X_train_sel_conv, y_train_sel-1, train=True)
+val_conv = create_dataset(X_val_sel_conv, y_val_sel-1, train=False)
+test_conv = create_dataset(X_test_sel_conv, y_test_sel-1, train=False)
                 \end{notebookin}
             };
         \end{tikzpicture}
@@ -422,18 +427,19 @@ X_test_sel_conv = X_test_sel.reshape(-1, 1, P)  # 1 channel input
 
     \begin{onlyenv}<3>
         \begin{tikzpicture}[overlay]
-            \node[set, xshift=-2em, yshift=-7em, text width=35em] at (current page.center) {
+            \node[set, xshift=-2em, yshift=-8em, text width=35em] at (current page.center) {
                 \begin{notebookin}
 model = torch.nn.Sequential(
             torch.nn.Conv1d(1, 8, kernel_size=5, stride=5),
             torch.nn.ReLU(),
             torch.nn.Conv1d(8, 16, kernel_size=3, stride=3),
             torch.nn.ReLU(),
-            torch.nn.Conv1d(16, out_dim, kernel_size=3),
-            torch.nn.ReLU(),
+            torch.nn.Conv1d(16, out_dim, kernel_size=3),  # logits
             torch.nn.AdaptiveAvgPool1d(1),
             torch.nn.Flatten(1)  # must be compatible with N x P
         ).to(device)
+# new model -> new optimiser
+optim = torch.optim.AdamW(model.parameters(), lr=0.001)
                 \end{notebookin}
             };
         \end{tikzpicture}
@@ -454,10 +460,10 @@ model = torch.nn.Sequential(
         \begin{tikzpicture}[overlay]
             \node[set, xshift=-2em, yshift=-8em, text width=35em] at (current page.center) {
                 \begin{notebookin}
-logits_pred = predict(test, model, device)
-y_pred = logits_pred.argmax(dim=1)
+logits_pred = predict(test_conv, model, device)
+y_pred = logits_pred.argmax(dim=1).cpu()
 
-acc = accuracy_score(y_pred, y_test_sel-1)
+acc = accuracy_score(y_test_sel-1, y_pred)
 print(f"Test accuracy: {acc:.1%}")
                 \end{notebookin}
                 \begin{notebookout}

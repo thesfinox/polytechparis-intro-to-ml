@@ -38,7 +38,7 @@
                 \textbf{Images/Videos:}
                 \begin{itemize}
                     \item Information is locally connected
-                    \item Distant \emph{pixels} do not share same ops
+                    \item The same local operation applies everywhere (\emph{weight sharing})
                 \end{itemize}
             }
             \onslide<4->{%
@@ -82,16 +82,16 @@
 
     \begin{equation*}
         \text{(1D)}~
-        S^{(c)}_{i}
+        \tilde{S}^{(c)}_{i}
         =
-        \sum\limits_{c = 1}^C
+        \sum\limits_{c^{\prime}}
         \sum\limits_{u = -\lfloor K_u/2 \rfloor}^{\lfloor K_u/2 \rfloor}
         \underbrace{\mathcal{K}^{(c c^{\prime})}_{u}}_{\text{kernel}}\;
         S^{(c^{\prime})}_{i-u}
         \qor \text{(2D)}~
-        X^{(c)}_{ij}
+        \tilde{X}^{(c)}_{ij}
         =
-        \sum\limits_{c = 1}^C
+        \sum\limits_{c^{\prime}}
         \sum\limits_{u = -\lfloor K_u/2 \rfloor}^{\lfloor K_u/2 \rfloor}
         \sum\limits_{v = -\lfloor K_v/2 \rfloor}^{\lfloor K_v/2 \rfloor}
         \underbrace{\mathcal{K}^{(c c^{\prime})}_{uv}}_{\text{kernel}}\;
@@ -160,7 +160,7 @@
             \begin{itemize}
                 \item \textbf{Query} (Q): the information you want to retrieve
                 \item \textbf{Key} (K): how the information can be looked for in Q
-                \item \textbf{Value} (V): how to rank the information retrieved
+                \item \textbf{Value} (V): the information content once ranked by Q and K
             \end{itemize}
         \item<3-> \textbf{cross-correlate Q and K}: find how the K matches your request Q
         \item<4-> \textbf{find the right direction V}: project your search in the direction of \enquote{value}
@@ -171,7 +171,7 @@
     \begin{onlyenv}<1>
         \begin{block}{Input data}
             \begin{equation*}
-                X \gets X + \operatorname{PositionalEncoding}(X) \in \mathbb{R}^{S \times D}
+                X \gets X + \operatorname{PositionalEncoding}(1, \dots, S) \in \mathbb{R}^{S \times D}
             \end{equation*}
         \end{block}
 
@@ -181,11 +181,11 @@
     \begin{onlyenv}<2>
         \begin{block}{Query, Key, Value}
             \begin{equation*}
-                Q = \operatorname{MLP}_Q(X) \in \mathbb{R}^{S \times D_{\text{emb}}},
+                Q = \operatorname{Linear}_Q(X) \in \mathbb{R}^{S \times D_{\text{emb}}},
                 \quad
-                K = \operatorname{MLP}_K(X \in \mathbb{R}^{S \times D_{\text{emb}}}),
+                K = \operatorname{Linear}_K(X) \in \mathbb{R}^{S \times D_{\text{emb}}},
                 \quad
-                V = \operatorname{MLP}_V(X) \in \mathbb{R}^{S \times D_{\text{emb}}}
+                V = \operatorname{Linear}_V(X) \in \mathbb{R}^{S \times D_{\text{emb}}}
             \end{equation*}
         \end{block}
     \end{onlyenv}

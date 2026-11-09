@@ -109,10 +109,10 @@
             \textbf{Output class:} $\vec{y} \in \mathbb{R}^{n}$ \\[1em]
 
             \onslide<2,4,6>{%
-            \textbf{Hidden layer:} $H^{(n)} \in \mathbb{R}^{m^{(n-1)} \times m^{(n)}}$ \\
+            \textbf{Hidden layer:} $H^{(\ell)} \in \mathbb{R}^{n \times m^{(\ell)}}$ \\
             }
             \onslide<3,5,7>{%
-                \textbf{Activation:} $f^{(n)}$ \\[1em]
+                \textbf{Activation:} $f^{(\ell)}$ \\[1em]
             }
             \onslide<8->{%
                 \textbf{Final activation:} $\sigma$ \\
@@ -153,8 +153,8 @@
 
             \begin{itemize}
                 \item<8-> No activation (regression) $$f(x) = x$$
-                \item<9-> Sigmoid (binary classification) $$f(x) = \frac{1}{1 + e^{-x}} \in [0, 1]$$
-                \item<10-> Softmax (multi-class classification) $$f(x_i) = \frac{e^{x_i}}{\sum_{j=1}^{K} e^{x_j}} \in [0, 1]$$
+                \item<9-> Sigmoid (binary classification) $$f(x) = \frac{1}{1 + e^{-x}} \in (0, 1)$$
+                \item<10-> Softmax (multi-class classification) $$f(x_i) = \frac{e^{x_i}}{\sum_{j=1}^{K} e^{x_j}} \in (0, 1)$$
             \end{itemize}
 
         \end{column}
@@ -181,7 +181,7 @@
     As for previous models, we define a \textbf{loss function} $\mathcal{L} = \mathcal{L}(\vec{y}, \hat{\vec{y}}; \Theta)$ which\dots
     \begin{itemize}
         \item<2-> \dots depends on the \textbf{true labels} $\vec{y}$ and the \textbf{predictions} $\hat{\vec{y}}$ of the network
-        \item<3-> \dots depends on the \textbf{parameters} (weights) $\Theta = \left\{ W^{(1)}, W^{(2)}, \dots, W^{(L)} \right\}$
+        \item<3-> \dots depends on the \textbf{parameters} (weights) $\Theta = \left\{ W^{(0)}, W^{(1)}, \dots, W^{(L)} \right\}$
     \end{itemize}
 
     \vfill \pause
@@ -196,7 +196,7 @@
 \end{frame}
 
 \begin{frame}{Neural Networks}{Backpropagating errors\dots}
-    The training of a neural network is done by \textbf{backpropagation} (1986).
+    The training of a neural network is done by \textbf{backpropagation} (popularised in 1986).
     It uses the fact that
     \begin{center}
         \textbf{neural network} = \textbf{composition of functions}
@@ -224,17 +224,16 @@
             \pdv{\hat{y}}{W^{(\ell)}_{ij}} \\
             & =
             \pdv{\mathcal{L}}{\hat{y}}
-            \pdv{\hat{y}}{f^{(L)}}
-            \pdv{f^{(L)}}{z^{(L-1)}}
-            \pdv{z^{(L-1)}}{W^{(\ell)}_{ij}} \\
+            \pdv{\hat{y}}{Z^{(L)}}
+            \pdv{Z^{(L)}}{W^{(\ell)}_{ij}} \\
             & =
             \pdv{\mathcal{L}}{\hat{y}}
-            \pdv{\hat{y}}{f^{(L)}}
-            \pdv{f^{(L)}}{z^{(L-1)}}
-            \pdv{z^{(L-1)}}{f^{(L-2)}}
+            \pdv{\hat{y}}{Z^{(L)}}
+            \pdv{Z^{(L)}}{H^{(L-1)}}
+            \pdv{H^{(L-1)}}{Z^{(L-1)}}
             \dots
-            \pdv{f^{(\ell)}}{z^{(\ell-1)}}
-            \pdv{z^{(\ell-1)}}{W^{(\ell)}_{ij}}
+            \pdv{H^{(\ell)}}{Z^{(\ell)}}
+            \pdv{Z^{(\ell)}}{W^{(\ell)}_{ij}}
             \Rightarrow
             W^{(\ell)}_{ij} \gets W^{(\ell)}_{ij} - \eta \pdv{\mathcal{L}}{W^{(\ell)}_{ij}}
         \end{split}
@@ -242,7 +241,7 @@
 \end{frame}
 
 \begin{frame}{Neural Networks}{\includegraphics[height=12pt]{01_slides/img/tool.pdf}~Computing backpropagation\dots}
-    Consider a \textbf{fully connected} neural network with $2$ hidden layers and ReLU activations trained using a \textbf{MSE} loss on a scalar output $y$:
+    Consider a \textbf{fully connected} neural network with $1$ hidden layer and ReLU activations trained using a \textbf{MSE} loss on a scalar output $y$:
     \begin{itemize}
         \item \alert<2>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Compute the \textbf{derivative of} $\mathcal{L}$ w.r.t.\ the predictions $\hat{y}$}
         \item \alert<3>{\includegraphics[height=12pt]{01_slides/img/brain.pdf}~Does the network need a sigmoid activation function at the output layer?}
@@ -258,7 +257,7 @@
             \begin{equation*}
                 \pdv{\mathcal{L}}{\hat{y}_i}
                 =
-                \pdv{\hat{y}_i} \left(\frac{1}{2n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2\right)
+                \pdv{\hat{y}_i} \left(\frac{1}{2n} \sum_{j=1}^{n} (y_j - \hat{y}_j)^2\right)
                 =
                 -\frac{1}{n} (y_i - \hat{y}_i)
             \end{equation*}
@@ -280,7 +279,7 @@
 
     \begin{onlyenv}<5>
         \tiny
-        \begin{block}{Derivative of the layer $L-1$ (not scalar!)}
+        \begin{block}{Derivative of the hidden layer (not scalar!)}
             \begin{equation*}
                 H^{(1)}_{ij}
                 =
@@ -288,12 +287,10 @@
                 \implies
                 \pdv{H^{(1)}_{ij}}{W^{(1)}_{kl}}
                 =
-                \pdv{H^{(1)}_{ij}}{f^{(1)}}
-                \odot
+                \pdv{H^{(1)}_{ij}}{Z^{(1)}_{ij}}
                 \pdv{Z^{(1)}_{ij}}{W^{(1)}_{kl}}
                 =
-                \theta(Z^{(0)})_{ij}
-                \odot
+                \theta(Z^{(1)})_{ij}\,
                 X_{ik} \delta_{jl}
             \end{equation*}
         \end{block}
@@ -353,18 +350,18 @@
                     \frac{\eta}{n}
                     \sum\limits_{i,m,n}
                     (\hat{y}_i - y_i) \delta_{im} w_n^{(2)}
-                    \theta(Z^{(0)})_{mn} \odot X_{mk} \delta_{nl}
+                    \theta(Z^{(1)})_{mn}\, X_{mk} \delta_{nl}
                     \\
                     & =
                     W_{kl}^{(1)}
                     -
                     \frac{\eta}{n}
                     \sum\limits_{i}
-                    (\hat{y}_i - y_i) w_l^{(2)} \theta(Z^{(0)})_{il} \odot X_{ik}
+                    (\hat{y}_i - y_i) w_l^{(2)} \theta(Z^{(1)})_{il}\, X_{ik}
                     =
                     W_{kl}^{(1)}
                     -
-                    \eta \mathbb{E}\left[ (\hat{\vec{y}} - \vec{y} ) (\theta(Z^{(0)}) \odot X w^{(2), \top} ) \right]
+                    \frac{\eta}{n} \left( X^{\top} \left[ \left( (\hat{\vec{y}} - \vec{y}) \, \vec{w}^{(2), \top} \right) \odot \theta(Z^{(1)}) \right] \right)_{kl}
                 \end{split}
             \end{equation*}
         \end{block}
