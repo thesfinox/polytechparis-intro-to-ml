@@ -66,11 +66,11 @@
         \begin{column}{0.6\textwidth}
             \alert<2>{\textbf{Start:} choose a number of \enquote{groups} $K$ and choose their centre randomly}
 
-            \textbf{Loop N times:}
+            \textbf{Repeat:}
             \begin{enumerate}
                 \item \alert<3>{Assign samples to the nearest group centre}
                 \item \alert<4>{Use samples in the group to compute again the centre}
-                \item \textbf{After N iterations:} stop and perform a final assignment of samples
+                \item \textbf{Until} the assignments stop changing (or after a maximum number of iterations)
             \end{enumerate}
         \end{column}
         \hfil
@@ -93,16 +93,17 @@
 
     \begin{columns}[c]
         \begin{column}{0.6\textwidth}
-            \alert<2>{\textbf{Start:} Set the number of clusters to $0$}
+            \small
+            \alert<2>{\textbf{Start:} no clusters; choose a radius $\varepsilon$ and a minimum number of neighbours $m$}
 
             \textbf{Loop over all points P:}
             \begin{enumerate}
                 \item if P was already considered then skip
-                \item \alert<3>{select P and assign it to a \enquote{group} (\emph{cluster})}
+                \item \alert<3>{if P has $\ge m$ neighbours within $\varepsilon$ (\emph{core point}), open a \emph{cluster} with P, else mark P as \textbf{noise} ($-1$)}
                 \item \alert<4>{\textbf{Loop over all points Q near P:}}
                       \begin{enumerate}
                           \item \alert<5>{select Q and add it to cluster}
-                          \item \alert<6-7>{Extend the cluster with neighbours of Q}
+                          \item \alert<6-7>{if Q is a core point, extend with its neighbours}
                           \item \alert<8>{Close the cluster when no more points are unexplored in the vicinity}
                       \end{enumerate}
             \end{enumerate}
@@ -116,7 +117,7 @@
 
     \vfill
 
-    \textbf{Key difference:} You do no need to set the number of clusters to start! Only based on \enquote{density}: does \textbf{not transfer} to different sets
+    \textbf{Key difference:} You do not need to set the number of clusters to start! Only based on \enquote{density}: does \textbf{not transfer} to different sets
 \end{frame}
 
 \begin{frame}{Clustering}{Grouping similar objects\dots}
@@ -147,8 +148,9 @@
     \begin{itemize}
         \item if \textbf{ground truth} is available $\rightarrow$ \emph{Rand score}:
               \begin{equation*}
-                  \operatorname{Rand} = \frac{\text{no.\ of matching pairs}}{\text{total pairs}}
+                  \operatorname{Rand} = \frac{\text{no.\ of pairs on which the partitions agree}}{\text{total pairs}}
               \end{equation*}
+              {\footnotesize The \emph{adjusted} Rand score is $\simeq 0$ for random clusters.}
         \item if \textbf{no ground truth} is available $\rightarrow$ \emph{Silhouette score}:
               \begin{equation*}
                   \operatorname{S} = \frac{1}{N} \sum\limits_{i = 1}^N \frac{b_i - a_i}{\max\{ a_i, b_i \}},
@@ -327,7 +329,7 @@ Silhouette - DBSCAN (test) = 0.680
     We will mainly see:
     \begin{itemize}
         \item (PCA) If data contains \enquote{signal}, rotate it in the right direction
-        \item (tSNE) Preserve the concept of \enquote{distance} in high and low dimensions
+        \item (tSNE) Preserve the \enquote{neighbourhoods} in high and low dimensions
     \end{itemize}
 \end{frame}
 
@@ -337,13 +339,13 @@ Silhouette - DBSCAN (test) = 0.680
         \begin{equation*}
             \exists \Lambda = \operatorname{diag}\left( \lambda_1, \lambda_2, \dots, \lambda_d \right)
         \end{equation*}
-        where $\lambda_i$ are \textbf{eigenvalues} of $C$, and
+        where $\lambda_i \in \mathbb{R}$ are \textbf{eigenvalues} of $C$, and
         \begin{equation*}
             W = \left( \vec{w}_i^{\top} \right)_{i = 1}^d,
             \quad
             \vec{w}_i = \left( w_{i1}~w_{i2}~\dots~w_{id} \right)
         \end{equation*}
-        is the matrix of associated \textbf{eigenvectors} (as columns), such that
+        is the \textbf{orthogonal} ($W^{\top} W = \mathbb{I}$) matrix of associated \textbf{eigenvectors} (as columns), such that
         \begin{equation*}
             C = W \Lambda W^{\top}.
         \end{equation*}
@@ -358,12 +360,13 @@ Silhouette - DBSCAN (test) = 0.680
 \end{frame}
 
 \begin{frame}{Principal Components Analysis}{\includegraphics[height=12pt]{01_slides/img/tool.pdf}~Finding the direction of signal\dots}
-    Consider some data such that $\mathbb{E}[X] = 0$:
+    Consider some data such that $\mathbb{E}[X] = 0$, made of \textbf{noise} plus one \textbf{signal} direction $\vec{u}$:
     \begin{equation*}
-        X = \left( \mathbb{I}_{n \times p} + \beta \vec{v}^{\top} \vec{u} \right)^{\frac{1}{2}} Z \simeq
-        \left( \mathbb{I}_{n \times p} + \frac{1}{2} \beta \vec{v}^{\top} \vec{u} \right) Z \in \mathbb{R}^{n \times p}
+        X = Z\, \Sigma^{\frac{1}{2}} \in \mathbb{R}^{n \times p},
+        \qquad
+        \Sigma = \mathbb{I}_{p \times p} + \beta\, \vec{u}^{\top} \vec{u} \in \mathbb{R}^{p \times p},
     \end{equation*}
-    where $\norm{\vec{u}} = \norm{\vec{v}} = 1$ and $\beta > 0$, and $Z = \mathbb{I}_{p \times p} + \frac{1}{\sqrt{n}} W$, and $W \sim \mathcal{N}(O, \mathbb{I}_{p \times p})$.
+    where $\norm{\vec{u}} = 1$ (row vector), $\beta > 0$ is the signal strength, and $Z \in \mathbb{R}^{n \times p}$ has independent $\mathcal{N}(0, 1)$ entries.
 
     \vfill \pause
 
@@ -376,55 +379,44 @@ Silhouette - DBSCAN (test) = 0.680
                 =
                 \frac{1}{n} X^{\top} X
                 & =
-                Z^{\top}
-                (
+                \Sigma^{\frac{1}{2}}
+                \underbrace{\left( \frac{1}{n} Z^{\top} Z \right)}_{\mathbb{I}_{p \times p} + \mathcal{O}(1 / \sqrt{n})}
+                \Sigma^{\frac{1}{2}}
+                \\
+                & \xrightarrow{n \to \infty}
+                \Sigma
+                =
                 \mathbb{I}_{p \times p}
                 +
-                \beta
-                \overbrace{\frac{\vec{u}^{\top} \vec{v}\,  \mathbb{I}_{n \times p} + \mathbb{I}_{p \times n}\, \vec{v}^{\top} \vec{u}}{2}}^{A = A^T \in \mathbb{R}^{p \times p}}
-                ) Z
-                +
-                \mathcal{O}(\beta^2)
-                \\
-                & \simeq
-                \mathbb{I}_{p \times p}
-                +
-                \beta A
-                +
-                \frac{1}{\sqrt{n}} \left( W^{\top} + W \right)
-                \\
-                & =
-                \underbrace{%
-                    \beta A
-                    +
-                    \widetilde{W}
-                }_{\text{all symmetric!}}
+                \beta\, \vec{u}^{\top} \vec{u}
                 \only<3>{%
                 \alert{%
                 =
-                \beta
-                \vec{a}^{\top} \vec{a}
+                (1 + \beta)\, \vec{u}^{\top} \vec{u}
                 +
-                \sum\limits_{i = 1}^d
-                \tilde{\lambda}_i
-                \tilde{\vec{w}}_i^{\top}
-                \tilde{\vec{w}}_i
+                \sum\limits_{i = 2}^p
+                1 \cdot
+                \vec{w}_i^{\top}
+                \vec{w}_i
                 }
                 }
             \end{split}
         \end{equation*}
+        \only<3>{where $\vec{w}_2, \dots, \vec{w}_p$ complete $\vec{u}$ to an orthonormal basis.}
     \end{onlyenv}
     \begin{onlyenv}<4>
         \begin{equation*}
             C
-            =
-            \beta \vec{a}^{\top} \vec{a}
-            +
-            \sum\limits_{i = 1}^d \tilde{\lambda}_i \tilde{\vec{w}}_i^{\top} \tilde{\vec{w}}_i
-            =
-            \sum\limits_{i = 1}^d \lambda_i \vec{w}_i^{\top} \vec{w}_i,
+            \simeq
+            \sum\limits_{i = 1}^p \lambda_i \vec{w}_i^{\top} \vec{w}_i,
+            \qquad
+            \vec{w}_1 = \vec{u},
+            \quad
+            \lambda_1 = 1 + \beta~\text{(signal + noise)},
+            \quad
+            \lambda_2 = \dots = \lambda_p = 1~\text{(noise only)}.
         \end{equation*}
-        where $\lambda_1 = \beta + \tilde{\lambda}_1$, and $\lambda_1 > \lambda_2 > \dots > \lambda_d$.
+        {\tiny For finite $n$, the noise spreads the eigenvalues: the signal is visible only if $\beta > \sqrt{p / n}$.}
     \end{onlyenv}
 \end{frame}
 
@@ -441,7 +433,7 @@ Silhouette - DBSCAN (test) = 0.680
     \begin{equation*}
         X^{\prime} = X\, T,
         \quad
-        T = T^{\top} \in \mathbb{R}^{p \times p}
+        T \in \mathbb{R}^{p \times p} \quad \text{s.t.} \quad T T^{\top} = \mathbb{I}
     \end{equation*}
     such that
     \begin{equation*}
@@ -474,7 +466,7 @@ Silhouette - DBSCAN (test) = 0.680
 \begin{frame}{Principal Components Analysis}{Finding the direction of signal\dots}
     We thus find that
     \begin{equation*}
-        \operatorname{Var}(\vec{t}_i)
+        \operatorname{Var}(X \vec{t}_i)
         =
         \vec{t}_i^{\,\top} C \vec{t}_i
         =
@@ -482,11 +474,11 @@ Silhouette - DBSCAN (test) = 0.680
     \end{equation*}
     and in particular \emph{if good conditions are met}:
     \begin{equation*}
-        \operatorname{Var}(\vec{t}_1)
+        \operatorname{Var}(X \vec{t}_1)
         =
         \vec{t}_1^{\,\top} C \vec{t}_1
         =
-        \alert{\beta + \tilde{\lambda}_i}
+        \alert{1 + \beta}
     \end{equation*}
 
     \vfill \pause
@@ -498,7 +490,7 @@ Silhouette - DBSCAN (test) = 0.680
 
     \vfill \pause
 
-    This is called called \textbf{Principal Components Analysis} (PCA):
+    This is called \textbf{Principal Components Analysis} (PCA):
     \begin{equation*}
         \underbrace{~~X^{\prime}~~}_{\text{scores/principal components}} = X \underbrace{~~T~~}_{\text{loadings}}.
     \end{equation*}
@@ -513,8 +505,8 @@ Silhouette - DBSCAN (test) = 0.680
     \begin{enumerate}
         \item<1-> Suppose you have data $X \in \mathbb{R}^{n \times p}$ and find $T \in \mathbb{R}^{p \times p}$ for PCA
         \item<2-> Then, naturally, $X^{\prime} \in \mathbb{R}^{n \times p}$
-        \item<3-> However, the important part is concentrated in few components of $T_{a} \preceq T$, $a < p$.
-        \item<4-> Hence, the product $\alert{X^{\prime}_a} = X \alert{T_a \in \mathbb{R}^{n \times a}}$ has a \textbf{reduced dimensionality}, but not \textbf{reduced information}!
+        \item<3-> However, the important part is concentrated in the first $a < p$ columns of $T$ (call them $T_a$).
+        \item<4-> Hence, the product $\alert{X^{\prime}_a} = X \alert{T_a \in \mathbb{R}^{n \times a}}$ has a \textbf{reduced dimensionality}, while losing \textbf{little information}!
     \end{enumerate}
 \end{frame}
 
@@ -525,8 +517,8 @@ Silhouette - DBSCAN (test) = 0.680
         \begin{column}{0.6\textwidth}
             The eigenvalues of the covariance matrix define the \textbf{explained variance} of each component:
             \begin{enumerate}
-                \item \alert<1>{You can select all components that are \textbf{higher} than a certain threshold (e.g.\ $\lambda_i > 5\%$)}
-                \item \alert<2>{You can select all components that \textbf{cumulatively} add up to a certain variance threshold (e.g.\ $\sum_{i < a} \lambda_i \le 95\%$)}
+                \item \alert<1>{You can select all components that are \textbf{higher} than a certain threshold (e.g.\ $\lambda_i / \sum_j \lambda_j > 5\%$)}
+                \item \alert<2>{You can keep the smallest number $a$ of components that \textbf{cumulatively} reach a certain variance threshold (e.g.\ $\sum_{i \le a} \lambda_i / \sum_j \lambda_j \ge 95\%$)}
             \end{enumerate}
         \end{column}
         \hfil
@@ -666,7 +658,7 @@ Scalar product: t_0 . t_1 = -5.08e-09
                     \large
                     We use \textbf{distances} between points!
 
-                    They are scalars and do not transform differently in different dimensions!
+                    They are scalars defined in any dimension: we turn them into \enquote{who is close to whom} (\emph{neighbours})!
                 \end{center}
             \end{column}
         }
@@ -674,8 +666,10 @@ Scalar product: t_0 . t_1 = -5.08e-09
             \begin{column}<3>{0.4\textwidth}
                 \begin{center}
                     \large
-                    \textbf{Key idea:} maintain the same \emph{distance} value in high dimension and low dimension!
+                    \textbf{Key idea:} maintain the same \emph{neighbourhood} of points in high dimension and low dimension!
                 \end{center}
+
+                Use \emph{perplexity} ($2^{H}$) to fix the effective number of neighbours to consider (i.e.\ fix $\sigma$).
             \end{column}
         }
     \end{columns}
@@ -693,14 +687,17 @@ Scalar product: t_0 . t_1 = -5.08e-09
             \begin{equation*}
                 P(\vec{x}_i, \vec{x}_j)
                 =
-                \frac{
-                    e^{-\frac{\norm{\vec{x}_i - \vec{x}_j}^2}{2 \sigma_i^2}}
-                }{
-                    \sum\limits_{i \neq j}
-                    e^{-\frac{\norm{\vec{x}_i - \vec{x}_j}^2}{2 \sigma_i^2}}
-                }
-                +
-                (i \leftrightarrow j)
+                \frac{1}{2N}
+                \left[
+                    \frac{
+                        e^{-\frac{\norm{\vec{x}_i - \vec{x}_j}^2}{2 \sigma_i^2}}
+                    }{
+                        \sum\limits_{k \neq i}
+                        e^{-\frac{\norm{\vec{x}_i - \vec{x}_k}^2}{2 \sigma_i^2}}
+                    }
+                    +
+                    (i \leftrightarrow j)
+                    \right]
             \end{equation*}
 
             This is a \textbf{Gaussian} distribution over distances.
@@ -712,16 +709,14 @@ Scalar product: t_0 . t_1 = -5.08e-09
                 \large \textbf{LOW DIMENSION}
                 Compute a \emph{desired} \enquote{distance probability}:
                 \begin{equation*}
-                    Q(\vec{x}_i, \vec{x}_j)
+                    Q(\vec{z}_i, \vec{z}_j)
                     =
                     \frac{
                         \left( 1 + \norm{\vec{z}_i - \vec{z}_j}^2 \right)^{-1}
                     }{
-                        \sum\limits_{i \neq j}
-                        \left( 1 + \norm{\vec{z}_i - \vec{z}_j}^2 \right)^{-1}
+                        \sum\limits_{k \neq l}
+                        \left( 1 + \norm{\vec{z}_k - \vec{z}_l}^2 \right)^{-1}
                     }
-                    +
-                    (i \leftrightarrow j)
                 \end{equation*}
 
                 This is a \textbf{Cauchy} distribution over distances.
@@ -747,11 +742,10 @@ Scalar product: t_0 . t_1 = -5.08e-09
                     \mathrm{D}_{\text{KL}}\left( P \Vert Q \right)
                     \\
                     & =
-                    \frac{1}{N}
-                    \sum\limits_{i, j}
+                    \sum\limits_{i \neq j}
                     P(\vec{x}_i, \vec{x}_j)
                     \ln
-                    \frac{P(\vec{x}_i, \vec{x}_j)}{Q(\vec{x}_i, \vec{x}_j)}
+                    \frac{P(\vec{x}_i, \vec{x}_j)}{Q(\vec{z}_i, \vec{z}_j)}
                 \end{split}
             \end{equation*}
         \end{column}
@@ -764,7 +758,7 @@ Scalar product: t_0 . t_1 = -5.08e-09
 \end{frame}
 
 \begin{frame}{Visualisation Tools}{Keeping the distance\dots}
-    Overall, \textbf{tSNE} enables to keep similar distances in lower dimension:
+    Overall, \textbf{tSNE} keeps neighbourhoods in lower dimension:
     \vfill
     \begin{columns}[c]
         \begin{column}<1->{0.45\textwidth}

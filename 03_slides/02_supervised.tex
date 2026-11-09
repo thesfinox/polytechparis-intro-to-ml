@@ -109,11 +109,12 @@
         \left(\vec{a}^*, b^*\right)
         =
         \arg\min\limits_{\vec{a}, b}
-        \frac{\norm{\vec{a}}}{2}
-        +
+        \max\limits_{\mu_i \ge 0}
+        \frac{\norm{\vec{a}}^2}{2}
+        -
         \only<1>{\sum\limits_{i = 1}^N}
         \only<2>{\alert{\sum\limits_{i = 1}^S}}
-        \mu_i y_i \left( \vec{a} \cdot \vec{x}_i + b\right)
+        \mu_i \left[ y_i \left( \vec{a} \cdot \vec{x}_i + b\right) - 1 \right]
     \end{equation*}
     \vfill
     \begin{columns}[c]
@@ -202,7 +203,7 @@
         \begin{cases}
             \vec{x}_i \cdot \vec{x}_j                                & \text{linear kernel}                      \\
             (1 + \vec{x}_i \cdot \vec{x}_j)^p                        & \text{polynomial kernel}                  \\
-            \exp(-\frac{\norm{\vec{x}_i - \vec{x}_j}^2}{2 \sigma})^p & \text{RBF (\emph{radial basis function})} \\
+            \exp(-\frac{\norm{\vec{x}_i - \vec{x}_j}^2}{2 \sigma^2}) & \text{RBF (\emph{radial basis function})} \\
             \dots
         \end{cases}
     \end{equation*}
@@ -227,10 +228,8 @@
 \end{frame}
 
 \begin{frame}{Decision Trees}{Separating into buckets\dots}
-    Like SVMs, \textbf{decision trees} are trained via \textbf{gradient descent} against particular losses:
+    \textbf{Decision trees} are grown \emph{greedily}: at each node, choose the split that most reduces a criterion:
     \begin{itemize}
-        \item \textbf{SVM for classification:} standard cross-entropy
-        \item \textbf{SVM for regression:} standard MSE
         \item \textbf{Decision trees for classification:} \emph{Gini impurity} or cross-entropy
         \item \textbf{Decision trees for regression:} standard MSE
     \end{itemize}
@@ -262,12 +261,11 @@
         \item \textbf{Pruning:} create some rules to stop from getting to the end
               \begin{itemize}
                   \item Limit the number of \textbf{leaf nodes} (terminal nodes)
-                  \item Randomise the \textbf{input features}
                   \item Limit the \textbf{depth level}
                   \item \dots
               \end{itemize}
-        \item \textbf{Ensembling:} train multiple pruned decision trees and take the average value $\Rightarrow$ these are called \textbf{Random Forests}
-        \item \textbf{Boosting:} iteratively train a tree and re-weight the badly classified/regresses points $\Rightarrow$ the procedure is called \textbf{Gradient Boosting}
+        \item \textbf{Ensembling:} train multiple decision trees on random (\emph{bootstrap}) samples of the data and random subsets of features, and take the average value $\Rightarrow$ these are called \textbf{Random Forests}
+        \item \textbf{Boosting:} iteratively train a tree on the negative gradient of the loss $\Rightarrow$ the procedure is called \textbf{Gradient Boosting}
     \end{itemize}
 
     \vfill
