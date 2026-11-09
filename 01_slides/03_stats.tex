@@ -88,6 +88,7 @@ This is **bold** and this is *italic*.
     Then, load the libraries
     \begin{notebookin}
 import numpy as np
+import matplotlib.pyplot as plt
     \end{notebookin}
 
     \vfill
@@ -131,7 +132,7 @@ Y.shape = (1000, 1)
     \end{notebookout}
 
     \vfill \pause
-    And perform basic operations (e.g. \textbf{matric multiplication}):
+    And perform basic operations (e.g. \textbf{matrix multiplication}):
     \begin{notebookin}
 Z = (X.T @ Y) / 1000
 print("Z.shape =", Z.shape)
@@ -181,7 +182,7 @@ X[32:64, 18:64] = 0
     \end{notebookin}
 
     \vfill \pause
-    An certain objects (mostly 2d) can be shown:
+    Certain objects (mostly 2d) can be shown:
     \begin{notebookin}
 fig, ax = plt.subplots(ncols=1, nrows=1, layout="constrained")
 img = ax.matshow(X, cmap="RdBu_r")
@@ -259,7 +260,7 @@ X = X[p]; y = y[p]
 
     \begin{enumerate}
         \item \alert<2>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Verify that both $X$ and $y$ are vectors of length $3000$}
-        \item \alert<3-4>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Plot the three multivariate normal distributions (one per plot + on the same plot)}
+        \item \alert<3-4>{\includegraphics[height=12pt]{01_slides/img/pen-tool.pdf}~Plot the three univariate normal distributions (one per plot + on the same plot)}
         \item \alert<5>{\includegraphics[height=12pt]{01_slides/img/brain.pdf}~If $X$ are samples, what do labels identify in this example?}
     \end{enumerate}
 
@@ -451,7 +452,7 @@ def accuracy(y_true, y_pred):
         \begin{tikzpicture}[overlay]
             \node[set, xshift=-2em, yshift=3em] at (current page.center) {
                 \begin{notebookin}
-from mlintro.naive_classifier import fit, predict
+from mlintro.naive_classifier import fit, predict, accuracy
                 \end{notebookin}
             };
         \end{tikzpicture}
@@ -473,10 +474,10 @@ mean_list, std_list, prior_list = fit(X[:2500], y[:2500])
                 \begin{notebookin}
 preds = predict(X[2500:], mean_list, std_list, prior_list)
 acc = accuracy(y[2500:], preds)
-print(f"Accuracy: {acc:.1%"})
+print(f"Accuracy: {acc:.1%}")
                 \end{notebookin}
                 \begin{notebookout}
-96.6%
+Accuracy: 96.6%
             \end{notebookout}
             };
         \end{tikzpicture}
@@ -493,7 +494,7 @@ print(f"Accuracy: {acc:.1%"})
         \huge
         \textbf{Naive Bayes Classifier}
     \end{center}
-    and performs simple (\emph{naive}) classification, based on basic assumptions on the shape of the data.
+    and performs simple classification, based on basic assumptions on the shape of the data (here: Gaussian classes). With several features, \emph{naive} means assuming the features are \textbf{independent} within each class.
 
     \vspace{1em}
 

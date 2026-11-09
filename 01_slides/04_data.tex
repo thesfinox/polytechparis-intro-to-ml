@@ -126,7 +126,7 @@ List of keys: ['description', 'samples', 'lines', 'bands', 'header offset', 'fil
 # Parse wavelengths to decimal numbers
 wavelengths = np.array(wavelengths).astype("float")
 # Parse bad_wavelengths to a boolean array
-bad_wavelengths = np.array(bad_wavelengths).astype("bool")
+bad_wavelengths = np.array(bad_wavelengths).astype("float").astype("bool")
                 \end{notebookin}
             };
         \end{tikzpicture}
@@ -272,7 +272,7 @@ SWIR image.shape = (167, 418, 600)
     \begin{enumerate}
         \item data contain \emph{spectral} information: typical \textbf{material} signature
         \item contamination from multiple sources: spectra are not directly comparable
-        \item must find a way to remove the background \enquote{noise}
+        \item must find a way to remove the background (the \emph{continuum}: illumination, grain size, etc.)
     \end{enumerate}
 
     \vfill \pause
@@ -288,7 +288,7 @@ SWIR image.shape = (167, 418, 600)
             \begin{equation*}
                 I(\lambda) = 1 - S(\lambda) / C(\lambda)
             \end{equation*}
-            becomes the spectrum which has \textbf{no background} (when $S = C \Rightarrow I = 0$)
+            is the \emph{band depth}: the spectrum without its continuum (when $S = C \Rightarrow I = 0$)
         \end{column}
         \hfil
         \begin{column}{0.35\textwidth}
@@ -480,9 +480,8 @@ Labels.shape = (418, 595)
         \begin{tikzpicture}[overlay]
             \node[set, text width=35em, xshift=-2em, yshift=-7em] at (current page.center) {
                 \begin{notebookin}
-if labels.shape != img_swir_norm.shape[1:]:
-    pad_rows = img_swir_norm.shape[1] - labels.shape[0]
-    pad_cols = img_swir_norm.shape[2] - labels.shape[1]
+pad_rows = img_swir_norm.shape[1] - labels.shape[0]
+pad_cols = img_swir_norm.shape[2] - labels.shape[1]
 if (pad_rows >= 0) and (pad_cols >= 0):
     labels = np.pad(
         labels,

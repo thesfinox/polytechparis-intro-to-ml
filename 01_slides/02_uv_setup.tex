@@ -85,6 +85,7 @@ rm AnEmptyFile.txt
 # Copy and execute the following line in the previous location
 curl -LsSf https://astral.sh/uv/install.sh | sh
     \end{codewithcard}
+    {\tiny The command downloads and runs the official installer script from \texttt{astral.sh}: only run scripts from sources you trust.}
 
     \pause
     You must \textbf{close and restart} your terminal, then \textbf{go back} to the previous location:
@@ -107,7 +108,7 @@ git config --global user.name "Name Surname"
 git config --global user.email name.surname@whatever.com
 
 # Create your first project
-uv init --name="my-project-name" \
+uv init --name="mlintro" \
 --description="This is where you describe the purpose of the project" \
 --build-backend="hatch" \
 --python 3.13
@@ -115,7 +116,7 @@ uv init --name="my-project-name" \
 
     \vfill
 
-    Using \textbf{any file browser} that you know
+    Using \textbf{any file browser} that you know, open the new project folder and look at its content.
 \end{frame}
 
 \begin{frame}{Python Projects Primer}{A quick look at a project\dots}
