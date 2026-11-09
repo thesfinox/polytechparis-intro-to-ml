@@ -15,7 +15,7 @@
             =
             \mathbb{E}\left[ \left( y - f(x) \right)^2 \right]
             =
-            \mathbb{E}\left[ \operatorname{dist}\left( y - f(x) \right)^2 \right]
+            \mathbb{E}\left[ \operatorname{dist}\left( y, f(x) \right)^2 \right]
         \end{equation*}
     \end{onlyenv}
 
@@ -64,7 +64,7 @@
     \begin{enumerate}
         \item $x \in \mathcal{D}_{\text{test}}$ represent the real \textbf{use case} scenario
         \item $x \in \mathcal{D}_{\text{val}}$ come from the same distribution as $\mathcal{D}_{\text{train}}$ and are used for evaluation
-        \item $x \in \mathcal{D}_{\text{train}}$ are \textbf{shuffled} data representing \textbf{realistic}
+        \item $x \in \mathcal{D}_{\text{train}}$ are \textbf{shuffled} data representing \textbf{realistic} cases, used to fit the model
     \end{enumerate}
     This is known as \textbf{holdout validation}.
 
@@ -74,7 +74,7 @@
         Once a \textbf{test set} is selected, there are other types of \textbf{validation} procedures worth knowing:
         \begin{itemize}
             \item \textbf{cross-validation}: Instead of choosing one validation set, you iteratively retain a certain number of data from the train distribution for validation and train on the others
-            \item \textbf{leave-one-out} (\emph{jackknife}): Train on all but one piece of data and evaluate on the remaining point. Repeat for all samples at your disposal (extreme case of cross-validation).
+            \item \textbf{leave-one-out}: Train on all but one piece of data and evaluate on the remaining point. Repeat for all samples at your disposal (extreme case of cross-validation).
         \end{itemize}
     }
 
@@ -106,6 +106,7 @@
             \node[set, text width=30em, yshift=-3em, xshift=-2em] at (current page.center) {
                 \begin{notebookin}
 import numpy as np
+import matplotlib.pyplot as plt
 
 X = np.load("../data/HC_norm.npy")
 y = np.load("../data/HC_labels.npy")
@@ -172,7 +173,7 @@ y_test.shape = (25080,)
         \begin{tikzpicture}[overlay]
             \node[set, text width=30em, yshift=-2em, xshift=-2em] at (current page.center) {
                 \begin{notebookin}
-X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.1)
+X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.1, shuffle=True, random_state=42)
 print("X_train.shape =", X_train.shape)
 print("y_train.shape =", y_train.shape)
 print("X_val.shape =", X_val.shape)
@@ -343,8 +344,8 @@ X_test.mean =  0.0061483374
             \node[set, text width=35em, yshift=-11em, xshift=-2em] at (current page.center) {
                 \begin{notebookin}
 fig, ax = plt.subplots(ncols=3, figsize=(15, 5), layout="constrained")
-for n, X in enumerate([X_train, X_val, X_test]):
-    ax[n].plot(X.mean(axis=0), "k-", label="train")
+for n, X_split in enumerate([X_train, X_val, X_test]):
+    ax[n].plot(X_split.mean(axis=0), "k-")
     ax[n].set(xlabel="channel", ylabel="intensity (a.u.)")
     ax[n].ticklabel_format(axis="y", style="scientific", scilimits=(0, 0), useMathText=True)
 plt.show()

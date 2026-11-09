@@ -2,7 +2,7 @@
 % !TeX encoding = UTF-8
 % !TeX spellcheck = en_GB
 \begin{frame}{Linear Regression}{Let's start simple\dots}
-    Let $X \in \mathbb{R}^{N \times d}$ be our \textbf{data set} and $\vec{y} = \mathbb{R}^N$ be the labels:
+    Let $X \in \mathbb{R}^{N \times d}$ be our \textbf{data set} and $\vec{y} \in \mathbb{R}^N$ be the labels:
     \begin{equation*}
         \mathcal{D} = \left\{ (\vec{x}_i, y_i) ~\mid~ \vec{x}_i \in \mathbb{R}^d,~ y_i \in \mathbb{R} \right\}_{i = 1}^N
     \end{equation*}
@@ -33,17 +33,17 @@
     \begin{onlyenv}<3>
         {\tiny
         \textcolor{CEAblack!65}{%
-        Since $y_i^{(\Theta)} = \sum\limits_{\ell = 1}^d X_{i, \ell}\, \beta_{\ell}$, the L2 loss is the only case where the optimal values of $\vec{\beta}$ can be computed exactly:
+        Since $y_i^{(\Theta)} = \sum\limits_{\ell = 1}^d X_{i, \ell}\, \beta_{\ell}$, the L2 loss is the classic case where the optimal values of $\vec{\beta}$ can be computed exactly:
         \begin{equation*}
             \pdv{L\left(y, y^{(\Theta)}\right)}{\beta_{\ell}}
             =
-            \frac{1}{N} \sum\limits_{i = 1}^N X_{i\ell}\, \left(y_i - X_{i\ell}\, \beta_{\ell}\right)
+            -\frac{1}{N} \sum\limits_{i = 1}^N X_{i\ell}\, \left(y_i - \sum\limits_{m = 1}^d X_{im}\, \beta_{m}\right)
             =
             0
             \quad \Leftrightarrow \quad
             \sum\limits_{i = 1}^N X_{i\ell} y_i
             =
-            \beta_{\ell} \left( \sum\limits_{i = 1}^N X_{i\ell} X_{i\ell} \right)
+            \sum\limits_{m = 1}^d \left( \sum\limits_{i = 1}^N X_{i\ell} X_{im} \right) \beta_{m}
             \quad \Leftrightarrow \quad
             X^{\top} \vec{y} = \left( X^{\top} X \right) \vec{\beta}
         \end{equation*}
@@ -76,14 +76,14 @@
         \end{equation*}
     \end{block}
 
-    \begin{block}{Huber Loss}
-        \small
+    \begin{block}{Huber Loss {\normalfont\footnotesize ($\mathbf{1}(\cdot) = 1$ if true, $0$ otherwise, smooth at $\delta$)}}
+        \footnotesize
         \begin{equation*}
             L\left(\vec{y}, \vec{y}^{(\Theta)}\right)
             =
-            \frac{1}{2N} \sum\limits_{i = 1}^N \left(y_i - y^{(\Theta)}_i\right)^2\, \Theta\left( \delta - \left|y_i - y^{(\Theta)}_i\right|\right)
+            \frac{1}{2N} \sum\limits_{i = 1}^N \left(y_i - y^{(\Theta)}_i\right)^2\, \mathbf{1}\left( \left|y_i - y^{(\Theta)}_i\right| \le \delta \right)
             +
-            \frac{1}{N} \sum\limits_{i = 1}^N \left|y_i - y^{(\Theta)}_i\right|\, \Theta\left( \left|y_i - y^{(\Theta)}_i\right| - \delta \right)
+            \frac{\delta}{N} \sum\limits_{i = 1}^N \left( \left|y_i - y^{(\Theta)}_i\right| - \frac{\delta}{2} \right) \mathbf{1}\left( \left|y_i - y^{(\Theta)}_i\right| > \delta \right)
         \end{equation*}
     \end{block}
 \end{frame}
@@ -124,7 +124,7 @@
 
     When we compute the gradient of $\tilde{L}$, we now have:
     \begin{enumerate}
-        \item $\pdv{\tilde{L}}{\theta_1} = 0$ and $\pdv{\tilde{L}}{\theta_2} = 0$: these are the \enquote{old} equations (nothing changed)
+        \item $\pdv{\tilde{L}}{\theta_1} = 0$ and $\pdv{\tilde{L}}{\theta_2} = 0$: the \enquote{old} equations, plus the term $\lambda\, \partial g \slash \partial \theta_i$
         \item $\pdv{\tilde{L}}{\lambda} = 0 \Leftrightarrow g(\theta_1, \theta_2) = 0$: this condition automatically imposes the constraint!
     \end{enumerate}
 
@@ -270,7 +270,8 @@
         \item<6-> both of them at the same time: this is called \textbf{elastic net} regression
     \end{itemize}
     {\footnotesize
-    The idea is to avoid the \enquote{explosion} of the parameters and exploit them when they are \enquote{small}.
+    The idea is to avoid the \enquote{explosion} of the parameters and keep them \enquote{small}.
+    Lasso also sets some parameters \textbf{exactly to zero} (feature selection).
     }
 \end{frame}
 
@@ -282,7 +283,7 @@
 
     \textbf{Coefficient of Determination:} (\emph{R-squared})
     \begin{equation*}
-        R^2 = 1 - \frac{\sum\limits_{i = 1}^d (y_i - y_i^{(\Theta)})^2}{\sum\limits_{i = 1}^d (y_i - \mathbb{E}[y_i^{(\Theta)}])^2}
+        R^2 = 1 - \frac{\sum\limits_{i = 1}^N (y_i - y_i^{(\Theta)})^2}{\sum\limits_{i = 1}^N (y_i - \bar{y})^2}
     \end{equation*}
     and others that you already know (mean squared error, mean absolute error, percentage errors, etc.).
     Take a look at \href{https://scikit-learn.org/stable/api/sklearn.metrics.html\#regression-metrics}{Scikit-learn regression metrics} for a nice list!
@@ -426,11 +427,12 @@ R-squared (L2) = 0.12657738085806358
 
     \vfill \pause
 
-    This can happen for both \textbf{data} and \textbf{labels} and the only way is to convert it to numerical:
+    This can happen for both \textbf{data} and \textbf{labels} and we need to convert it to numerical:
     \begin{equation*}
         \{ \text{cat}, \text{dog}, \text{elephant}, \dots \} \mapsto \{ 0, 1, 2, \dots \}
     \end{equation*}
     which establishes to which \textbf{class} a particular piece of data belongs.
+        {\footnotesize (For input \textbf{data}, integers create a fake order: prefer the \emph{one-hot encoding} of the next slide.)}
 \end{frame}
 
 \begin{frame}{Linear Models for Classification}{From regression to classification\dots}
@@ -479,7 +481,7 @@ R-squared (L2) = 0.12657738085806358
 \begin{frame}{Linear Models for Classification}{From regression to classification\dots}
     That is, with $K$ different classes
     \begin{equation*}
-        \operatorname{OH}_K(y)
+        \operatorname{OH}^{(K)}(y)_k
         =
         \begin{cases}
             1 & \qif y = k    \\
@@ -515,15 +517,15 @@ R-squared (L2) = 0.12657738085806358
         =
         \ln \underbrace{\frac{y_k^{(\Theta)}}{1 - y_k^{(\Theta)}}}_{\text{odds}}
         =
-        \frac{\text{\enquote{This happens}}}{\text{\enquote{This does not happen}}}
+        \ln \frac{\text{\enquote{This happens}}}{\text{\enquote{This does not happen}}}
         \in (-\infty, +\infty)
     \end{equation*}
 
     \vfill
 
-    \includegraphics[height=12pt]{01_slides/img/brain.pdf}~What are the odds that an \textbf{unbiased} coin gives either head or tail?
+    \includegraphics[height=12pt]{01_slides/img/brain.pdf}~What are the odds that an \textbf{unbiased} coin gives head? And tail?
 
-    \includegraphics[height=12pt]{01_slides/img/brain.pdf}~What are the odds that an \textbf{biased} (80\% head) coin gives either head or tail?
+    \includegraphics[height=12pt]{01_slides/img/brain.pdf}~What are the odds that a \textbf{biased} (80\% head) coin gives head? And tail?
 \end{frame}
 
 \begin{frame}{Linear Models for Classification}{Log-odds and linear models\dots}
@@ -540,7 +542,7 @@ R-squared (L2) = 0.12657738085806358
         =
         \theta_{1k}\, x_1
         +
-        \theta_{1k}\, x_2
+        \theta_{2k}\, x_2
         +
         \dots
     \end{equation*}
@@ -569,7 +571,7 @@ R-squared (L2) = 0.12657738085806358
                 P(y = k \mid \vec{x})
                 =
                 \frac{1}{1 + e^{-f_{k,\, (\Theta)}(\vec{x})}}
-                \in [0, 1]
+                \in (0, 1)
             \end{equation*}
             which enables \textbf{class assignments}:
             \begin{equation*}
@@ -585,7 +587,7 @@ R-squared (L2) = 0.12657738085806358
 \end{frame}
 
 \begin{frame}{Linear Models for Classification}{Multi-class classification and linear models\dots}
-    What if classes are \textbf{not independent} (i.e.\ $\vec{x}$ can be $A$ or $B$, but not both)?
+    What if classes are \textbf{mutually exclusive} (i.e.\ $\vec{x}$ can be $A$ or $B$, but not both)?
 
     \vfill
 
@@ -599,7 +601,7 @@ R-squared (L2) = 0.12657738085806358
         =
         \frac{e^{f_{k,\, (\Theta)}(\vec{x})}}{\sum\limits_{h = 1}^K e^{f_{h,\, (\Theta)}(\vec{x})}}
         =
-        \operatorname{softmax}(f_{k,\, (\Theta)}(\vec{x}))
+        \operatorname{softmax}(\vec{f}_{k,\, (\Theta)}(\vec{x}))
     \end{equation*}
 
     \vfill \pause
@@ -624,7 +626,7 @@ R-squared (L2) = 0.12657738085806358
 
     \vfill
 
-    And if more systems become available, you then \textbf{sum} the entropies:
+    And if more \textbf{independent} systems become available, you then \textbf{sum} the entropies:
     \begin{equation*}
         H_{\text{tot}}(P)
         =
@@ -633,7 +635,7 @@ R-squared (L2) = 0.12657738085806358
 \end{frame}
 
 \begin{frame}{Linear Models for Classification}{Comparing distributions\dots}
-    In this case, we have \textbf{two distributions} for \textbf{each class} (system):
+    In this case, we have \textbf{two distributions} over the classes for \textbf{each sample} (system):
     \begin{enumerate}
         \item the \textbf{true labels} $y_k \sim P$: the \textbf{one-hot} values of the labels in the data set
         \item the \textbf{predicted labels} $y_k^{(\Theta)} \sim Q$: the probabilities of belonging to class $k$
@@ -706,33 +708,34 @@ R-squared (L2) = 0.12657738085806358
         \end{equation*}
         Then, we can compute (\emph{chain rule})
         \begin{equation*}
-            \pdv{H(\vec{y}^{(\Theta)})}{\Theta_{\ell, k}}
+            \pdv{H(\vec{y}^{(\Theta)})}{\Theta_{g, k}}
             =
+            \sum\limits_{n = 1}^{N}
             \sum\limits_{h = 1}^{K}
-            \sum\limits_{l = 1}^{K}
+            \sum\limits_{j = 1}^{K}
             \pdv{H(\vec{y}^{(\Theta)})}{y_{n,h}^{(\Theta)}}
-            \pdv{y_{n,h}^{(\Theta)}}{z_{n,l}^{(\Theta)}}
-            \dv{z_{n,l}^{(\Theta)}}{\Theta_{\ell, k}}.
+            \pdv{y_{n,h}^{(\Theta)}}{z_{n,j}^{(\Theta)}}
+            \dv{z_{n,j}^{(\Theta)}}{\Theta_{g, k}}.
         \end{equation*}
 
         We find:
         \begin{equation*}
             \pdv{H(\vec{y}^{(\Theta)})}{y_{n,h}^{(\Theta)}}
             =
-            -\frac{1}{N} \sum\limits_{n = 1}^N
+            -\frac{1}{N}
             \frac{y_{n,h}}{y_{n,h}^{(\Theta)}},
             \quad
-            \pdv{y_{n,h}^{(\Theta)}}{z_{n,l}^{(\Theta)}}
+            \pdv{y_{n,h}^{(\Theta)}}{z_{n,j}^{(\Theta)}}
             =
-            \frac{\delta_{lh} e^{z_{n,h}^{(\Theta)}}}{\sum\limits_{r = 1}^K e^{z_{n,r}^{(\Theta)}}}
+            \frac{\delta_{jh} e^{z_{n,h}^{(\Theta)}}}{\sum\limits_{r = 1}^K e^{z_{n,r}^{(\Theta)}}}
             -
-            \frac{e^{z_{n,h}^{(\Theta)}} e^{z_{n,l}^{(\Theta)}}}{\left(\sum\limits_{r = 1}^K e^{z_{n,r}^{(\Theta)}}\right)^2}
+            \frac{e^{z_{n,h}^{(\Theta)}} e^{z_{n,j}^{(\Theta)}}}{\left(\sum\limits_{r = 1}^K e^{z_{n,r}^{(\Theta)}}\right)^2}
             =
             y_{n,h}^{(\Theta)} \left(\delta_{jh} - y_{n,j}^{(\Theta)}\right),
             \quad
-            \dv{z_{n,j}^{(\Theta)}}{\Theta_{\ell, k}}
+            \dv{z_{n,j}^{(\Theta)}}{\Theta_{g, k}}
             =
-            \delta_{jk} X_{n\, \ell}
+            \delta_{jk} X_{n\, g}
         \end{equation*}
 
         Hence, we get:
@@ -755,7 +758,7 @@ R-squared (L2) = 0.12657738085806358
             \frac{1}{N}
             \left( X^T \left( \vec{y}^{(\Theta)} - \vec{y} \right)\right)_{g k}
         \end{equation*}
-        That is one component of the Gram matrix between data $X$ and the \enquote{error} $y - y^{(\Theta)}$!
+        That is one component of the product between the data $X^{\top}$ and the \enquote{error} $y - y^{(\Theta)}$!
     \end{onlyenv}
 \end{frame}
 
@@ -790,11 +793,11 @@ R-squared (L2) = 0.12657738085806358
 
             \pause
 
-            Measure accept/reject the \textbf{null hypothesis}
+            Decide whether to reject the \textbf{null hypothesis}
             \begin{center}
                 $\mathcal{H}_0$: sample $\vec{x}_i$ \emph{does not} belong to class $k$
             \end{center}
-            or \textbf{alternative hypothesis}
+            in favour of the \textbf{alternative hypothesis}
             \begin{center}
                 $\mathcal{H}_1$: sample $\vec{x}_i$ belongs to class $k$
             \end{center}
@@ -848,7 +851,7 @@ R-squared (L2) = 0.12657738085806358
 
             \vspace{1em}
 
-            \textbf{Type I error:} (\emph{false positive rate}, misclassification)
+            \textbf{Type I error:} (\emph{false positive rate}, false alarm)
             \begin{center}
                 \emph{How many times do I accept $\mathcal{H}_1$ even though $\mathcal{H}_0$ is true?}
             \end{center}
@@ -901,7 +904,7 @@ R-squared (L2) = 0.12657738085806358
                 \node[anchor=south] (pred) at (2, 4.1) {\textbf{PREDICTED}};
                 \node[anchor=south, rotate=90] (act) at (-0.1, 2) {\textbf{ACTUAL}};
 
-                \node[text width=2, align=center] (tp) at (1, 3) {TP = 2};
+                \node[text width=2, align=center] (tp) at (1, 3) {TP = 3};
                 \node[text width=2, align=center] (fn) at (3, 3) {FN = 1};
                 \node[text width=2, align=center] (fp) at (1, 1) {FP = 2};
                 \node[text width=2, align=center] (tn) at (3, 1) {TN = 4};
