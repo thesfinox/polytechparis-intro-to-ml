@@ -16,10 +16,6 @@
 .*.lb
 
 ## Intermediate documents:
-01_intro_ml_polytech.pdf
-02_intro_ml_polytech.pdf
-03_intro_ml_polytech.pdf
-04_intro_ml_polytech.pdf
 code_listings_demo.pdf
 *.dvi
 *.xdv
